@@ -67,20 +67,45 @@ public class Grid {
 	
 	
 		// GETTERS/SETTERS
+	
+		// Returns the width of a cell in the grid
 	public int getCellWidth() {
 		return this.cellWidth;
 	}
 	
+		// Returns the height of a cell in the grid
 	public int getCellHeight() {
 		return this.cellHeight;
 	}
 	
+		// Returns the number of cells in a row in the grid
 	public int getRowLength() {
 		return this.rowLength;
 	}
 	
+		// Returns the number of cells in a column in the grid
 	public int getColumnLength() {
 		return this.columnLength;
+	}
+	
+		// Sets the width and the height of the cells
+	public void setDimensions(int cellWidth, int cellHeight) {
+		this.cellWidth = cellWidth;
+		this.cellHeight = cellHeight;
+	}
+	
+		// Sets the cellular dimensions of the grid
+	public void setCellDimensions(int rowLength, int columnLength) {
+		Map<Integer, Gridable> newMap = new HashMap<Integer, Gridable>();
+		
+		for( int x = 0; x < this.rowLength; x++ )
+		{
+			for( int y = 0; y < this.columnLength; y++ )
+			newMap.put(y * rowLength + x, get(x, y));
+		}
+		
+		this.rowLength = rowLength;
+		this.columnLength = columnLength;
 	}
 	
 	
