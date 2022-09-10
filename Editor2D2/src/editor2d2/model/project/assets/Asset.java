@@ -15,7 +15,7 @@ public abstract class Asset {
 	}
 	
 		// Returns the identifier of the asset
-	public String identifier() {
+	public String getIdentifier() {
 		return this.identifier;
 	}
 	
