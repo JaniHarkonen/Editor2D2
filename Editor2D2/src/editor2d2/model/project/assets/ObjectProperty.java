@@ -10,4 +10,11 @@ public class ObjectProperty {
 	
 		// Whether the property is compiled
 	public boolean isCompiled;
+	
+	
+	public ObjectProperty(String name, String value, boolean isCompiled) {
+		this.name = name;
+		this.value = value;
+		this.isCompiled = isCompiled;
+	}
 }

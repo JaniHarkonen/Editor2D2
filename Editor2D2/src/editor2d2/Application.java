@@ -1,8 +1,10 @@
 package editor2d2;
 
+import editor2d2.gui.Window;
+
 public class Application {
 
 	public static void main(String[] args) {
-		System.out.println("initial test :D:D:D:D:D");
+		Window window = Window.instantiate();
 	}
 }
