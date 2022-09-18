@@ -1,5 +1,7 @@
 package editor2d2.gui;
 
+import java.util.Map;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -8,20 +10,36 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import editor2d2.Application;
 import editor2d2.gui.body.AssetPane;
 import editor2d2.gui.body.ScenePane;
 import editor2d2.gui.body.Toolbar;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
 import editor2d2.gui.body.proppanes.TilePropertiesPane;
+import editor2d2.model.app.Controller;
+import editor2d2.model.project.Project;
+import editor2d2.model.project.Scene;
+import editor2d2.model.subservice.Subscriber;
+import editor2d2.model.subservice.Vendor;
 
-public class Root extends GUIComponent {
+public class Root extends GUIComponent implements Subscriber {
 	
-		// The index of the previously open tab
-	private int previousTabIndex;
+		// The index of the currently open tab
+	private int currentTabIndex;
+	
+		// Reference to the currently active project
+	private Project targetProject;
 	
 	
 	public Root() {
-		this.previousTabIndex = -1;
+		this.currentTabIndex = -1;
+		
+		Controller vendor = (Controller) Application.subscriptionService.get("active-project", "Root", this);
+		
+		if( vendor == null )
+		this.targetProject = null;
+		else
+		this.targetProject = vendor.getProject();
 	}
 	
 
@@ -53,22 +71,28 @@ public class Root extends GUIComponent {
 		
 		JTabbedPane tpScenes = new JTabbedPane();							// Scene tabs
 		tpScenes.add("+", new JPanel());
-		tpScenes.add("Placehold", (new ScenePane()).render());
-		tpScenes.add("Another one", (new ScenePane()).render());
+		
+			// Creates Scene tabs for all the Scenes in the target project
+			// Only renders the Scene for the currently open tab
+		int s = 1;
+		for( Map.Entry<String, Scene> en : this.targetProject.getAllScenes().entrySet() )
+		{
+			JPanel sp_container = new JPanel();
+			
+			if( this.currentTabIndex == s )
+			sp_container = (new ScenePane(en.getValue())).render();
+			
+			tpScenes.add(en.getKey(), sp_container);
+			s++;
+		}
+		
+		tpScenes.setSelectedIndex(this.currentTabIndex);
 		
 		tpScenes.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				JTabbedPane source = (JTabbedPane) e.getSource();
-				
-					// If clicked on the +
-				if( source.getSelectedIndex() == 0 )
-				{
-					//source.setSelectedIndex(previousTabIndex);
-					actionCreateScene();
-					return;
-				}
+				onSceneTabClick((JTabbedPane) e.getSource());
 			}
 		});
 		
@@ -85,6 +109,21 @@ public class Root extends GUIComponent {
 	}
 	
 	
+		// Handles the Scene tab clicks
+	private void onSceneTabClick(JTabbedPane source) {
+		
+			// If clicked on the +-tab
+		if( source.getSelectedIndex() == 0 )
+		{
+			source.setSelectedIndex(this.currentTabIndex);
+			actionCreateScene();
+			return;
+		}
+		
+		this.currentTabIndex = source.getSelectedIndex();
+		update();
+	}
+	
 		// Creates a new scene upon clicking +
 	private void actionCreateScene() {
 		String name = (String) JOptionPane.showInputDialog("Enter scene name:");
@@ -92,7 +131,18 @@ public class Root extends GUIComponent {
 		if( name == null || name.equals("") )
 		return;
 		
-		// CREATE SCENE, SWITCH TO ITS TAB AND UPDATE THE COMPONENT
+			// Creates a new Scene and adds it to the target project
+		Scene newScene = new Scene();
+		newScene.setName(name);
+		this.targetProject.addScene(newScene);
+		
+		update();
+	}
+
+
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		this.targetProject = ((Controller) vendor).getProject();
 		update();
 	}
 }

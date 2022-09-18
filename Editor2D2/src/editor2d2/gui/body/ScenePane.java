@@ -1,19 +1,30 @@
 package editor2d2.gui.body;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
-import editor2d2.gui.modal.views.ObjectModal;
+import editor2d2.model.project.Scene;
 
 public class ScenePane extends GUIComponent {
-
+	
+		// Reference to the scene represented by this pane
+	private final Scene scene;
+	
+	
+	public ScenePane(Scene scene) {
+		this.scene = scene;
+	}
+	
+	
 	@Override
 	protected JPanel draw() {
 		JPanel container = GUIUtilities.createDefaultPanel();
-		container.add(new JLabel("Scene "+Math.random()));
-		container.add((new ObjectModal()).render());
+		
+		if( this.scene == null )
+		return container;
+		
+		container.add((new SceneView(this.scene)).render());
 		
 		return container;
 	}

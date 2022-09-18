@@ -7,6 +7,9 @@ import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.placeables.Placeable;
 
 public class Scene {
+	
+		// Name of the scene
+	private String name;
 
 		// Width of the Scene area in pixels
 	private int width;
@@ -15,18 +18,31 @@ public class Scene {
 	private int height;
 	
 		// Layers of placeables that the Scene consists of
-	private final ArrayList<Layer<Placeable>> layers;
+	private final ArrayList<Layer<? extends Placeable>> layers;
 	
 		// Camera that is used to render the Scene view at its location
 	private Camera camera;
 	
 	
 	public Scene() {
-		this.layers = new ArrayList<Layer<Placeable>>();
+		this.name = null;
+		this.layers = new ArrayList<Layer<? extends Placeable>>();
+		this.camera = null;
+	}
+	
+	public Scene(String name) {
+		this();
+		
+		this.name = name;
 	}
 	
 	
 		// GETTERS/SETTERS
+	
+		// Returns the name of the Scene
+	public String getName() {
+		return this.name;
+	}
 	
 		// Returns the width of the Scene in pixels
 	public int getWidth() {
@@ -44,8 +60,16 @@ public class Scene {
 	}
 	
 		// Returns a reference to the list of layers that the Scene consists of
-	public ArrayList<Layer<Placeable>> getLayers() {
+	public ArrayList<Layer<? extends Placeable>> getLayers() {
 		return this.layers;
+	}
+	
+		// Sets the name of the Scene
+	public void setName(String name) {
+		if( name == null )
+		return;
+		
+		this.name = name;
 	}
 
 		// Sets the dimensions of the Scene
@@ -56,11 +80,12 @@ public class Scene {
 	
 		// Sets the camera instance viewing the Scene
 	public void setCamera(Camera camera) {
+		camera.setScene(this);
 		this.camera = camera;
 	}
 	
 		// Adds a layer to the list of layers
-	public void addLayer(Layer<Placeable> layer) {
+	public void addLayer(Layer<? extends Placeable> layer) {
 		this.layers.add(layer);
 	}
 	

@@ -9,6 +9,11 @@ public class Instance extends Placeable {
 	private double y;
 	
 	
+	@Override
+	public void draw(RenderContext rctxt) {
+		
+	}
+	
 		// GETTERS/SETTERS
 	
 		// Sets the X- and Y-coordinates of the instance
