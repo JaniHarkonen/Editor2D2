@@ -27,7 +27,7 @@ public class Grid {
 		this.columnLength = height;
 	}
 	
-	protected Grid(int width, int height, int cellWidth, int cellHeight) {
+	public Grid(int width, int height, int cellWidth, int cellHeight) {
 		this(width, height);
 		
 		this.cellWidth = cellWidth;

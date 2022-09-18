@@ -25,7 +25,7 @@ public class Project {
 	
 	
 		// Returns the name of the map project
-	public String getName(String name) {
+	public String getName() {
 		return this.name;
 	}
 	
@@ -42,5 +42,13 @@ public class Project {
 		// Sets the name of the project
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+		// Adds a new Scene to the project
+	public void addScene(Scene scene) {
+		if( scene == null )
+		return;
+		
+		this.scenes.put(scene.getName(), scene);
 	}
 }

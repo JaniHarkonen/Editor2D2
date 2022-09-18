@@ -15,6 +15,11 @@ public class DataCell extends Placeable implements Gridable {
 	private Data data;
 	
 	
+	@Override
+	public void draw(RenderContext rctxt) {
+		
+	}
+	
 		// Returns the cellular width of the data cell
 	public int getCellWidth() {
 		return this.cellHeight;
@@ -40,5 +45,4 @@ public class DataCell extends Placeable implements Gridable {
 	public void changeData(Data data) {
 		this.data = data;
 	}
-	
 }

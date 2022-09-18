@@ -22,10 +22,17 @@ public abstract class Layer<T extends Placeable> {
 		// The opacity of the layer
 	protected double opacity;
 	
+		// Placement of the layer in the layer list of a Scene
+	protected int index;
+	
 	
 	protected Layer(Scene scene, int cellWidth, int cellHeight) {
 		this.scene = scene;
-		this.objectGrid = new Grid(scene.getWidth() / cellWidth, scene.getHeight() / cellHeight);
+		this.objectGrid = new Grid(scene.getWidth() / cellWidth, scene.getHeight() / cellHeight, cellWidth, cellHeight);
+		this.name = null;
+		this.isVisible = true;
+		this.opacity = 255.0d;
+		this.index = -1;
 	}
 	
 	
@@ -49,6 +56,16 @@ public abstract class Layer<T extends Placeable> {
 		return this.objectGrid;
 	}
 	
+		// Returns the cellular width of the object grid
+	public int getObjecGridRowLength() {
+		return this.objectGrid.getRowLength();
+	}
+	
+		// Returns the cellular height of the object grid
+	public int getObjectGridColumnLength() {
+		return this.objectGrid.getColumnLength();
+	}
+	
 		// Returns the name of the layer
 	public String getName() {
 		return this.name;
@@ -62,6 +79,11 @@ public abstract class Layer<T extends Placeable> {
 		// Returns the opacity of the layer
 	public double getOpacity() {
 		return this.opacity;
+	}
+	
+		// Returns the placement of the layer in the Scene's layer list
+	public int getIndex() {
+		return this.index;
 	}
 	
 		// Sets the Scene the layer belongs to
@@ -87,6 +109,12 @@ public abstract class Layer<T extends Placeable> {
 		// Sets the opacity of the layer
 	public void setOpacity(double opacity) {
 		this.opacity = opacity;
+	}
+	
+		// Sets the placement of the layer in the Scene's layer list
+	public void setIndex(int index) {
+		if( index >= 0 )
+		this.index = index;
 	}
 	
 		// Adjusts the opacity by a given amount

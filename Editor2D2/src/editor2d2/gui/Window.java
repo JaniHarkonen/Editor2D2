@@ -2,6 +2,8 @@ package editor2d2.gui;
 
 import javax.swing.JFrame;
 
+import editor2d2.DebugUtils;
+
 public class Window {
 
 		// This class is a singleton, only instantiate if not already
@@ -21,6 +23,8 @@ public class Window {
 	
 	
 	private Window(int width, int height, String title) {
+		DebugUtils.loadPlaceholderImages();
+		
 		this.window = new JFrame();
 		window.setSize(width, height);
 		window.setTitle(title);
