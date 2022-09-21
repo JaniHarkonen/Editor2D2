@@ -24,6 +24,23 @@ public class Project {
 	}
 	
 	
+		// Adds a new Scene to the project
+	public void addScene(Scene scene) {
+		if( scene == null )
+		return;
+		
+		this.scenes.put(scene.getName(), scene);
+	}
+	
+		// Adds an asset into the project
+	public void addAsset(Asset asset) {
+		if( asset == null )
+		return;
+		
+		this.assets.add(asset);
+	}
+	
+	
 		// Returns the name of the map project
 	public String getName() {
 		return this.name;
@@ -39,16 +56,13 @@ public class Project {
 		return this.scenes;
 	}
 	
+		// Returns a reference to the list of Assets in the project
+	public ArrayList<Asset> getAllAssets() {
+		return this.assets;
+	}
+	
 		// Sets the name of the project
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-		// Adds a new Scene to the project
-	public void addScene(Scene scene) {
-		if( scene == null )
-		return;
-		
-		this.scenes.put(scene.getName(), scene);
 	}
 }

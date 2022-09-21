@@ -3,8 +3,12 @@ package editor2d2;
 import editor2d2.gui.Window;
 import editor2d2.model.app.Controller;
 import editor2d2.model.subservice.SubscriptionService;
+import editor2d2.resources.Resources;
 
 public class Application {
+	
+		// Reference to the native Resources of the application
+	public static final Resources resources = Resources.instantiate();
 	
 		// Reference to the Subscription Service
 	public static final SubscriptionService subscriptionService = SubscriptionService.instantiate();

@@ -40,7 +40,7 @@ public class SubscriptionService {
 	}
 	
 		// Subscribes a subscriber to a given handle with a given subscriber ID
-	public void subscribe(String handle, String subId, Subscriber subscriber) {
+	public void subscribe(String handle, String subId, Subscriber self) {
 		if( subId == null || handle == null )
 		return;
 		
@@ -53,7 +53,7 @@ public class SubscriptionService {
 			this.subscriptions.put(handle, subscription);
 		}
 		
-		subscription.subscribe(subId, subscriber);
+		subscription.subscribe(subId, self);
 	}
 	
 		// Unsubscribes a with a given ID subscriber from a given handle
@@ -81,12 +81,12 @@ public class SubscriptionService {
 	 * @return Returns a reference to the vendor or NULL, if the vendor hasn't
 	 * registered yet.
 	 */
-	public Vendor get(String handle, String subId, Subscriber subscriber) {
-		if( handle == null || subId == null || subscriber == null )
+	public Vendor get(String handle, String subId, Subscriber self) {
+		if( handle == null || subId == null || self == null )
 		return null;
 		
 		Subscription subscription = this.subscriptions.get(handle);
-		subscribe(handle, subId, subscriber);
+		subscribe(handle, subId, self);
 		
 			// No subscription found
 		if( subscription == null )

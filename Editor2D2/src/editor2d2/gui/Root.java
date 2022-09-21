@@ -11,11 +11,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import editor2d2.Application;
-import editor2d2.gui.body.AssetPane;
 import editor2d2.gui.body.ScenePane;
 import editor2d2.gui.body.Toolbar;
+import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
-import editor2d2.gui.body.proppanes.TilePropertiesPane;
+import editor2d2.gui.body.proppanes.PropertiesPane;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.Scene;
@@ -35,6 +35,7 @@ public class Root extends GUIComponent implements Subscriber {
 		this.currentTabIndex = -1;
 		
 		Controller vendor = (Controller) Application.subscriptionService.get("active-project", "Root", this);
+		Application.subscriptionService.subscribe("selected-asset", "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;
@@ -58,7 +59,10 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		containerRightSide.add((new TilePropertiesPane()).render());	// Placeable properties
+		PropertiesPane pp = PropertiesPane.createPropertiesPane(Application.controller.DEBUGgetAsset());
+		if( pp != null )
+		containerRightSide.add(pp.render());	// Placeable properties
+		
 		containerRightSide.add((new LayerManagerPane()).render()); 		// Layer manager pane
 		
 			// Scene-asset split
@@ -99,7 +103,7 @@ public class Root extends GUIComponent implements Subscriber {
 		containerTopSide.add(tpScenes);
 		
 		spAssets.add(containerTopSide, SwingConstants.TOP);					// Scene pane
-		spAssets.add((new AssetPane()).render(), SwingConstants.BOTTOM);	// Asset pane
+		spAssets.add((new AssetPane(this.targetProject)).render(), SwingConstants.BOTTOM);	// Asset pane
 		spAssets.setDividerLocation(Window.DEFAULT_WINDOW_HEIGHT / 2);
 		
 		containerLeftSide.add(spAssets);
@@ -142,7 +146,16 @@ public class Root extends GUIComponent implements Subscriber {
 
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
-		this.targetProject = ((Controller) vendor).getProject();
+		
+		switch( handle )
+		{
+			case "active-project":
+				this.targetProject = ((Controller) vendor).getProject();
+				break;
+			
+			case "selected-asset":
+				break;
+		}
 		update();
 	}
 }
