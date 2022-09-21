@@ -1,8 +1,9 @@
 package editor2d2.model.project.scene.placeables;
 
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
-import editor2d2.DebugUtils;
+import editor2d2.Application;
 import editor2d2.common.grid.Grid;
 import editor2d2.model.project.assets.Image;
 import editor2d2.model.project.scene.Camera;
@@ -23,6 +24,8 @@ public class Tile extends Placeable {
 	@Override
 	public void draw(RenderContext rctxt) {
 		//if( sprite == null ) return;
+		
+		BufferedImage img = Application.resources.getGraphic("test-grass");
 
 		Camera cam = rctxt.camera;
 		Grid objs = getLayer().getObjectGrid();
@@ -35,9 +38,9 @@ public class Tile extends Placeable {
 		
 		AffineTransform at = new AffineTransform();
 		at.translate(f_x, f_y);
-		at.scale(f_w / DebugUtils.IMG_GRASS.getWidth(), f_h / DebugUtils.IMG_GRASS.getHeight());
+		at.scale(f_w / img.getWidth(), f_h / img.getHeight());
 		
-		rctxt.gg.drawImage(DebugUtils.IMG_GRASS, at, null);
+		rctxt.gg.drawImage(img, at, null);
 		//sprite.draw(ctxt.graphics, at);
 	}
 	

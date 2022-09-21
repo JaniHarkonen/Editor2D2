@@ -2,8 +2,6 @@ package editor2d2.gui;
 
 import javax.swing.JFrame;
 
-import editor2d2.DebugUtils;
-
 public class Window {
 
 		// This class is a singleton, only instantiate if not already
@@ -23,17 +21,15 @@ public class Window {
 	
 	
 	private Window(int width, int height, String title) {
-		DebugUtils.loadPlaceholderImages();
-		
 		this.window = new JFrame();
-		window.setSize(width, height);
-		window.setTitle(title);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.window.setSize(width, height);
+		this.window.setTitle(title);
+		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		window.setJMenuBar((new WindowToolbar()).get());
-		window.add((new Root()).render());
+		this.window.setJMenuBar((new WindowToolbar()).get());
+		this.window.add((new Root()).render());
 		
-		window.setVisible(true);
+		this.window.setVisible(true);
 	}
 	
 	
@@ -53,7 +49,7 @@ public class Window {
 		if( isInstantiated )
 		return null;
 		
-		Window.isInstantiated = true;
+		isInstantiated = true;
 		
 		return new Window(width, height, title);
 	}
