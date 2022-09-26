@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 /**
  * This class will be used to load and reference the assets native to
- * Editor2D. This class is a singleton.
+ * Editor2D as well as other external assets. This class is a singleton.
  * @author User
  *
  */
@@ -41,7 +41,10 @@ public final class Resources {
 			
 				// Asset icons
 			loadGraphic("icon-asset-folder", path + "assets\\icon_folder.png");
-			loadGraphic("icon-asset-object", path + "assets\\icon_object.png");	
+			loadGraphic("icon-asset-object", path + "assets\\icon_object.png");
+			
+				// Null icons
+			loadGraphic("icon-null-texture", path + "assets\\icon_null_texture.png");
 	}
 	
 	
@@ -58,6 +61,41 @@ public final class Resources {
 		return new Resources();
 	}
 	
+	
+	/**
+	 * Loads an external graphic from a given file and returns
+	 * a reference to the Buffered Image representing it.
+	 * @param path Path of the image file to load from.
+	 * @return BufferedImage of the loaded image or NULL if the
+	 * loading failed.
+	 */
+	public BufferedImage loadExternalGraphic(String path) {
+		if( path == null )
+		return null;
+		
+		BufferedImage img = null;
+		
+		try {
+			img = ImageIO.read(new File(path));
+		}
+		catch( IOException e ) { }
+		
+		return img;
+	}
+	
+	/**
+	 * Loads an external graphic from a given file and returns
+	 * a reference to the Buffered Image representing it.
+	 * @param file File object of the image file to load from.
+	 * @return BufferedImage of the loaded image or NULL if the
+	 * loading failed.
+	 */
+	public BufferedImage loadExternalGraphic(File file) {
+		if( file == null )
+		return null;
+		
+		return loadExternalGraphic(file.getPath());
+	}
 	
 	/**
 	 * Returns a reference to the graphic of a given name.
@@ -78,12 +116,7 @@ public final class Resources {
 	 * graphic.
 	 */
 	private void loadGraphic(String name, String fname) {
-		BufferedImage img = null;
-		
-		try {
-			img = ImageIO.read(new File(fname));
-		}
-		catch (IOException e) { }
+		BufferedImage img = loadExternalGraphic(fname);
 		
 		if( img != null )
 		this.graphics.put(name, img);

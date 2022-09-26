@@ -142,7 +142,7 @@ public class DebugUtils {
 	 * @param ref Method caller.
 	 */
 	public static void log(String msg, Object ref) {
-		System.out.println(ref);
+		System.out.println(ref + " :");
 		System.out.println(msg);
 	}
 }
