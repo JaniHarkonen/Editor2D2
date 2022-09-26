@@ -3,12 +3,14 @@ package editor2d2.gui.body.assetpane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.assets.Asset;
+import editor2d2.model.subservice.Vendor;
 
-public class AssetPane extends GUIComponent {
+public class AssetPane extends GUIComponent implements Vendor {
 	
 		// Reference to the project the asset pane is representing
 	private Project source;
@@ -16,6 +18,8 @@ public class AssetPane extends GUIComponent {
 	
 	public AssetPane(Project source) {
 		this.source = source;
+		
+		Application.subscriptionService.register("asset-pane", this);
 	}
 	
 
