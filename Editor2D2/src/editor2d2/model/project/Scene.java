@@ -112,4 +112,19 @@ public class Scene {
 		
 		return false;
 	}
+	
+		// Removes a given layer from the list of layers and returns
+		// true if the removal was successful, false if not
+	public boolean removeLayer(Layer<? extends Placeable> layer) {
+		for( int i = 0; i < this.layers.size(); i++ )
+		{
+			if( this.layers.get(i) == layer )
+			{
+				this.layers.remove(i);
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

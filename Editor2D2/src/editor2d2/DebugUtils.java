@@ -58,7 +58,9 @@ public class DebugUtils {
 			
 					// Layer
 				TileLayer tl1 = new TileLayer(scene1, 32);
+				tl1.setName("tiles");
 				ObjectLayer ol1 = new ObjectLayer(scene1);
+				ol1.setName("objs");
 				
 					// Tiles
 				int d = 0;
