@@ -1,2 +1,1 @@
-TODO - ScenePan
-- ability to place all types of placeables
+T

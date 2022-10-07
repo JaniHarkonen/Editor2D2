@@ -2,7 +2,6 @@ package editor2d2.model.project.layers;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Scene;
-import editor2d2.model.project.scene.placeables.Placeable;
 import editor2d2.model.project.scene.placeables.Tile;
 
 public class TileLayer extends Layer<Tile> {
@@ -14,6 +13,10 @@ public class TileLayer extends Layer<Tile> {
 	public TileLayer(Scene scene, int gridSize) {
 		super(scene, gridSize, gridSize);
 		this.gridSize = gridSize;
+	}
+	
+	public TileLayer(Scene scene) {
+		this(scene, 32);
 	}
 	
 

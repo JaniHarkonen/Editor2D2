@@ -16,9 +16,6 @@ public class Controller implements Vendor {
 		// Reference to the currently active Layer
 	private Layer<? extends Placeable> layer;
 	
-		// (DEBUG) Reference to the currently selected Asset that will be placed
-	//private Asset asset;
-	
 		// Reference to the selected placeable
 	private Placeable selectedPlaceable;
 	
@@ -29,7 +26,6 @@ public class Controller implements Vendor {
 		// This class is a singleton, only instantiate once
 	private Controller() {
 		this.project = null;
-		//this.asset = null;
 		this.selectedPlaceable = null;
 		this.layer = null;
 		
@@ -48,11 +44,6 @@ public class Controller implements Vendor {
 	public Project getProject() {
 		return this.project;
 	}
-	
-		// (DEBUG) Returns a reference to the currently selected asset
-	/*public Asset getAsset() {
-		return this.asset;
-	}*/
 	
 		// Returns a reference to the selected placeable
 	public Placeable getSelectedPlaceable() {
@@ -73,7 +64,6 @@ public class Controller implements Vendor {
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
-		//this.asset = asset;
 		this.selectedPlaceable = asset.createPlaceable();
 		
 		Application.subscriptionService.register("selected-placeable", this);

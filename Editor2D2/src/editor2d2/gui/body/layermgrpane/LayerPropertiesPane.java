@@ -1,25 +1,55 @@
 package editor2d2.gui.body.layermgrpane;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
+import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
+import editor2d2.model.project.layers.Layer;
+import editor2d2.model.project.scene.placeables.Placeable;
 
 public class LayerPropertiesPane extends GUIComponent {
+	
+		// Reference to the source layer that the pane is representing
+	private Layer<? extends Placeable> source;
+	
+		// Layer name text field
+	private CTextField txtName;
+	
+		// Layer opacity text field
+	private CTextField txtOpacity;
+	
+	
+	public LayerPropertiesPane(Layer<? extends Placeable> source) {
+		this.source = source;
+		
+		this.txtName = new CTextField("Name: ");
+		this.txtName.orientation = BoxLayout.PAGE_AXIS;
+		
+		this.txtOpacity = new CTextField();
+	}
+	
+	public LayerPropertiesPane() {
+		this(null);
+	}
+	
 
 	@Override
 	protected JPanel draw() {
 		JPanel container = GUIUtilities.createDefaultPanel();
 		
 			// Layer name field
-		CTextField txtName = new CTextField("Name:");
-		txtName.orientation = BoxLayout.PAGE_AXIS;
+		this.txtName.setText(this.source.getName());
 		
 			// Type area
 		JPanel containerType = GUIUtilities.createDefaultPanel();
@@ -33,18 +63,19 @@ public class LayerPropertiesPane extends GUIComponent {
 		containerType.add(dmType);
 		
 			// Opacity area
+		double opacity = this.source.getOpacity();
 		JPanel containerOpacity = GUIUtilities.createDefaultPanel();
 		
 				// Opacity slider
-			JSlider sldOpacity = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+			JSlider sldOpacity = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (100 * opacity));
 			
 				// Opacity field
-			CTextField txtOpacity = new CTextField();
+			this.txtOpacity.setText(""+(opacity * 255));
 			JLabel labOpacityTitle = new JLabel("Opacity:");
 			
 		containerOpacity.add(labOpacityTitle);
 		containerOpacity.add(sldOpacity);
-		containerOpacity.add(txtOpacity.render());
+		containerOpacity.add(this.txtOpacity.render());
 		
 			// Visibility checkbox 
 		JPanel containerVisibility = GUIUtilities.createDefaultPanel();
@@ -56,11 +87,32 @@ public class LayerPropertiesPane extends GUIComponent {
 		containerVisibility.add(labVisibilityTitle);
 		containerVisibility.add(cbIsVisible);
 		
-		container.add(txtName.render());
+		container.add(this.txtName.render());
 		container.add(containerType);
 		container.add(containerOpacity);
 		container.add(containerVisibility);
 		
+			// Controls
+		JButton btnApply =  new JButton("Apply");
+		btnApply.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				onApply();
+			}
+		});
+		container.add(btnApply);
+		
 		return container;
+	}
+	
+	
+		// Called upon clicking "Apply", applies changes to the source layer
+	private void onApply() {
+		String name = this.txtName.getText();
+		double opacity = (Double.parseDouble(this.txtOpacity.getText()) / 255);
+		
+		this.source.setName(name);
+		this.source.setOpacity(opacity);
 	}
 }
