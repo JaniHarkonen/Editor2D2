@@ -35,7 +35,7 @@ public class Root extends GUIComponent implements Subscriber {
 		this.currentTabIndex = -1;
 		
 		Controller vendor = (Controller) Application.subscriptionService.get("active-project", "Root", this);
-		Application.subscriptionService.subscribe("selected-asset", "Root", this);
+		Application.subscriptionService.subscribe("selected-placeable", "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;
@@ -59,7 +59,7 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		PropertiesPane pp = PropertiesPane.createPropertiesPane(Application.controller.DEBUGgetAsset());
+		PropertiesPane pp = PropertiesPane.createPropertiesPane(Application.controller.getSelectedPlaceable());
 		if( pp != null )
 		containerRightSide.add(pp.render());	// Placeable properties
 		
@@ -156,6 +156,7 @@ public class Root extends GUIComponent implements Subscriber {
 			case "selected-asset":
 				break;
 		}
+		
 		update();
 	}
 }

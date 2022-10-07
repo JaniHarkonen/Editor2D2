@@ -1,5 +1,7 @@
 package editor2d2.model.project.assets;
 
+import editor2d2.model.project.scene.placeables.Placeable;
+
 public abstract class Asset {
 
 		// Name of the asset as displayed in the resources panel
@@ -7,6 +9,13 @@ public abstract class Asset {
 	
 		// Identifier used to refer to the asset in the compiled map file
 	protected String identifier;
+	
+	
+		// Creates a placeable based on the asset
+		// CAN BE OVERRIDDEN
+	public Placeable createPlaceable() {
+		return null;
+	}
 	
 	
 		// Returns the name of the asset

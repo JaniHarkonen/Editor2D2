@@ -2,24 +2,34 @@ package editor2d2.gui.body;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
+import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.model.project.Scene;
+import editor2d2.model.project.layers.Layer;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.CameraBounds;
+import editor2d2.model.project.scene.placeables.Placeable;
+import editor2d2.model.subservice.Subscriber;
+import editor2d2.model.subservice.Vendor;
 
-public class SceneView extends GUIComponent {
+public class SceneView extends GUIComponent implements Vendor, Subscriber {
 	
 		// Reference to the Scene that this view will render
 	private final Scene scene;
@@ -34,8 +44,20 @@ public class SceneView extends GUIComponent {
 	public SceneView(Scene scene) {
 		this.scene = scene;
 		this.view = createView();
+		
+		SceneView previousSceneView = ((SceneView) Application.subscriptionService.get("SceneView-DragBox-scene-dragger", "SceneView", this));
+		
+		if( previousSceneView == null )
 		this.sceneDragger = new DragBox(0, 0, this.scene.getWidth(), this.scene.getHeight());
+		else
+		this.sceneDragger = previousSceneView.getSceneDragger();
+		
+		Application.subscriptionService.register("SceneView-DragBox-scene-dragger", this);
 	}
+	
+	
+	@Override
+	public void onNotification(String handle, Vendor vendor) { }
 	
 
 	@Override
@@ -96,6 +118,10 @@ public class SceneView extends GUIComponent {
 					
 				gg.draw(bounds_cam);
 				
+					// Render the DragBox bounds
+				gg.setColor(Color.BLUE);
+				gg.drawRect((int) sceneDragger.getX(), (int) sceneDragger.getY(), (int) sceneDragger.getWidth(), (int) sceneDragger.getHeight());
+				
 					// Render the placement grid of the layer that is currently active
 				/*dash[0] = 1.0f;
 				dash[1] = 1.0f;
@@ -125,8 +151,21 @@ public class SceneView extends GUIComponent {
 				int mb = e.getButton();
 				
 					// Left mouse button released
-				if( mb == MB_LEFT )
-				sceneDragger.stopDragging();
+				if( mb == MB_RIGHT )
+				{
+					container.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					sceneDragger.stopDragging();
+				}
+			}
+		});
+		
+			// Register mouse wheel
+		container.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				cam.shift(0, 0, -e.getWheelRotation() * 0.1);
+				update();
 			}
 		});
 		
@@ -136,18 +175,46 @@ public class SceneView extends GUIComponent {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				
-					// Handle Scene dragging
-				if( !sceneDragger.checkDragging() )
-				sceneDragger.startDragging(e.getX(), e.getY(), 1);
-				else
+				if( SwingUtilities.isLeftMouseButton(e) )
 				{
-					DragBoxPoll dgpoll = sceneDragger.poll(e.getX(), e.getY(), 1);
-					cam.shift(dgpoll.x, dgpoll.y, 0);
-					update();
+					Placeable p = Application.controller.getSelectedPlaceable();
+					
+					if( p != null )
+					{
+						Placeable dupp = p.duplicate();
+						int pcx = (int) (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
+						int pcy = (int) (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
+						Layer<? extends Placeable> layer = Application.controller.getProject().getScene("small scene").getLayers().get(1);
+						
+						layer.attemptPlace(pcx, pcy, dupp);
+						update();
+					}
+				}
+				
+					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
+					// on the first click)
+				if( SwingUtilities.isRightMouseButton(e) )
+				{
+					if( !sceneDragger.checkDragging() )
+					{
+						container.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+						sceneDragger.startDragging(e.getX(), e.getY(), 1);
+					}
+					else
+					{
+						DragBoxPoll dgpoll = sceneDragger.poll(e.getX(), e.getY(), 1);
+						cam.shift(dgpoll.x, dgpoll.y, 0);
+						update();
+					}
 				}
 			}
 		});
 		
 		return container;
+	}
+	
+		// Returns a reference to the DragBox that is used to move the scene
+	private DragBox getSceneDragger() {
+		return this.sceneDragger;
 	}
 }

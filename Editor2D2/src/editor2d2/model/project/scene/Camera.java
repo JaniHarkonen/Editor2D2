@@ -1,11 +1,13 @@
 package editor2d2.model.project.scene;
 
+import java.awt.AlphaComposite;
+import java.awt.Composite;
 import java.awt.Graphics2D;
 
-import editor2d2.DebugUtils;
 import editor2d2.common.grid.Grid;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.layers.Layer;
+import editor2d2.model.project.layers.ObjectArray;
 import editor2d2.model.project.scene.placeables.Drawable;
 import editor2d2.model.project.scene.placeables.Placeable;
 import editor2d2.model.project.scene.placeables.RenderContext;
@@ -44,43 +46,58 @@ public class Camera {
 		// Renders the area in the map visible to the camera
 	public void render(Graphics2D gg) {
 		RenderContext rctxt = new RenderContext(gg, this);
+		Composite prevComp = rctxt.gg.getComposite();
+		
+		int renderCount = 0;
 		
 		for( Layer<? extends Placeable> lay : this.scene.getLayers() )
 		{
 				// Skip invisible layers and layers with 0 opacity
-			if( !lay.checkVisible() || lay.getOpacity() < 1 )
+			if( !lay.checkVisible() || lay.getOpacity() < 0.001 )
 			continue;
 			
+				// Set the opacity for the Graphics2D-context
+			rctxt.gg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) lay.getOpacity()));
+			
 			Grid grid = lay.getObjectGrid();
+			CameraBounds bounds = getBounds();
 			
 				// Grid dimensions
 			int cw = grid.getCellWidth(),
 				ch = grid.getCellHeight(),
 				gw = grid.getRowLength(),
 				gh = grid.getColumnLength();
-				
-			CameraBounds bounds = getBounds();
 			
 				// Area visible to the Camera
-			int start_x = Math.max(0 , (int) bounds.left / cw),
-				start_y = Math.max(0 , (int) bounds.top / ch),
-				end_x	= Math.min(gw, (int) bounds.right / cw),
-				end_y 	= Math.min(gh, (int) bounds.bottom / ch);
+			int start_x = Math.max(0 , (int) bounds.left / cw - 1),
+				start_y = Math.max(0 , (int) bounds.top / ch - 1),
+				end_x	= Math.min(gw, (int) bounds.right / cw + 1),
+				end_y 	= Math.min(gh, (int) bounds.bottom / ch + 1);
 			
 				// Draw the visible area of the Scene
 			for( int x = start_x; x < end_x; x++ )
 			{
 				for( int y = start_y; y < end_y; y++ )
 				{
-					Drawable place = (Drawable) grid.get(x, y);
+					Drawable drawable = (Drawable) grid.get(x, y);
 					
-					if( place == null )
+					if( drawable == null )
 					continue;
 					
-					place.draw(rctxt);
+					drawable.draw(rctxt);
+					
+						// DEBUG
+					if( drawable instanceof ObjectArray )
+					renderCount += ((ObjectArray) drawable).objects.size();
+					else
+					renderCount++;
 				}
 			}
 		}
+		
+			// Reset Graphics2D composite
+		rctxt.gg.setComposite(prevComp);
+		rctxt.gg.drawString("Placeables rendered: " + renderCount, 0, 16);
 	}
 	
 	/**
@@ -124,8 +141,8 @@ public class Camera {
 	
 		// Returns the bounds of the view of the Camera
 	public CameraBounds getBounds() {
-		double 	wh = this.portWidth / 2 * this.z,
-				hh = this.portHeight / 2 * this.z;
+		double 	wh = this.portWidth / 2 / this.z,
+				hh = this.portHeight / 2 / this.z;
 		
 		return new CameraBounds(this.x - wh, this.y - hh, this.x + wh, this.y + hh);
 	}

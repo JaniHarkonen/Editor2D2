@@ -19,7 +19,7 @@ public abstract class Layer<T extends Placeable> {
 		// Whether the layer and its contents are being drawn
 	protected boolean isVisible;
 	
-		// The opacity of the layer
+		// The opacity of the layer (0 - 1)
 	protected double opacity;
 	
 		// Placement of the layer in the layer list of a Scene
@@ -31,20 +31,40 @@ public abstract class Layer<T extends Placeable> {
 		this.objectGrid = new Grid(scene.getWidth() / cellWidth, scene.getHeight() / cellHeight, cellWidth, cellHeight);
 		this.name = null;
 		this.isVisible = true;
-		this.opacity = 255.0d;
+		this.opacity = 1.0;
 		this.index = -1;
 	}
 	
 	
 		// Places a given Gridable object into a cell in the object grid
-	public void place(int cx, int cy, Gridable p) {
+		// CAN BE OVERRIDDEN FOR MORE COMPLICATED PLACEABLES
+	public void place(int cx, int cy, Placeable p) {
+		p.setCellPosition(cx, cy);
+		p.setOffsets(0, 0);
+		p.changeLayer(this);
+		
 		this.objectGrid.put(cx, cy, p);
+	}
+	
+		// Attempts to place a Gridable object into a cell checking it first
+		// using the layer filter
+		// THIS METHOD SHOULD BE FAVORED OVER place
+		// ONLY USE place WHEN YOU KNOW THAT THE PLACEABLE IS ACCEPTED BY THE LAYER
+	public void attemptPlace(int cx, int cy, Placeable p) {
+		if( filterCheck(p) )
+		place(cx, cy, p);
 	}
 	
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		place(cx, cy, null);
 	}
+	
+	
+		// Checks whether a Gridable object can be placed onto the layer
+		// TO BE OVERRIDDEN
+	protected abstract boolean filterCheck(Gridable p);
+	
 	
 		// Returns a reference to the Scene the layer belongs to
 	public Scene getScene() {

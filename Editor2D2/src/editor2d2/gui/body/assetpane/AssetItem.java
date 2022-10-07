@@ -31,7 +31,7 @@ public class AssetItem extends GUIComponent {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if( e.getButton() == 1 )
-				Application.controller.DEBUGsetAsset(source);
+				Application.controller.selectAsset(source);
 			}
 		});
 		

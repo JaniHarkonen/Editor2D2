@@ -132,5 +132,7 @@ public class ImageModal extends ModalView<Image> {
 	protected void actionCreate() {
 		saveChanges(true);
 		finalizeCreation();
+		
+		this.host.closeModalWindow();
 	}
 }

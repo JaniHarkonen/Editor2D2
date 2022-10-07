@@ -168,6 +168,8 @@ public class ObjectModal extends ModalView<EObject> {
 	protected void actionCreate() {
 		saveChanges(true);
 		finalizeCreation();
+		
+		this.host.closeModalWindow();
 	}
 	
 		// Adds a new property panel to a given container upon

@@ -2,6 +2,9 @@ package editor2d2.model.project.assets;
 
 import java.util.ArrayList;
 
+import editor2d2.model.project.scene.placeables.Instance;
+import editor2d2.model.project.scene.placeables.Placeable;
+
 public class EObject extends Asset {
 
 		// Reference to the Image asset being used as the sprite
@@ -29,6 +32,16 @@ public class EObject extends Asset {
 		this.rotation = 0;
 		//this.properties = new HashMap<String, ObjectProperty>();
 		this.properties = new ArrayList<ObjectProperty>();
+	}
+	
+	
+	@Override
+	public Placeable createPlaceable() {
+		Instance inst = new Instance();
+		inst.setObject(this);
+		inst.setSprite(this.sprite);
+		
+		return inst;
 	}
 	
 	

@@ -64,6 +64,15 @@ public class Scene {
 		return this.layers;
 	}
 	
+		// Returns a reference to a layer with given name
+	public Layer<? extends Placeable> getLayerByName(String name) {
+		for( Layer<? extends Placeable> l : this.layers )
+		if( l.getName().equals(name) )
+		return l;
+		
+		return null;
+	}
+	
 		// Sets the name of the Scene
 	public void setName(String name) {
 		if( name == null )

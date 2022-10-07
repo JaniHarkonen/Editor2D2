@@ -59,19 +59,6 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 	
 	
 	@Override
-	protected JPanel draw() {
-		JPanel container = GUIUtilities.createDefaultPanel();
-		JTabbedPane tpViews = new JTabbedPane();
-		
-		for( ModalView<? extends Asset> mv : this.views )
-		tpViews.add(mv.getAsset().getName(), mv.render());
-		
-		container.add(tpViews);
-		return container;
-	}
-	
-	
-	@Override
 	public void onNotification(String handle, Vendor vendor) {
 		switch( handle )
 		{
@@ -91,6 +78,32 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		
 		this.dialog.setVisible(true);
 		this.dialog.setLocationRelativeTo(null);
+	}
+	
+		// Closes the modal window and clears the views if requested
+	public void closeModalWindow(boolean clearViews) {
+		if( clearViews )
+		closeAllViews();
+		
+		this.dialog.dispatchEvent(new WindowEvent(this.dialog, WindowEvent.WINDOW_CLOSING));
+	}
+	
+		// Closes the modal window and clears the views
+	public void closeModalWindow() {
+		closeModalWindow(true);
+	}
+	
+	
+	@Override
+	protected JPanel draw() {
+		JPanel container = GUIUtilities.createDefaultPanel();
+		JTabbedPane tpViews = new JTabbedPane();
+		
+		for( ModalView<? extends Asset> mv : this.views )
+		tpViews.add(mv.getAsset().getName(), mv.render());
+		
+		container.add(tpViews);
+		return container;
 	}
 	
 		// Closes all views and clears the list of views

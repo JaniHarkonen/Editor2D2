@@ -110,9 +110,8 @@ public abstract class ModalView<A extends Asset> extends GUIComponent {
 	protected abstract void actionCreate();
 	
 		// Called upon clicking "Cancel"
-	protected void actionCancel() {
-		
-	}
+		// CAN BE OVERRIDDEN
+	protected void actionCancel() { }
 	
 		// Updates the Project and the Asset Pane to the creation
 		// of a new Asset
