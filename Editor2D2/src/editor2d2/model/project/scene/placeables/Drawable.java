@@ -8,5 +8,13 @@ package editor2d2.model.project.scene.placeables;
  */
 public interface Drawable {
 
+	/**
+	 * Draws the placeable with settings provided by the given
+	 * RenderContext-object.
+	 * 
+	 * @param rctxt RenderContext-object that will provide the
+	 * settings necessary for drawing the placeable including
+	 * the Graphics2D-context.
+	 */
 	public void draw(RenderContext rctxt);
 }

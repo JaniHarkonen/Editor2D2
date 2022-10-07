@@ -2,6 +2,9 @@ package editor2d2.model.project.assets;
 
 import java.awt.Color;
 
+import editor2d2.model.project.scene.placeables.DataCell;
+import editor2d2.model.project.scene.placeables.Placeable;
+
 public class Data extends Asset {
 
 		// Data contained by the data cells
@@ -9,6 +12,21 @@ public class Data extends Asset {
 	
 		// Color of the data cell
 	private Color color;
+	
+	
+	public Data() {
+		this.value = "0";
+		this.color = Color.WHITE;
+	}
+	
+	
+	@Override
+	public Placeable createPlaceable() {
+		DataCell dcell = new DataCell();
+		dcell.setData(this);
+		
+		return dcell;
+	}
 	
 	
 		// Returns the data represented by the Data object

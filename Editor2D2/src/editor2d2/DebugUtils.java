@@ -6,6 +6,7 @@ import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.assets.Image;
+import editor2d2.model.project.layers.ObjectLayer;
 import editor2d2.model.project.layers.TileLayer;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.placeables.Tile;
@@ -50,13 +51,14 @@ public class DebugUtils {
 			
 					// Camera
 				Camera cam1 = new Camera();
-				cam1.setPortDimensions(320, 160);
+				cam1.setPortDimensions(358, 210);
 				cam1.shift(0, 0, 0);
 			
 			scene1.setCamera(cam1);
 			
 					// Layer
 				TileLayer tl1 = new TileLayer(scene1, 32);
+				ObjectLayer ol1 = new ObjectLayer(scene1);
 				
 					// Tiles
 				int d = 0;
@@ -64,15 +66,13 @@ public class DebugUtils {
 				{
 					for( int y = 0; y < 6; y++ )
 					{
-						Tile t1 = new Tile();
-						t1.place(tl1, x, y);
+						tl1.place(x, y, new Tile());
 						d++;
 					}
 				}
 				
-				DebugUtils.log(""+d, new DebugUtils());
-				
 			scene1.addLayer(tl1);
+			scene1.addLayer(ol1);
 			
 				// Scene2
 			Scene scene2 = new Scene("BIG scene O_O");
@@ -141,7 +141,7 @@ public class DebugUtils {
 	 * @param msg Message to log to the console.
 	 * @param ref Method caller.
 	 */
-	public static void log(String msg, Object ref) {
+	public static void log(Object msg, Object ref) {
 		System.out.println(ref + " :");
 		System.out.println(msg);
 	}

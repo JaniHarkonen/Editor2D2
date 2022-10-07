@@ -1,11 +1,8 @@
 package editor2d2.gui.modal.views;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JColorChooser;
@@ -13,17 +10,11 @@ import javax.swing.JPanel;
 
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.ColorPreviewPanel;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.assets.Data;
 
 public class DataModal extends ModalView<Data> {
-	
-		// Default color panel width
-	public static final int DEFAULT_COLOR_PANEL_WIDTH = 64;
-	
-		// Default color panel height
-	public static final int DEFAULT_COLOR_PANEL_HEIGHT = 64;
-	
 	
 		// Data value text field
 	private CTextField txtDataValue;
@@ -68,35 +59,7 @@ public class DataModal extends ModalView<Data> {
 		JPanel containerCellColor = GUIUtilities.createDefaultPanel();
 		containerCellColor.setBorder(BorderFactory.createTitledBorder("Cell color"));
 			
-			// Color preview panel
-			@SuppressWarnings("serial")
-			JPanel colorPanel = new JPanel() {
-				
-				@Override
-				protected void paintComponent(Graphics g) {
-					int pw = DEFAULT_COLOR_PANEL_WIDTH,
-						ph = DEFAULT_COLOR_PANEL_HEIGHT;
-					
-						// Draw color panel
-					g.setColor(srcColor);
-					g.fillRect(0, 0, pw, ph);
-					
-						// Draw data data value
-					Color invColor = Color.BLACK;
-					float invColorBrightness = 1 - Color.RGBtoHSB(colr, colg, colb, null)[2];
-					
-					if( invColorBrightness < 0.45 || invColorBrightness > 0.55 )
-					invColor = new Color(Color.HSBtoRGB(0, 0, invColorBrightness));
-					
-					g.setColor(invColor);
-					
-					FontMetrics fm = g.getFontMetrics();
-					Rectangle2D textDimensions = fm.getStringBounds(srcValue, g);
-					
-					g.drawString(srcValue, (int) ((pw / 2) - textDimensions.getCenterX()), (int) ((ph / 2) - textDimensions.getCenterY()));
-				}
-			};
-			
+			JPanel colorPanel = new ColorPreviewPanel(srcColor, srcValue);
 			colorPanel.addMouseListener(new MouseAdapter() {
 				
 				@Override
@@ -152,6 +115,8 @@ public class DataModal extends ModalView<Data> {
 	protected void actionCreate() {
 		saveChanges(true);
 		finalizeCreation();
+		
+		this.host.closeModalWindow();
 	}
 	
 	private void actionColorPicker() {

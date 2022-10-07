@@ -45,6 +45,7 @@ public final class Resources {
 			
 				// Null icons
 			loadGraphic("icon-null-texture", path + "assets\\icon_null_texture.png");
+			loadGraphic("icon-null-object", path + "assets\\icon_null_object.png");
 	}
 	
 	

@@ -2,6 +2,9 @@ package editor2d2.model.project.assets;
 
 import java.awt.image.BufferedImage;
 
+import editor2d2.model.project.scene.placeables.Placeable;
+import editor2d2.model.project.scene.placeables.Tile;
+
 public class Image extends Asset {
 
 		// BufferedImage of the asset
@@ -17,9 +20,37 @@ public class Image extends Asset {
 	}
 	
 	
+	@Override
+	public Placeable createPlaceable() {
+		Tile tile = new Tile();
+		tile.setImage(this);
+		
+		return tile;
+	}
+	
 		// Returns a refernce to the BufferedImage representing the Image asset
 	public BufferedImage getImage() {
 		return this.image;
+	}
+	
+		// Returns the width of the underlying BufferedImage
+	public int getWidth() {
+		return this.image.getWidth();
+	}
+	
+		// Returns the width of the underlying BufferedImage divided by n
+	public int getWidth(int n) {
+		return this.image.getWidth() / n;
+	}
+	
+		// Returns the height of the underlying BufferedImage
+	public int getHeight() {
+		return this.image.getHeight();
+	}
+	
+		// Returns the height of the underlying BufferedImage divided by n
+	public int getHeight(int n) {
+		return this.image.getHeight() / n;
 	}
 	
 		// Returns the filepath of the underlying image file
