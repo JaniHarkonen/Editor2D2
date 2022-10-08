@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import editor2d2.model.project.layers.Layer;
 import editor2d2.model.project.scene.Camera;
-import editor2d2.model.project.scene.placeables.Placeable;
 
 public class Scene {
 	
@@ -18,7 +17,7 @@ public class Scene {
 	private int height;
 	
 		// Layers of placeables that the Scene consists of
-	private final ArrayList<Layer<? extends Placeable>> layers;
+	private final ArrayList<Layer> layers;
 	
 		// Camera that is used to render the Scene view at its location
 	private Camera camera;
@@ -26,7 +25,7 @@ public class Scene {
 	
 	public Scene() {
 		this.name = null;
-		this.layers = new ArrayList<Layer<? extends Placeable>>();
+		this.layers = new ArrayList<Layer>();
 		this.camera = null;
 	}
 	
@@ -60,13 +59,13 @@ public class Scene {
 	}
 	
 		// Returns a reference to the list of layers that the Scene consists of
-	public ArrayList<Layer<? extends Placeable>> getLayers() {
+	public ArrayList<Layer> getLayers() {
 		return this.layers;
 	}
 	
 		// Returns a reference to a layer with given name
-	public Layer<? extends Placeable> getLayerByName(String name) {
-		for( Layer<? extends Placeable> l : this.layers )
+	public Layer getLayerByName(String name) {
+		for( Layer l : this.layers )
 		if( l.getName().equals(name) )
 		return l;
 		
@@ -94,7 +93,7 @@ public class Scene {
 	}
 	
 		// Adds a layer to the list of layers
-	public void addLayer(Layer<? extends Placeable> layer) {
+	public void addLayer(Layer layer) {
 		this.layers.add(layer);
 	}
 	
@@ -115,7 +114,7 @@ public class Scene {
 	
 		// Removes a given layer from the list of layers and returns
 		// true if the removal was successful, false if not
-	public boolean removeLayer(Layer<? extends Placeable> layer) {
+	public boolean removeLayer(Layer layer) {
 		for( int i = 0; i < this.layers.size(); i++ )
 		{
 			if( this.layers.get(i) == layer )

@@ -4,7 +4,7 @@ import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.scene.placeables.DataCell;
 
-public class DataLayer extends Layer<DataCell> {
+public class DataLayer extends Layer {
 	
 		// Size of a cell in the grid
 	private int gridSize;

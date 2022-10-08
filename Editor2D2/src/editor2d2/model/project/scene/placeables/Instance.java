@@ -78,39 +78,6 @@ public class Instance extends Placeable {
 		return inst;
 	}
 	
-	/*@Override
-	public void place(Layer<? extends Placeable> target, int cx, int cy) {
-		if( target == null )
-		return;
-		
-		Grid ogrid = target.getObjectGrid();
-		
-		int tcw = ogrid.getCellWidth(),
-			tch = ogrid.getCellHeight();
-		
-		int fcx = cx / tcw,
-			fcy = cy / tch;
-		
-		target.place(fcx, fcy, this);
-		setCellPosition(fcx, fcy);
-		setOffsets(cx - (fcx * tcw), cy - (fcy * tch));
-		this.layer = target;
-	}
-	
-	public void place(Layer<? extends Placeable> target, double x, double y) {
-		place(target, (int) x, (int) y);
-		
-		Grid ogrid = target.getObjectGrid();
-		
-		int tcw = ogrid.getCellWidth(),
-			tch = ogrid.getCellHeight();
-		
-		double 	fcx = x / tcw,
-				fcy = y / tch;
-		
-		setOffsets(x - (fcx * tcw), y - (fcy * tch));
-	}*/
-	
 	
 		// GETTERS/SETTERS
 	

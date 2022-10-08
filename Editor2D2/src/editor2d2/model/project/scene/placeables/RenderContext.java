@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import editor2d2.model.project.scene.Camera;
 
+
 /**
  * Container class whose instance will be passed onto drawables
  * upon rendering. This class will contain information used to

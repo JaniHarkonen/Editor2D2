@@ -5,7 +5,7 @@ import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.scene.placeables.Placeable;
 
-public abstract class Layer<T extends Placeable> {
+public abstract class Layer {
 	
 		// Reference to the Scene this layer belongs to
 	protected Scene scene;

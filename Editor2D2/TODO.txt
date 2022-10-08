@@ -14,5 +14,4 @@ TODO - ArchitecturalRethink
 - figure out if some GUI classes can be split further
 - figure out if some GUI classes can be combined
 - figure out the role of the Controller as well as AppState
-- do layers have to be template-classes? probably not
 - new package structure?

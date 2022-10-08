@@ -15,12 +15,11 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.model.project.layers.Layer;
-import editor2d2.model.project.scene.placeables.Placeable;
 
 public class LayerPropertiesPane extends GUIComponent {
 	
 		// Reference to the source layer that the pane is representing
-	private Layer<? extends Placeable> source;
+	private Layer source;
 	
 		// Layer name text field
 	private CTextField txtName;
@@ -29,7 +28,7 @@ public class LayerPropertiesPane extends GUIComponent {
 	private CTextField txtOpacity;
 	
 	
-	public LayerPropertiesPane(Layer<? extends Placeable> source) {
+	public LayerPropertiesPane(Layer source) {
 		this.source = source;
 		
 		this.txtName = new CTextField("Name: ");

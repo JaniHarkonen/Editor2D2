@@ -4,7 +4,7 @@ import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.scene.placeables.Tile;
 
-public class TileLayer extends Layer<Tile> {
+public class TileLayer extends Layer {
 	
 		// Size of a cell in the grid
 	private int gridSize;

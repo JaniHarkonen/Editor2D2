@@ -14,7 +14,7 @@ public class Controller implements Vendor {
 	private Project project;
 	
 		// Reference to the currently active Layer
-	private Layer<? extends Placeable> layer;
+	private Layer layer;
 	
 		// Reference to the selected placeable
 	private Placeable selectedPlaceable;
@@ -51,7 +51,7 @@ public class Controller implements Vendor {
 	}
 	
 		// Returns a reference to the currently active Layer
-	public Layer<? extends Placeable> getLayer() {
+	public Layer getLayer() {
 		return this.layer;
 	}
 	
@@ -70,7 +70,7 @@ public class Controller implements Vendor {
 	}
 	
 		// Sets the currently active Layer
-	public void setLayer(Layer<? extends Placeable> layer) {
+	public void setLayer(Layer layer) {
 		this.layer = layer;
 	}
 }

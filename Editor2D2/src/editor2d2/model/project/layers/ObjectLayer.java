@@ -6,7 +6,7 @@ import editor2d2.model.project.Scene;
 import editor2d2.model.project.scene.placeables.Instance;
 import editor2d2.model.project.scene.placeables.Placeable;
 
-public class ObjectLayer extends Layer<Instance> {
+public class ObjectLayer extends Layer {
 	
 		// Width of a grid cell in pixels
 	public static int OBJECT_LAYER_GRID_CELL_WIDTH = 200;//1920;

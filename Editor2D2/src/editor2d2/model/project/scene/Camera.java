@@ -9,7 +9,6 @@ import editor2d2.model.project.Scene;
 import editor2d2.model.project.layers.Layer;
 import editor2d2.model.project.layers.ObjectArray;
 import editor2d2.model.project.scene.placeables.Drawable;
-import editor2d2.model.project.scene.placeables.Placeable;
 import editor2d2.model.project.scene.placeables.RenderContext;
 
 public class Camera {
@@ -50,7 +49,7 @@ public class Camera {
 		
 		int renderCount = 0;
 		
-		for( Layer<? extends Placeable> lay : this.scene.getLayers() )
+		for( Layer lay : this.scene.getLayers() )
 		{
 				// Skip invisible layers and layers with 0 opacity
 			if( !lay.checkVisible() || lay.getOpacity() < 0.001 )

@@ -22,7 +22,7 @@ public abstract class Placeable implements Gridable, Drawable {
 	protected int cellY;
 	
 		// Reference to the layer the placeable is placed in
-	protected Layer<? extends Placeable> layer;
+	protected Layer layer;
 	
 	
 	protected Placeable() {
@@ -51,29 +51,6 @@ public abstract class Placeable implements Gridable, Drawable {
 	@Override
 	public abstract void draw(RenderContext rctxt);
 	
-		// Places the placeable onto a given layer
-		// CAN BE OVERRIDDEN
-	/*protected void place(Layer<? extends Placeable> target, int cx, int cy, boolean attempt) {
-		if( target == null )
-		return;
-		
-		if( attempt )
-		target.attemptPlace(cx, cy, this);
-		else
-		target.place(cx, cy, this);
-		
-		setCellPosition(cx, cy);
-		setOffsets(0, 0);
-		this.layer = target;
-	}
-	
-		// Attempts to place the Placeable onto a given layer running it
-		// by the layer filter first
-		// THIS METHOD SHOULD BE USED INSTEAD OF place WHEN THERE IS
-		// AMBIGUITY WHETHER THE PLACEABLE IS ACCEPTED BY THE LAYER
-	public final void attemptPlace(Layer<? extends Placeable> target, int cx, int cy) {
-		place(target, cx, cy, true);
-	}*/
 	
 		// Creates a duplicate of this Placeable
 		// CAN BE OVERRIDDEN
@@ -82,7 +59,7 @@ public abstract class Placeable implements Gridable, Drawable {
 	}
 	
 		// Moves the Placeable to a given layer
-	public void changeLayer(Layer<? extends Placeable> layer) {
+	public void changeLayer(Layer layer) {
 		
 			// A simple change can be used if the Placeable is not yet on any layer
 		if( this.layer == null )
@@ -123,7 +100,7 @@ public abstract class Placeable implements Gridable, Drawable {
 	}
 	
 		// Returns a reference to the layer the placeable is placed in
-	public Layer<? extends Placeable> getLayer() {
+	public Layer getLayer() {
 		return this.layer;
 	}
 	

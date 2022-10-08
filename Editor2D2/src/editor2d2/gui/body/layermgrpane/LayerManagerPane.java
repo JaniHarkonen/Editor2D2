@@ -12,12 +12,11 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.layers.Layer;
 import editor2d2.model.project.layers.ObjectLayer;
-import editor2d2.model.project.scene.placeables.Placeable;
 
 public class LayerManagerPane extends GUIComponent {
 	
 		// Whether a layer is being edited
-	private Layer<? extends Placeable> editedLayer;
+	private Layer editedLayer;
 	
 	
 	public LayerManagerPane() {
@@ -71,7 +70,7 @@ public class LayerManagerPane extends GUIComponent {
 		container.add(containerControls);
 		
 			// Layer panes
-		for( Layer<? extends Placeable> layer : Application.controller.getProject().getScene("small scene").getLayers() )
+		for( Layer layer : Application.controller.getProject().getScene("small scene").getLayers() )
 		container.add((new LayerPane(layer)).render());
 		
 		}
@@ -120,7 +119,7 @@ public class LayerManagerPane extends GUIComponent {
 	
 		// Called upon deleting a layer (-)
 	private void onDeleteLayer() {
-		Layer<? extends Placeable> target = Application.controller.getLayer();
+		Layer target = Application.controller.getLayer();
 		
 		if( target == null )
 		return;

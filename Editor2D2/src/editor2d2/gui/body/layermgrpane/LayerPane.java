@@ -11,14 +11,13 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.model.project.layers.Layer;
-import editor2d2.model.project.scene.placeables.Placeable;
 
 public class LayerPane extends GUIComponent {
 	
-	private Layer<? extends Placeable> source;
+	private Layer source;
 	
 	
-	public LayerPane(Layer<? extends Placeable> source) {
+	public LayerPane(Layer source) {
 		this.source = source;
 	}
 	
@@ -32,7 +31,7 @@ public class LayerPane extends GUIComponent {
 		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		container.add(new JLabel(source.getName()));
 		
-		Layer<? extends Placeable> selectedLayer = Application.controller.getLayer();
+		Layer selectedLayer = Application.controller.getLayer();
 		
 		if( selectedLayer != null && Application.controller.getLayer() == this.source )
 		container.setBackground(Color.RED);

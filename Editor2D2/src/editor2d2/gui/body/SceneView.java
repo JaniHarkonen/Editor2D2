@@ -184,7 +184,7 @@ public class SceneView extends GUIComponent implements Vendor, Subscriber {
 						Placeable dupp = p.duplicate();
 						int pcx = (int) (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
 						int pcy = (int) (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
-						Layer<? extends Placeable> layer = Application.controller.getLayer();
+						Layer layer = Application.controller.getLayer();
 						DebugUtils.log(layer, this);
 						
 						if( layer != null )
