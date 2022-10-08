@@ -21,7 +21,6 @@ public class EObject extends Asset {
 	private double rotation;
 	
 		// Properties of the object mapped with the name of the property fields
-	//private Map<String, ObjectProperty> properties;
 	private ArrayList<ObjectProperty> properties;
 	
 	
@@ -30,7 +29,6 @@ public class EObject extends Asset {
 		this.width = 0;
 		this.height = 0;
 		this.rotation = 0;
-		//this.properties = new HashMap<String, ObjectProperty>();
 		this.properties = new ArrayList<ObjectProperty>();
 	}
 	
@@ -66,17 +64,11 @@ public class EObject extends Asset {
 	}
 	
 		// Returns the list of object properties
-	/*public Map<String, ObjectProperty> getProperties() {
-		return this.properties;
-	}*/
 	public ArrayList<ObjectProperty> getProperties() {
 		return this.properties;
 	}
 	
 		// Returns the property of a given name
-	/*public ObjectProperty getProperty(String property) {
-		return this.properties.get(property);
-	}*/
 	public ObjectProperty getProperty(String property) {
 		for( ObjectProperty op : this.properties )
 		{
@@ -108,17 +100,11 @@ public class EObject extends Asset {
 	}
 	
 		// Sets the list of object properties
-	/*public void setProperties(Map<String, ObjectProperty> properties) {
-		this.properties = properties;
-	}*/
 	public void setProperties(ArrayList<ObjectProperty> properties) {
 		this.properties = properties;
 	}
 	
 		// Modifies a given property, or adds it if it doesn't exist
-	/*public void modifyProperty(String property, ObjectProperty objectProperty) {
-		this.properties.put(property, objectProperty);
-	}*/
 	public void modifyProperty(String property, ObjectProperty newProperty) {
 		for( int i = 0; i < this.properties.size(); i++ )
 		{
@@ -138,9 +124,6 @@ public class EObject extends Asset {
 	}
 	
 		// Removes a given property
-	/*public void removeProperty(String property) {
-		this.properties.put(property, null);
-	}*/
 	public void removeProperty(String property) {
 		for( int i = 0; i < this.properties.size(); i++ )
 		{

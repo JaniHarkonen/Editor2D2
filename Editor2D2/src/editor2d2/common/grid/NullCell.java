@@ -8,6 +8,4 @@ package editor2d2.common.grid;
  * @author User
  *
  */
-public class NullCell implements Gridable {
-
-}
+public final class NullCell implements Gridable { }

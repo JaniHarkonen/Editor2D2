@@ -106,12 +106,17 @@ public abstract class ModalView<A extends Asset> extends GUIComponent {
 	}
 	
 		// Called upon clicking "Create"
-		// TO BE OVERRIDDEN
-	protected abstract void actionCreate();
+		// CAN BE OVERRIDDEN
+	protected void actionCreate() {
+		saveChanges(true);
+		finalizeCreation();
+		
+		this.host.closeModalWindow();
+	}
 	
 		// Called upon clicking "Cancel"
 		// CAN BE OVERRIDDEN
-	protected void actionCancel() { }
+	protected void actionCancel() {}
 	
 		// Updates the Project and the Asset Pane to the creation
 		// of a new Asset

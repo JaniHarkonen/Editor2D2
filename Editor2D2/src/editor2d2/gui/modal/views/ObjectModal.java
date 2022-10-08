@@ -139,11 +139,10 @@ public class ObjectModal extends ModalView<EObject> {
 	@Override
 	public void setFactorySettings() {
 		EObject source = new EObject();
-		source.setIdentifier("c");
-		source.setName("Object " + System.currentTimeMillis());
-		source.setWidth(0);
-		source.setHeight(0);
-		source.setRotation(0);
+		long currms = System.currentTimeMillis();
+		
+		source.setIdentifier("OBJ" + currms);
+		source.setName("Object " + currms);
 		
 		this.source = source;
 	}
@@ -162,14 +161,6 @@ public class ObjectModal extends ModalView<EObject> {
 		this.source.setWidth(Double.parseDouble(w));
 		this.source.setHeight(Double.parseDouble(h));
 		this.source.setRotation(Double.parseDouble(rot));
-	}
-
-	@Override
-	protected void actionCreate() {
-		saveChanges(true);
-		finalizeCreation();
-		
-		this.host.closeModalWindow();
 	}
 	
 		// Adds a new property panel to a given container upon

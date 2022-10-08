@@ -24,6 +24,29 @@ public class ObjectArray implements Gridable, Drawable  {
 		inst.draw(rctxt);
 	}
 	
+	
+		// Adds an instance to the Instance list
+	public void add(Instance inst) {
+		this.objects.add(inst);
+	}
+	
+		// Removes an instance from the Instance list given its index
+	public void remove(int index) {
+		this.objects.remove(index);
+	}
+	
+		// Removes a given instance from the Instance list
+	public void remove(Instance inst) {
+		for( int i = 0; i < this.objects.size(); i++ )
+		{
+			if( this.objects.get(i) != inst )
+			continue;
+		
+			this.objects.remove(i);
+			return;
+		}
+	}
+	
 		// GETTERS / SETTERS
 	
 		// Returns a reference to an Instance stored at a given index
@@ -34,11 +57,5 @@ public class ObjectArray implements Gridable, Drawable  {
 		// Returns the list of all Instances int the Object Array
 	public ArrayList<Instance> getAllInstances() {
 		return this.objects;
-	}
-	
-	
-		// Adds an instance to the Instance list
-	public void add(Instance e) {
-		this.objects.add(e);
 	}
 }

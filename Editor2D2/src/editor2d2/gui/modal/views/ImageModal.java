@@ -1,7 +1,6 @@
 package editor2d2.gui.modal.views;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -12,6 +11,7 @@ import javax.swing.JPanel;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
@@ -38,13 +38,13 @@ public class ImageModal extends ModalView<Image> {
 	@Override
 	protected JPanel draw() {
 		JPanel modal = GUIUtilities.createDefaultPanel();
-		BufferedImage image = source.getImage();
+		BufferedImage image = this.source.getImage();
 		
 		if( image == null )
 		image = Application.resources.getGraphic("icon-null-texture");
 		
 			// File source field
-		this.txtFileSource.setText(source.getFilePath());
+		this.txtFileSource.setText(this.source.getFilePath());
 		this.txtFileSource.textField.setEditable(false);
 		
 		modal.add(this.txtFileSource.render());
@@ -54,20 +54,11 @@ public class ImageModal extends ModalView<Image> {
 		lPreview.setMinimumSize(new Dimension(Integer.MAX_VALUE, lPreview.getHeight()));
 		modal.add(lPreview);
 		
-		final BufferedImage finalImage = image;	// Local variables that are passed into classes must be de-facto final
-		
 				// Preview image
-			@SuppressWarnings("serial")
-			JPanel preview = new JPanel() {
-				
-				@Override
-				protected void paintComponent(Graphics g) {
-					g.drawImage(finalImage, 0, 0, null);
-				}
-			};
+			CImage previewImage = new CImage();
+			previewImage.setImage(image);
 			
-		preview.setMinimumSize(new Dimension(finalImage.getWidth(), finalImage.getHeight()));
-		modal.add(preview);
+		modal.add(previewImage.render());
 		
 			// Load image button
 		JButton btnLoadImage = new JButton("Load");
@@ -87,8 +78,10 @@ public class ImageModal extends ModalView<Image> {
 	@Override
 	public void setFactorySettings() {
 		Image source = new Image();
-		source.setIdentifier("a");
-		source.setName("Image " + System.currentTimeMillis());
+		long currms = System.currentTimeMillis();
+		
+		source.setIdentifier("IMG" + currms);
+		source.setName("Image " + currms);
 		
 		this.source = source;
 	}
@@ -96,22 +89,31 @@ public class ImageModal extends ModalView<Image> {
 	
 		// Loads a new image file upon clicking "Load"
 	private void actionLoadFile() {
+		
+			// Determine the allowed image extensions that will be displayed by the
+			// file system dialog prompt
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		settings.filters = ImageExtensions.withAllImageExtensions();
 		
+			// Open file system dialog prompt and wait for response
 		FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
 		
+			// Prompt was not approved
 		if( !res.isApproved )
 		return;
 		
+			// Load the image
 		String path = res.filepaths[0].getPath();
 		BufferedImage img = Application.resources.loadExternalGraphic(path);
 		
+			// Image load failed
 		if( img == null )
 		return;
 		
 		this.source.setImage(img);
 		this.txtFileSource.setText(path);
+		
+			// Save changes
 		saveChanges(false);
 		update();
 	}
@@ -126,13 +128,5 @@ public class ImageModal extends ModalView<Image> {
 		return;
 		
 		this.source.setFilePath(fsource);
-	}
-
-	@Override
-	protected void actionCreate() {
-		saveChanges(true);
-		finalizeCreation();
-		
-		this.host.closeModalWindow();
 	}
 }

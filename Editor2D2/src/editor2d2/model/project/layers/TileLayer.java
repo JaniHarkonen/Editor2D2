@@ -24,4 +24,10 @@ public class TileLayer extends Layer<Tile> {
 	protected boolean filterCheck(Gridable p) {
 		return p instanceof Tile;
 	}
+	
+	
+		// Returns the size of a grid cell
+	public int getGridSize() {
+		return this.gridSize;
+	}
 }

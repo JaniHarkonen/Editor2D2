@@ -47,10 +47,11 @@ public class DataModal extends ModalView<Data> {
 	protected JPanel draw() {
 		JPanel modal = GUIUtilities.createDefaultPanel();
 		String srcValue = this.source.getValue();
-		Color srcColor = source.getColor();
-			int colr = srcColor.getRed(),
-				colg = srcColor.getGreen(),
-				colb = srcColor.getBlue();
+		
+		Color srcColor = this.source.getColor();
+		int colr = srcColor.getRed(),
+			colg = srcColor.getGreen(),
+			colb = srcColor.getBlue();
 		
 			// Data value field
 		this.txtDataValue.setText(srcValue);
@@ -68,10 +69,10 @@ public class DataModal extends ModalView<Data> {
 				}
 			});
 		
-				// RGB fields
-			this.txtColorRed.setText(""+colr);
-			this.txtColorGreen.setText(""+colg);
-			this.txtColorBlue.setText(""+colb);
+			// RGB fields
+		this.txtColorRed.setText(""+colr);
+		this.txtColorGreen.setText(""+colg);
+		this.txtColorBlue.setText(""+colb);
 		
 		containerCellColor.add(colorPanel);
 		containerCellColor.add(this.txtColorRed.render());
@@ -87,10 +88,10 @@ public class DataModal extends ModalView<Data> {
 	@Override
 	public void setFactorySettings() {
 		Data source = new Data();
-		source.setIdentifier("b");
-		source.setName("Data " + System.currentTimeMillis());
-		source.setValue("0");
-		source.setColor(Color.WHITE);
+		long currms = System.currentTimeMillis();
+		
+		source.setIdentifier("DATA" + currms);
+		source.setName("Data " + currms);
 		
 		this.source = source;
 	}
@@ -110,17 +111,9 @@ public class DataModal extends ModalView<Data> {
 		this.source.setValue(val);
 		this.source.setColor(new Color(Integer.parseInt(colr), Integer.parseInt(colg), Integer.parseInt(colb)));
 	}
-
-	@Override
-	protected void actionCreate() {
-		saveChanges(true);
-		finalizeCreation();
-		
-		this.host.closeModalWindow();
-	}
 	
 	private void actionColorPicker() {
-		Color pick = JColorChooser.showDialog(host.getDialog(), "Choose cell color", source.getColor());
+		Color pick = JColorChooser.showDialog(host.getDialog(), "Choose cell color", this.source.getColor());
 		
 		if( pick == null )
 		return;

@@ -3,7 +3,6 @@ package editor2d2.model.project.layers;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.scene.placeables.DataCell;
-import editor2d2.model.project.scene.placeables.Placeable;
 
 public class DataLayer extends Layer<DataCell> {
 	
@@ -20,5 +19,11 @@ public class DataLayer extends Layer<DataCell> {
 	@Override
 	protected boolean filterCheck(Gridable p) {
 		return p instanceof DataCell;
+	}
+	
+	
+		// Returns the size of a grid cell
+	public int getGridSize() {
+		return this.gridSize;
 	}
 }
