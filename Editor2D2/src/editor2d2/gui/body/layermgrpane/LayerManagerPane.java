@@ -1,14 +1,12 @@
 package editor2d2.gui.body.layermgrpane;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.Scene;
 import editor2d2.model.project.layers.Layer;
 import editor2d2.model.project.layers.ObjectLayer;
@@ -31,65 +29,23 @@ public class LayerManagerPane extends GUIComponent {
 		if( this.editedLayer == null )
 		{
 		
-			// Controls area
-		JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-		
-				// Control - create new layer button
-			JButton btnAddLayer = new JButton("+");
-			btnAddLayer.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					onAddLayer();
-				}
-			});
-			containerControls.add(btnAddLayer);
+				// Controls area
+			JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+				containerControls.add(new ClickableButton("+",   (e) -> { onAddLayer(); }));
+				containerControls.add(new ClickableButton("-",   (e) -> { onDeleteLayer(); }));
+				containerControls.add(new ClickableButton("...", (e) -> { onEditLayer(); }));
+			container.add(containerControls);
 			
-				// Control - delete layer button
-			JButton btnDeleteLayer = new JButton("-");
-			btnDeleteLayer.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					onDeleteLayer();
-				}
-			});
-			containerControls.add(btnDeleteLayer);
-		
-				// Control - edit layer button
-			JButton btnEditLayer = new JButton("...");
-			btnEditLayer.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					onEditLayer();
-				}
-			});
-			containerControls.add(btnEditLayer);
+				// Layer panes
+			for( Layer layer : Application.controller.getProject().getScene("small scene").getLayers() )
+			container.add((new LayerPane(layer)).render());
 			
-		container.add(containerControls);
-		
-			// Layer panes
-		for( Layer layer : Application.controller.getProject().getScene("small scene").getLayers() )
-		container.add((new LayerPane(layer)).render());
-		
 		}
 		else
 		{
 				// Controls
 			JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-			
-					// Control - back button
-				JButton btnBackToLayerManager = new JButton("<");
-				btnBackToLayerManager.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						onBackToLayerManager();
-					}
-				});
-				containerControls.add(btnBackToLayerManager);
-				
+				containerControls.add(new ClickableButton("<", (e) -> { onBackToLayerManager(); }));
 			container.add(containerControls);
 			
 				// Layer properties pane

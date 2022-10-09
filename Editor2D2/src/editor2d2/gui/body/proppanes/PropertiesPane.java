@@ -1,14 +1,13 @@
 package editor2d2.gui.body.proppanes;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.assets.Asset;
 import editor2d2.model.project.assets.Data;
 import editor2d2.model.project.assets.EObject;
@@ -17,17 +16,12 @@ import editor2d2.model.project.scene.placeables.Placeable;
 
 public abstract class PropertiesPane extends GUIComponent {
 	
-		// Target placeable that has been configured by the properties pane
-	//protected Placeable target;
-	
 		// Source Placeable whose properties the pane is representing
-	//protected Asset source;
 	protected Placeable source;
 	
 	
 	protected PropertiesPane(Placeable source) {
 		this.source = source;
-		//this.target = null;
 	}
 	
 	
@@ -87,17 +81,7 @@ public abstract class PropertiesPane extends GUIComponent {
 		container.add(new JLabel("Asset: " + this.source.getAsset().getName()));
 		
 		container.add(body);
-		
-		JButton btnApplyChanges = new JButton("Apply");
-		btnApplyChanges.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionApply(e);
-			}
-		});
-		
-		container.add(btnApplyChanges);
+		container.add(new ClickableButton("Apply", (e) -> { actionApply(e); }));
 		
 		return container;
 	}

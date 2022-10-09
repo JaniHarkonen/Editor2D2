@@ -53,8 +53,6 @@ public abstract class GUIComponent {
 	}
 	
 		// Draws the element and returns the resulting JPanel
-		// (WILL BE OVERRIDDEN)
-	protected JPanel draw() {
-		return null;
-	}
+		// (TO BE OVERRIDDEN)
+	protected abstract JPanel draw();
 }

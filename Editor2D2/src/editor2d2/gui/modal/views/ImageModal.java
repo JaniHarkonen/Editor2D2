@@ -1,11 +1,8 @@
 package editor2d2.gui.modal.views;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,6 +10,7 @@ import editor2d2.Application;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalWindow;
@@ -61,16 +59,7 @@ public class ImageModal extends ModalView<Image> {
 		modal.add(previewImage.render());
 		
 			// Load image button
-		JButton btnLoadImage = new JButton("Load");
-		btnLoadImage.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionLoadFile();
-			}
-		});
-		
-		modal.add(btnLoadImage);
+		modal.add(new ClickableButton("Load", (e) -> { actionLoadFile(); }));
 		
 		return this.createDefaultModalView(modal);
 	}

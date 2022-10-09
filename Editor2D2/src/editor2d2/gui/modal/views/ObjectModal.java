@@ -1,16 +1,14 @@
 package editor2d2.gui.modal.views;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.assets.EObject;
 import editor2d2.model.project.assets.ObjectProperty;
@@ -76,28 +74,9 @@ public class ObjectModal extends ModalView<EObject> {
 		for( ObjectProperty op : objProps )
 		containerProperties.add(createPropertyField(op));
 		
-				// Add property button
-			JButton btnAddProp = new JButton("+");
-			btnAddProp.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					actionAddProperty();
-				}
-			});
-			
-				// Remove selected properties button
-			JButton btnRemoveProp = new JButton("-");
-			btnRemoveProp.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					actionRemoveProperties();
-				}
-			});
-		
-		containerProperties.add(btnAddProp);
-		containerProperties.add(new JButton("-"));
+			// Property controls
+		containerProperties.add(new ClickableButton("+", (e) -> { actionAddProperty(); }));
+		containerProperties.add(new ClickableButton("-", (e) -> { actionRemoveProperties(); }));
 		
 		modal.add(txtSprite.render());
 		modal.add(containerDimensions);

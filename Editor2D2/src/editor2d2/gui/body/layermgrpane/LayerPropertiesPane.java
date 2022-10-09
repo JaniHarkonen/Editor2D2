@@ -1,10 +1,6 @@
 package editor2d2.gui.body.layermgrpane;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,6 +10,7 @@ import javax.swing.JSlider;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.layers.Layer;
 
 public class LayerPropertiesPane extends GUIComponent {
@@ -91,15 +88,7 @@ public class LayerPropertiesPane extends GUIComponent {
 		container.add(containerVisibility);
 		
 			// Controls
-		JButton btnApply =  new JButton("Apply");
-		btnApply.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				onApply();
-			}
-		});
-		container.add(btnApply);
+		container.add(new ClickableButton("Apply", (e) -> { onApply(); }));
 		
 		return container;
 	}

@@ -1,15 +1,12 @@
 package editor2d2.gui.modal.views;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.assets.Asset;
 
@@ -55,28 +52,8 @@ public abstract class ModalView<A extends Asset> extends GUIComponent {
 		
 			// Control area (create, save, cancel)
 		JPanel containerControls = new JPanel();
-		
-				// Create button
-			JButton btnCreate = new JButton("Create");
-			btnCreate.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					actionCreate();
-				}
-			});
-			
-				// Cancel button
-			JButton btnCancel = new JButton("Cancel");
-			btnCancel.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					actionCancel();
-				}
-			});
-		
-		containerControls.add(btnCreate);
-		containerControls.add(btnCancel);
+		containerControls.add(new ClickableButton("Create", (e) -> { actionCreate(); }));
+		containerControls.add(new ClickableButton("Cancel", (e) -> { actionCancel(); }));
 		
 		container.add(this.txtName.render());
 		container.add(this.txtIdentifier.render());
