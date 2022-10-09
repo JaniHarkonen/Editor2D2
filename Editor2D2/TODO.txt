@@ -13,4 +13,3 @@ TODO - ArchitecturalRethink
 - figure out if some GUI classes can be split further
 - figure out if some GUI classes can be combined
 - figure out the role of the Controller as well as AppState
-- new package structure?

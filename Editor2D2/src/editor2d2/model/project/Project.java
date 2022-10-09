@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import editor2d2.model.project.assets.Asset;
+import editor2d2.model.project.scene.Scene;
 
 public class Project {
 

@@ -11,16 +11,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import editor2d2.Application;
-import editor2d2.gui.body.ScenePane;
+import editor2d2.gui.body.PropertiesPane;
 import editor2d2.gui.body.Toolbar;
 import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
-import editor2d2.gui.body.proppanes.PropertiesPane;
+import editor2d2.gui.body.scene.ScenePane;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
-import editor2d2.model.project.Scene;
-import editor2d2.model.subservice.Subscriber;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.scene.Scene;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
 public class Root extends GUIComponent implements Subscriber {
 	

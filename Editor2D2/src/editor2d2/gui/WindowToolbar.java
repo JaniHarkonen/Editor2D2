@@ -9,14 +9,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
+import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
-import editor2d2.gui.modal.views.DataModal;
-import editor2d2.gui.modal.views.ImageModal;
-import editor2d2.gui.modal.views.ModalView;
-import editor2d2.gui.modal.views.ObjectModal;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.subservice.Subscriber;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.Asset;
+import editor2d2.modules.data.DataModal;
+import editor2d2.modules.image.ImageModal;
+import editor2d2.modules.object.ObjectModal;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
 public class WindowToolbar extends JMenuBar implements Subscriber {
 	

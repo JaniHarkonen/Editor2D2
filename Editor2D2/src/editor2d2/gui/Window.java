@@ -9,10 +9,10 @@ import javax.swing.filechooser.FileFilter;
 import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
+import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
-import editor2d2.gui.modal.views.ModalView;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.Asset;
+import editor2d2.subservice.Vendor;
 
 public class Window implements Vendor {
 

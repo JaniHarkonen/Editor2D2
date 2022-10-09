@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import editor2d2.gui.GUIComponent;
-import editor2d2.model.project.assets.Image;
+import editor2d2.modules.image.Image;
 
 public class CImage extends GUIComponent {
 	

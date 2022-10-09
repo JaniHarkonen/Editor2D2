@@ -2,11 +2,11 @@ package editor2d2.model.app;
 
 import editor2d2.Application;
 import editor2d2.DebugUtils;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.project.layers.Layer;
-import editor2d2.model.project.scene.placeables.Placeable;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.scene.Layer;
+import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.subservice.Vendor;
 
 public class Controller implements Vendor {
 

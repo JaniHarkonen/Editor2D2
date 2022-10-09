@@ -11,7 +11,7 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
-import editor2d2.model.project.layers.Layer;
+import editor2d2.model.project.scene.Layer;
 
 public class LayerPropertiesPane extends GUIComponent {
 	

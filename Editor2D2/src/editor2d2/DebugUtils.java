@@ -4,14 +4,14 @@ import java.awt.image.BufferedImage;
 
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
-import editor2d2.model.project.Scene;
-import editor2d2.model.project.assets.Image;
-import editor2d2.model.project.layers.ObjectLayer;
-import editor2d2.model.project.layers.TileLayer;
-import editor2d2.model.project.scene.Camera;
-import editor2d2.model.project.scene.placeables.Tile;
-import editor2d2.model.subservice.Subscriber;
-import editor2d2.model.subservice.Subscription;
+import editor2d2.model.project.scene.Scene;
+import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.modules.image.Image;
+import editor2d2.modules.image.Tile;
+import editor2d2.modules.image.TileLayer;
+import editor2d2.modules.object.ObjectLayer;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Subscription;
 
 /**
  * This class is set to contain utility methods for running debugging tests
