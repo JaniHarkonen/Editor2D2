@@ -1,10 +1,11 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.layer;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.common.grid.NullCell;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.object.placeable.Instance;
 
 public class ObjectLayer extends Layer {
 	

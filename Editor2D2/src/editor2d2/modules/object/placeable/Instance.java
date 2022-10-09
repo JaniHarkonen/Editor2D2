@@ -1,4 +1,4 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.placeable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -7,7 +7,8 @@ import editor2d2.Application;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
-import editor2d2.modules.image.Image;
+import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.object.asset.EObject;
 
 public class Instance extends Placeable {
 

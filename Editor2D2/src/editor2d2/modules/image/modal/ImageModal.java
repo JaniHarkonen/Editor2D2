@@ -1,4 +1,4 @@
-package editor2d2.modules.image;
+package editor2d2.modules.image.modal;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -15,6 +15,7 @@ import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.modules.image.asset.Image;
 import editor2d2.resources.ImageExtensions;
 
 public class ImageModal extends ModalView<Image> {

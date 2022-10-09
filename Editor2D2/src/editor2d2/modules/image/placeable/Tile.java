@@ -1,4 +1,4 @@
-package editor2d2.modules.image;
+package editor2d2.modules.image.placeable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -8,6 +8,7 @@ import editor2d2.common.grid.Grid;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
+import editor2d2.modules.image.asset.Image;
 
 public class Tile extends Placeable {
 

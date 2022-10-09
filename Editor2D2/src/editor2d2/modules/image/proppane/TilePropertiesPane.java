@@ -1,4 +1,4 @@
-package editor2d2.modules.image;
+package editor2d2.modules.image.proppane;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -18,6 +18,8 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.PropertiesPane;
 import editor2d2.gui.components.CTextField;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.image.placeable.Tile;
 
 public class TilePropertiesPane extends PropertiesPane {
 	

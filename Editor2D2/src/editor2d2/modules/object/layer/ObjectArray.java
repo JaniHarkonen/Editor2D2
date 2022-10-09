@@ -1,10 +1,11 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.layer;
 
 import java.util.ArrayList;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.scene.placeable.Drawable;
 import editor2d2.model.project.scene.placeable.RenderContext;
+import editor2d2.modules.object.placeable.Instance;
 
 public class ObjectArray implements Gridable, Drawable  {
 

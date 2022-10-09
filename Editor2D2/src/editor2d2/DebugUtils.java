@@ -6,10 +6,10 @@ import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.camera.Camera;
-import editor2d2.modules.image.Image;
-import editor2d2.modules.image.Tile;
-import editor2d2.modules.image.TileLayer;
-import editor2d2.modules.object.ObjectLayer;
+import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.image.layer.TileLayer;
+import editor2d2.modules.image.placeable.Tile;
+import editor2d2.modules.object.layer.ObjectLayer;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Subscription;
 

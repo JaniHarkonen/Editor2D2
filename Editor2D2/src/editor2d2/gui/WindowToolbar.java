@@ -12,9 +12,9 @@ import editor2d2.Application;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
-import editor2d2.modules.data.DataModal;
-import editor2d2.modules.image.ImageModal;
-import editor2d2.modules.object.ObjectModal;
+import editor2d2.modules.data.modal.DataModal;
+import editor2d2.modules.image.modal.ImageModal;
+import editor2d2.modules.object.modal.ObjectModal;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 

@@ -1,4 +1,4 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.asset;
 
 public class ObjectProperty {
 

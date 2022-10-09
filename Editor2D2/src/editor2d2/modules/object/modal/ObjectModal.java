@@ -1,4 +1,4 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.modal;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,8 @@ import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.asset.ObjectProperty;
 
 public class ObjectModal extends ModalView<EObject> {
 	

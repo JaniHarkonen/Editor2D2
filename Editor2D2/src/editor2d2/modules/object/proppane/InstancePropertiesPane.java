@@ -1,4 +1,4 @@
-package editor2d2.modules.object;
+package editor2d2.modules.object.proppane;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

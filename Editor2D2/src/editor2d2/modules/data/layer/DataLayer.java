@@ -1,28 +1,25 @@
-package editor2d2.modules.image;
+package editor2d2.modules.data.layer;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.modules.data.placeable.DataCell;
 
-public class TileLayer extends Layer {
+public class DataLayer extends Layer {
 	
 		// Size of a cell in the grid
 	private int gridSize;
 	
 	
-	public TileLayer(Scene scene, int gridSize) {
+	public DataLayer(Scene scene, int gridSize) {
 		super(scene, gridSize, gridSize);
 		this.gridSize = gridSize;
-	}
-	
-	public TileLayer(Scene scene) {
-		this(scene, 32);
 	}
 	
 
 	@Override
 	protected boolean filterCheck(Gridable p) {
-		return p instanceof Tile;
+		return p instanceof DataCell;
 	}
 	
 	

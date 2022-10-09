@@ -1,9 +1,10 @@
-package editor2d2.modules.data;
+package editor2d2.modules.data.asset;
 
 import java.awt.Color;
 
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.data.placeable.DataCell;
 
 public class Data extends Asset {
 

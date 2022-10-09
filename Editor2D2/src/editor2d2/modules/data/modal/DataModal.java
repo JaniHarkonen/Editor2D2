@@ -1,4 +1,4 @@
-package editor2d2.modules.data;
+package editor2d2.modules.data.modal;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -13,6 +13,7 @@ import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ColorPreviewPanel;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.modules.data.asset.Data;
 
 public class DataModal extends ModalView<Data> {
 	

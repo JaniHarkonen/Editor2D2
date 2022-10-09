@@ -10,12 +10,12 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.data.Data;
-import editor2d2.modules.data.DataCellPropertiesPane;
-import editor2d2.modules.image.Image;
-import editor2d2.modules.image.TilePropertiesPane;
-import editor2d2.modules.object.EObject;
-import editor2d2.modules.object.InstancePropertiesPane;
+import editor2d2.modules.data.asset.Data;
+import editor2d2.modules.data.proppane.DataCellPropertiesPane;
+import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.image.proppane.TilePropertiesPane;
+import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.proppane.InstancePropertiesPane;
 
 public abstract class PropertiesPane extends GUIComponent {
 	

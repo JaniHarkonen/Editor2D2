@@ -1,4 +1,4 @@
-package editor2d2.modules.data;
+package editor2d2.modules.data.placeable;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -9,6 +9,7 @@ import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
+import editor2d2.modules.data.asset.Data;
 
 public class DataCell extends Placeable implements Gridable {
 

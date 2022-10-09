@@ -9,7 +9,7 @@ import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Drawable;
 import editor2d2.model.project.scene.placeable.RenderContext;
-import editor2d2.modules.object.ObjectArray;
+import editor2d2.modules.object.layer.ObjectArray;
 
 public class Camera {
 
