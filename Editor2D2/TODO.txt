@@ -6,7 +6,6 @@ TODO - ArchitecturalRethink
 
 - find redundancies in code
 - figure out the correct usage of SubscriberService
-- determine if clickable buttons can be turned into GUIComponents
 - determine if some listeners can be turned into GUIComponents
 - determine a way to generate menu buttons (e.g. when creating an asset)
   in a general fashion to cut out weird dependencies to GUI components
