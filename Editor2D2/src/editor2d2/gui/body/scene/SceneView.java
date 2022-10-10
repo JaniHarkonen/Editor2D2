@@ -26,10 +26,8 @@ import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.camera.CameraBounds;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.subservice.Subscriber;
-import editor2d2.subservice.Vendor;
 
-public class SceneView extends GUIComponent implements Vendor, Subscriber {
+public class SceneView extends GUIComponent {
 	
 		// Reference to the Scene that this view will render
 	private final Scene scene;
@@ -45,19 +43,8 @@ public class SceneView extends GUIComponent implements Vendor, Subscriber {
 		this.scene = scene;
 		this.view = createView();
 		
-		SceneView previousSceneView = ((SceneView) Application.subscriptionService.get("SceneView-DragBox-scene-dragger", "SceneView", this));
-		
-		if( previousSceneView == null )
 		this.sceneDragger = new DragBox(0, 0, this.scene.getWidth(), this.scene.getHeight());
-		else
-		this.sceneDragger = previousSceneView.getSceneDragger();
-		
-		Application.subscriptionService.register("SceneView-DragBox-scene-dragger", this);
 	}
-	
-	
-	@Override
-	public void onNotification(String handle, Vendor vendor) { }
 	
 
 	@Override
@@ -215,10 +202,5 @@ public class SceneView extends GUIComponent implements Vendor, Subscriber {
 		});
 		
 		return container;
-	}
-	
-		// Returns a reference to the DragBox that is used to move the scene
-	private DragBox getSceneDragger() {
-		return this.sceneDragger;
 	}
 }

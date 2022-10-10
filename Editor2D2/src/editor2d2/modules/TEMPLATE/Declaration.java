@@ -9,14 +9,20 @@ import editor2d2.modules.object.proppane.InstancePropertiesPane;
 public final class Declaration {
 
 	public static void declare() {
+			// Name of the asset class in the editor. For example, Image.
 		String assetClass = "<ASSET CLASS NAME HERE>";
 		
 			// Declares the asset to the GUIFactory
-			// GUIFactory.declareAsset(x, assetClass) can be used in cases
-			// where the developer wants to influence the ordering of the
-			// assets in GUI elements, for example, in the "Asset"-menu in
+			// GUIFactory.declareAsset(x, assetClass, "<PLACEABLE CLASS NAME HERE")
+			// can be used in cases where the developer wants to influence the ordering
+			// of the assets in GUI elements, for example, in the "Asset"-menu in
 			// the window toolbar
-		GUIFactory.declareAsset(assetClass); //GUIFactory.declareAsset(x, assetClass);
+			//
+			// <PLACEABLE CLASS NAME> should be replaced with the name of the placeables
+			// that will be displayed in the editor, for example, when selecting the
+			// layer type.
+		GUIFactory.declareAsset(assetClass, "<PLACEABLE CLASS NAME HERE>");
+		//GUIFactory.declareAsset(x, assetClass, "<PLACEABLE CLASS NAME HERE>");
 		
 			// This factory function will be called by the GUI when the user clicks
 			// on a menu item in the "Asset"-menu in the window toolbar. It creates

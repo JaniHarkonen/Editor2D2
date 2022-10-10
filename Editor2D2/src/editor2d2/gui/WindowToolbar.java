@@ -13,6 +13,7 @@ import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
 import editor2d2.modules.GUIFactory;
+import editor2d2.subservice.Handle;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -35,13 +36,9 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	}
 	
 	@Override
-	public void onNotification(String handle, Vendor vendor) {
-		switch( handle )
-		{
-			case "modal":
-				regenerate();
-				break;
-		}
+	public void onNotification(Handle handle, Vendor vendor) {
+		if( handle == Handle.MODAL )
+		regenerate();
 	}
 	
 		// Generates the toolbar
@@ -57,7 +54,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		
 			// Asset menu
 		JMenu menuAsset = new JMenu("Asset");
-		Window host = (Window) Application.subscriptionService.get("modal", "WindowToolbar", this);
+		Window host = (Window) Application.subscriptionService.get(Handle.MODAL, "WindowToolbar", this);
 		
 		if( host != null )
 		{

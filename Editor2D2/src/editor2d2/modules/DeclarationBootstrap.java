@@ -1,6 +1,6 @@
 package editor2d2.modules;
 
-public class DeclarationBootstrap{
+class DeclarationBootstrap{
 
 	public static void bootstrap() {
 		editor2d2.modules.image.Declaration.declare();

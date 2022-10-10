@@ -5,9 +5,9 @@ TODO - ArchitecturalRethink
   software components
 
 - find redundancies in code
-- figure out the correct usage of SubscriberService
-- determine if some listeners can be turned into GUIComponents
+- figure out the role of the Controller as well as AppState
 - determine if container classes are needed in Root
+
+- determine if some listeners can be turned into GUIComponents
 - figure out if some GUI classes can be split further
 - figure out if some GUI classes can be combined
-- figure out the role of the Controller as well as AppState

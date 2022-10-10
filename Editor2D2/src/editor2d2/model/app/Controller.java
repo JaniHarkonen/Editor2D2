@@ -6,6 +6,7 @@ import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.subservice.Handle;
 import editor2d2.subservice.Vendor;
 
 public class Controller implements Vendor {
@@ -59,14 +60,14 @@ public class Controller implements Vendor {
 	public void openProject(Project project) {
 		this.project = project;
 		
-		Application.subscriptionService.register("active-project", this);
+		Application.subscriptionService.register(Handle.ACTIVE_PROJECT, this);
 	}
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
 		this.selectedPlaceable = asset.createPlaceable();
 		
-		Application.subscriptionService.register("selected-placeable", this);
+		Application.subscriptionService.register(Handle.SELECTED_PLACEABLE, this);
 	}
 	
 		// Sets the currently active Layer

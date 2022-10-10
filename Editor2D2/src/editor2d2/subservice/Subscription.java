@@ -7,22 +7,19 @@ import java.util.Map;
 public class Subscription {
 
 		// Subscription handle that will be used to subscribe to the vendor
-	private final String handle;
+	private final Handle handle;
 	
 		// Reference to the vendor that previously updated this handle
 	private Vendor vendor;
-	
-		// List of subscribers subscribed to this handle
-	//private final ArrayList<Subscriber> subscribers;
 	
 		// Mapping of subscribers to their IDs
 	private final Map<String, Subscriber> subscribers;
 	
 	
-	public Subscription(String handle) {
+	public Subscription(Handle handle) {
 		this.handle = handle;
 		this.vendor = null;
-		this.subscribers = new HashMap<String, Subscriber>();//new ArrayList<Subscriber>();
+		this.subscribers = new HashMap<String, Subscriber>();
 	}
 	
 	
@@ -30,34 +27,17 @@ public class Subscription {
 	public void update(Vendor vendor) {
 		this.vendor = vendor;
 		
-		/*for( Subscriber sub : this.subscribers )
-		sub.onNotification(this.handle, this.vendor);*/
 		for( Map.Entry<String, Subscriber> en : this.subscribers.entrySet() )
 		en.getValue().onNotification(this.handle, this.vendor);
 	}
 	
 		// Subscribes a given subscriber to this handle
 	public void subscribe(String subId, Subscriber subscriber) {
-		
-			// If already subscribed, exit
-		/*for( Subscriber sub : this.subscribers )
-		{
-			if( sub == subscriber )
-			return;
-		}*/
 		this.subscribers.put(subId, subscriber);
 	}
 	
 		// Unsubscribes a given subscriber from this handle
 	public void unsubscribe(String subId) {
-		/*for( int i = 0; i < this.subscribers.size(); i++ )
-		{
-			if( this.subscribers.get(i) == subscriber )
-			{
-				this.subscribers.remove(i);
-				return;
-			}
-		}*/
 		this.subscribers.remove(subId);
 	}
 	
@@ -84,7 +64,7 @@ public class Subscription {
 	}
 	
 		// Returns the handle
-	public String getHandle() {
+	public Handle getHandle() {
 		return this.handle;
 	}
 	
