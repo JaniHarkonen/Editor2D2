@@ -11,6 +11,7 @@ import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.asset.ObjectProperty;
 
@@ -157,5 +158,11 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		saveChanges(false);
 		update();
+	}
+
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source;
 	}
 }

@@ -5,15 +5,13 @@ import java.awt.image.BufferedImage;
 
 import editor2d2.Application;
 import editor2d2.common.grid.Grid;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
 
 public class Tile extends Placeable {
-
-		// Reference to the Image asset the tile is based on
-	//private Image image;
 	
 		// X-coordinate of the area in the Image asset that will be drawn
 	private int drawX;
@@ -81,6 +79,11 @@ public class Tile extends Placeable {
 		// Returns a reference to the Image asset the tile is based on
 	public Image getImage() {
 		return (Image) this.asset;
+	}
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return getImage();
 	}
 
 		// Changes the Image asset of the tile

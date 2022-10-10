@@ -1,8 +1,10 @@
 package editor2d2.modules.data.layer;
 
 import editor2d2.common.grid.Gridable;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.modules.data.asset.Data;
 import editor2d2.modules.data.placeable.DataCell;
 
 public class DataLayer extends Layer {
@@ -26,5 +28,11 @@ public class DataLayer extends Layer {
 		// Returns the size of a grid cell
 	public int getGridSize() {
 		return this.gridSize;
+	}
+
+
+	@Override
+	public Asset getReferencedAsset() {
+		return new Data();
 	}
 }

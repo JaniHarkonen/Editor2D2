@@ -8,16 +8,10 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
-import editor2d2.model.project.Asset;
+import editor2d2.model.project.HasAsset;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.data.asset.Data;
-import editor2d2.modules.data.proppane.DataCellPropertiesPane;
-import editor2d2.modules.image.asset.Image;
-import editor2d2.modules.image.proppane.TilePropertiesPane;
-import editor2d2.modules.object.asset.EObject;
-import editor2d2.modules.object.proppane.InstancePropertiesPane;
 
-public abstract class PropertiesPane extends GUIComponent {
+public abstract class PropertiesPane extends GUIComponent implements HasAsset {
 	
 		// Source Placeable whose properties the pane is representing
 	protected Placeable source;
@@ -25,25 +19,6 @@ public abstract class PropertiesPane extends GUIComponent {
 	
 	protected PropertiesPane(Placeable source) {
 		this.source = source;
-	}
-	
-	
-	public static PropertiesPane createPropertiesPane(Placeable source) {
-		if( source == null )
-		return null;
-		
-		Asset srcAsset = source.getAsset();
-		
-		if( srcAsset instanceof Image )
-		return new TilePropertiesPane(source);
-		
-		if( srcAsset instanceof EObject )
-		return new InstancePropertiesPane(source);
-		
-		if( srcAsset instanceof Data )
-		return new DataCellPropertiesPane(source);
-		
-		return null;
 	}
 	
 	

@@ -2,12 +2,14 @@ package editor2d2.modules.object.layer;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.common.grid.NullCell;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.placeable.Instance;
 
-public class ObjectLayer extends Layer {
+public class InstanceLayer extends Layer {
 	
 		// Width of a grid cell in pixels
 	public static int OBJECT_LAYER_GRID_CELL_WIDTH = 200;//1920;
@@ -16,7 +18,7 @@ public class ObjectLayer extends Layer {
 	public static int OBJECT_LAYER_GRID_CELL_HEIGHT = 200;//1080;
 	
 	
-	public ObjectLayer(Scene scene) {
+	public InstanceLayer(Scene scene) {
 		super(scene, OBJECT_LAYER_GRID_CELL_WIDTH, OBJECT_LAYER_GRID_CELL_HEIGHT);
 	}
 	
@@ -58,5 +60,11 @@ public class ObjectLayer extends Layer {
 	@Override
 	protected boolean filterCheck(Gridable p) {
 		return p instanceof Instance;
+	}
+
+
+	@Override
+	public Asset getReferencedAsset() {
+		return new EObject();
 	}
 }

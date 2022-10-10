@@ -13,6 +13,7 @@ import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ColorPreviewPanel;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.modules.data.asset.Data;
 
 public class DataModal extends ModalView<Data> {
@@ -122,5 +123,11 @@ public class DataModal extends ModalView<Data> {
 		saveChanges(false);
 		this.source.setColor(pick);
 		update();
+	}
+	
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source;
 	}
 }

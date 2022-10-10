@@ -12,9 +12,7 @@ import editor2d2.Application;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
-import editor2d2.modules.data.modal.DataModal;
-import editor2d2.modules.image.modal.ImageModal;
-import editor2d2.modules.object.modal.ObjectModal;
+import editor2d2.modules.GUIFactory;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -36,6 +34,16 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		repaint();
 	}
 	
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		switch( handle )
+		{
+			case "modal":
+				regenerate();
+				break;
+		}
+	}
+	
 		// Generates the toolbar
 	private void generate() {
 		
@@ -54,9 +62,11 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		if( host != null )
 		{
 			ModalWindow modal = host.getModalWindow();
-			menuAsset.add(createAssetMenuItem("Create image", new ImageModal(modal, true)));
-			menuAsset.add(createAssetMenuItem("Create object", new ObjectModal(modal, true)));
-			menuAsset.add(createAssetMenuItem("Create data", new DataModal(modal, true)));
+			String[] ctypes = GUIFactory.getClassTypes();
+			
+				// Populate Asset menu
+			for( String type : ctypes )
+			menuAsset.add(createAssetMenuItem("Create " + type, GUIFactory.createModalView(type, modal)));
 		}
 		
 			// Meta data settings
@@ -80,15 +90,5 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 				Application.window.popup(mv);
 			}
 		});
-	}
-	
-	@Override
-	public void onNotification(String handle, Vendor vendor) {
-		switch( handle )
-		{
-			case "modal":
-				regenerate();
-				break;
-		}
 	}
 }

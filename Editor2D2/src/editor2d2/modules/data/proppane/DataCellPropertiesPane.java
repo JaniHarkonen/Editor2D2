@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.PropertiesPane;
 import editor2d2.gui.components.ColorPreviewPanel;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.data.asset.Data;
 import editor2d2.modules.data.placeable.DataCell;
@@ -30,5 +31,11 @@ public class DataCellPropertiesPane extends PropertiesPane {
 		container.add(containerColor);
 		
 		return container;
+	}
+
+
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source.getAsset();
 	}
 }

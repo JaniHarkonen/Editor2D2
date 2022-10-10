@@ -3,12 +3,24 @@ package editor2d2.model.project;
 import editor2d2.model.project.scene.placeable.Placeable;
 
 public abstract class Asset {
-
+	
+		// Name of the asset class that will be displayed in the editor
+		// THIS SHOULD ONLY BE SET ONCE IN THE CONSTRUCTOR AS IT ONLY
+		// PERTAINS TO THE CLASS
+	protected final String assetClassName;
+	
 		// Name of the asset as displayed in the resources panel
 	protected String name;
 	
 		// Identifier used to refer to the asset in the compiled map file
 	protected String identifier;
+	
+	
+	protected Asset(String assetClassName) {
+		this.assetClassName = assetClassName;
+		this.name = null;
+		this.identifier = null;
+	}
 	
 	
 		// Creates a placeable based on the asset
@@ -17,6 +29,11 @@ public abstract class Asset {
 		return null;
 	}
 	
+	
+		// Returns the name of the asset class
+	public String getAssetClassName() {
+		return this.assetClassName;
+	}
 	
 		// Returns the name of the asset
 	public String getName() {

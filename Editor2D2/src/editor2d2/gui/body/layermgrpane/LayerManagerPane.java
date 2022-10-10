@@ -9,7 +9,7 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.modules.object.layer.ObjectLayer;
+import editor2d2.modules.object.layer.InstanceLayer;
 
 public class LayerManagerPane extends GUIComponent {
 	
@@ -66,7 +66,7 @@ public class LayerManagerPane extends GUIComponent {
 		// Called upon adding a new layer (+)
 	private void onAddLayer() {
 		Scene scene = Application.controller.getProject().getScene("small scene");
-		ObjectLayer newLayer = new ObjectLayer(scene);
+		InstanceLayer newLayer = new InstanceLayer(scene);
 		newLayer.setName("Object layer " + System.currentTimeMillis());
 		scene.addLayer(newLayer);
 		

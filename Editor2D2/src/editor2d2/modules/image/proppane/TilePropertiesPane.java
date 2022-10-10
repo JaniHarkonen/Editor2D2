@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.PropertiesPane;
 import editor2d2.gui.components.CTextField;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.placeable.Tile;
@@ -166,5 +167,11 @@ public class TilePropertiesPane extends PropertiesPane {
 		Image src = ((Tile) source).getImage();
 		
 		return Math.min(src.getHeight(selectionHeight) - 1, Math.max(0, cy));
+	}
+
+
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source.getAsset();
 	}
 }

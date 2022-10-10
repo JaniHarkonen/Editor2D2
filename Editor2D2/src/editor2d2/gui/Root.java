@@ -19,6 +19,8 @@ import editor2d2.gui.body.scene.ScenePane;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.GUIFactory;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -59,9 +61,14 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		PropertiesPane pp = PropertiesPane.createPropertiesPane(Application.controller.getSelectedPlaceable());
-		if( pp != null )
-		containerRightSide.add(pp.render());	// Placeable properties
+		Placeable p = Application.controller.getSelectedPlaceable();
+		
+		if( p != null )
+		{
+			PropertiesPane pp = GUIFactory.createPropertiesPane(p.getAsset().getAssetClassName(), p);//PropertiesPane.createPropertiesPane(Application.controller.getSelectedPlaceable());
+			if( pp != null )
+			containerRightSide.add(pp.render());	// Placeable properties
+		}
 		
 		containerRightSide.add((new LayerManagerPane()).render()); 		// Layer manager pane
 		

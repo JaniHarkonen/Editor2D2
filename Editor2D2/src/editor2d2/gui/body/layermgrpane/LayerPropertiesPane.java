@@ -12,6 +12,7 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.scene.Layer;
+import editor2d2.modules.GUIFactory;
 
 public class LayerPropertiesPane extends GUIComponent {
 	
@@ -50,9 +51,17 @@ public class LayerPropertiesPane extends GUIComponent {
 		JPanel containerType = GUIUtilities.createDefaultPanel();
 		
 			JLabel labTypeTitle = new JLabel("Type:");
-		
-			String[] typeChoices = { "Tile", "Object", "Data" };
-			JComboBox dmType = new JComboBox(typeChoices);
+			
+			String[] typeChoices = GUIFactory.getClassTypes();
+			
+			for( int i = 0; i < typeChoices.length; i++ )
+			typeChoices[i] = GUIFactory.getPlaceableClass(typeChoices[i]);
+			
+			GUIUtilities.convertFirstLetterUppercase(typeChoices);
+			
+			JComboBox<String> dmType = new JComboBox<String>(typeChoices);
+			String selectedLayerType = GUIFactory.getPlaceableClass(this.source.getReferencedAsset().getAssetClassName());
+			dmType.setSelectedItem(GUIUtilities.getFirstLetterUppercase(selectedLayerType));
 			
 		containerType.add(labTypeTitle);
 		containerType.add(dmType);

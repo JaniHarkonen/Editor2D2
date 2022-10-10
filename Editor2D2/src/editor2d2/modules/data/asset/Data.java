@@ -16,6 +16,8 @@ public class Data extends Asset {
 	
 	
 	public Data() {
+		super("data");
+		
 		this.value = "0";
 		this.color = Color.WHITE;
 	}

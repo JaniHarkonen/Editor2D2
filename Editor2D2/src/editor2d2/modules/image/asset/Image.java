@@ -16,6 +16,8 @@ public class Image extends Asset {
 	
 	
 	public Image() {
+		super("image");
+		
 		this.image = null;
 		this.path = "";
 	}

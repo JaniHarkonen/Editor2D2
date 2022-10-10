@@ -2,9 +2,10 @@ package editor2d2.model.project.scene;
 
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
+import editor2d2.model.project.HasAsset;
 import editor2d2.model.project.scene.placeable.Placeable;
 
-public abstract class Layer {
+public abstract class Layer implements HasAsset {
 	
 		// Reference to the Scene this layer belongs to
 	protected Scene scene;

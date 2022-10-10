@@ -2,9 +2,10 @@ package editor2d2.model.project.scene.placeable;
 
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
+import editor2d2.model.project.HasAsset;
 import editor2d2.model.project.scene.Layer;
 
-public abstract class Placeable implements Gridable, Drawable {
+public abstract class Placeable implements Gridable, Drawable, HasAsset {
 	
 		// Reference to the Asset that the Placeable is based on
 	protected Asset asset;

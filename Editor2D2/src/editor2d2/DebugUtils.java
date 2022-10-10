@@ -9,7 +9,7 @@ import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.modules.image.placeable.Tile;
-import editor2d2.modules.object.layer.ObjectLayer;
+import editor2d2.modules.object.layer.InstanceLayer;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Subscription;
 
@@ -59,7 +59,7 @@ public class DebugUtils {
 					// Layer
 				TileLayer tl1 = new TileLayer(scene1, 32);
 				tl1.setName("tiles");
-				ObjectLayer ol1 = new ObjectLayer(scene1);
+				InstanceLayer ol1 = new InstanceLayer(scene1);
 				ol1.setName("objs");
 				
 					// Tiles

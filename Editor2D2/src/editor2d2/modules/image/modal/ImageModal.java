@@ -15,6 +15,7 @@ import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.resources.ImageExtensions;
 
@@ -118,5 +119,11 @@ public class ImageModal extends ModalView<Image> {
 		return;
 		
 		this.source.setFilePath(fsource);
+	}
+
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source;
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import editor2d2.Application;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
@@ -104,8 +105,14 @@ public class Instance extends Placeable {
 		return (EObject) this.asset;
 	}
 	
+	@Override
+	public Asset getReferencedAsset() {
+		return getObject();
+	}
+	
 		// Returns the Image that represents the instance
 	public Image getSprite() {
 		return this.sprite;
 	}
+
 }

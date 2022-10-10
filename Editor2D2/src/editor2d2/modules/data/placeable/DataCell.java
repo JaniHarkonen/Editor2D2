@@ -5,13 +5,13 @@ import java.awt.FontMetrics;
 import java.awt.geom.Rectangle2D;
 
 import editor2d2.common.grid.Grid;
-import editor2d2.common.grid.Gridable;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.data.asset.Data;
 
-public class DataCell extends Placeable implements Gridable {
+public class DataCell extends Placeable {
 
 		// Cellular width of the data cell
 	private int cellWidth;
@@ -84,6 +84,11 @@ public class DataCell extends Placeable implements Gridable {
 		// Returns a reference to the Data object this cell is derived from
 	public Data getData() {
 		return (Data) this.asset;
+	}
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return getData();
 	}
 	
 		// Sets the cellular dimensions of the data cell

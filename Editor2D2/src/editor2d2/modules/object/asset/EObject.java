@@ -27,6 +27,8 @@ public class EObject extends Asset {
 	
 	
 	public EObject() {
+		super("object");
+		
 		this.sprite = null;
 		this.width = 0;
 		this.height = 0;
