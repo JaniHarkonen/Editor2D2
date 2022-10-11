@@ -93,7 +93,9 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 	
 		// Called upon clicking "Cancel"
 		// CAN BE OVERRIDDEN
-	protected void actionCancel() {}
+	protected void actionCancel() {
+		this.host.closeModalWindow();
+	}
 	
 		// Updates the Project and the Asset Pane to the creation
 		// of a new Asset
