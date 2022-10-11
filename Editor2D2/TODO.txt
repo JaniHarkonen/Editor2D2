@@ -1,7 +1,5 @@
 TODO - ArchitecturalRethink
 
-- port SubscriptionService back to using strings to allow multiple
-  independent SubscriptionService instances
 - implement undermentioned changes to Application, Controller and
   Window
 
