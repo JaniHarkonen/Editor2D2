@@ -42,4 +42,17 @@ public class GUIUtilities {
 		
 		return box;
 	}
+	
+		// Returns a copy of a string with the first character converted to
+		// uppercase
+	public static String getFirstLetterUppercase(String string) {
+		return (""+string.charAt(0)).toUpperCase() + string.substring(1);
+	}
+	
+		// Converts the first character of all the strings in a given array to
+		// uppercase
+	public static void convertFirstLetterUppercase(String[] strings) {
+		for( int i = 0; i < strings.length; i++ )
+		strings[i] = getFirstLetterUppercase(strings[i]);
+	}
 }

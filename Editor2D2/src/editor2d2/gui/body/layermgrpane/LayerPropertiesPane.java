@@ -1,27 +1,23 @@
 package editor2d2.gui.body.layermgrpane;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
-import editor2d2.model.project.layers.Layer;
-import editor2d2.model.project.scene.placeables.Placeable;
+import editor2d2.gui.components.ClickableButton;
+import editor2d2.model.project.scene.Layer;
+import editor2d2.modules.GUIFactory;
 
 public class LayerPropertiesPane extends GUIComponent {
 	
 		// Reference to the source layer that the pane is representing
-	private Layer<? extends Placeable> source;
+	private Layer source;
 	
 		// Layer name text field
 	private CTextField txtName;
@@ -30,7 +26,7 @@ public class LayerPropertiesPane extends GUIComponent {
 	private CTextField txtOpacity;
 	
 	
-	public LayerPropertiesPane(Layer<? extends Placeable> source) {
+	public LayerPropertiesPane(Layer source) {
 		this.source = source;
 		
 		this.txtName = new CTextField("Name: ");
@@ -55,9 +51,17 @@ public class LayerPropertiesPane extends GUIComponent {
 		JPanel containerType = GUIUtilities.createDefaultPanel();
 		
 			JLabel labTypeTitle = new JLabel("Type:");
-		
-			String[] typeChoices = { "Tile", "Object", "Data" };
-			JComboBox dmType = new JComboBox(typeChoices);
+			
+			String[] typeChoices = GUIFactory.getClassTypes();
+			
+			for( int i = 0; i < typeChoices.length; i++ )
+			typeChoices[i] = GUIFactory.getPlaceableClass(typeChoices[i]);
+			
+			GUIUtilities.convertFirstLetterUppercase(typeChoices);
+			
+			JComboBox<String> dmType = new JComboBox<String>(typeChoices);
+			String selectedLayerType = GUIFactory.getPlaceableClass(this.source.getReferencedAsset().getAssetClassName());
+			dmType.setSelectedItem(GUIUtilities.getFirstLetterUppercase(selectedLayerType));
 			
 		containerType.add(labTypeTitle);
 		containerType.add(dmType);
@@ -93,15 +97,7 @@ public class LayerPropertiesPane extends GUIComponent {
 		container.add(containerVisibility);
 		
 			// Controls
-		JButton btnApply =  new JButton("Apply");
-		btnApply.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				onApply();
-			}
-		});
-		container.add(btnApply);
+		container.add(new ClickableButton("Apply", (e) -> { onApply(); }));
 		
 		return container;
 	}

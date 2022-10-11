@@ -2,11 +2,12 @@ package editor2d2.model.app;
 
 import editor2d2.Application;
 import editor2d2.DebugUtils;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.project.layers.Layer;
-import editor2d2.model.project.scene.placeables.Placeable;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.scene.Layer;
+import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.subservice.Handle;
+import editor2d2.subservice.Vendor;
 
 public class Controller implements Vendor {
 
@@ -14,7 +15,7 @@ public class Controller implements Vendor {
 	private Project project;
 	
 		// Reference to the currently active Layer
-	private Layer<? extends Placeable> layer;
+	private Layer layer;
 	
 		// Reference to the selected placeable
 	private Placeable selectedPlaceable;
@@ -51,7 +52,7 @@ public class Controller implements Vendor {
 	}
 	
 		// Returns a reference to the currently active Layer
-	public Layer<? extends Placeable> getLayer() {
+	public Layer getLayer() {
 		return this.layer;
 	}
 	
@@ -59,18 +60,18 @@ public class Controller implements Vendor {
 	public void openProject(Project project) {
 		this.project = project;
 		
-		Application.subscriptionService.register("active-project", this);
+		Application.subscriptionService.register(Handle.ACTIVE_PROJECT, this);
 	}
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
 		this.selectedPlaceable = asset.createPlaceable();
 		
-		Application.subscriptionService.register("selected-placeable", this);
+		Application.subscriptionService.register(Handle.SELECTED_PLACEABLE, this);
 	}
 	
 		// Sets the currently active Layer
-	public void setLayer(Layer<? extends Placeable> layer) {
+	public void setLayer(Layer layer) {
 		this.layer = layer;
 	}
 }

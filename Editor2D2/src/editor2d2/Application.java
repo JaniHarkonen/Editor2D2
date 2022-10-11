@@ -2,8 +2,8 @@ package editor2d2;
 
 import editor2d2.gui.Window;
 import editor2d2.model.app.Controller;
-import editor2d2.model.subservice.SubscriptionService;
 import editor2d2.resources.Resources;
+import editor2d2.subservice.SubscriptionService;
 
 public class Application {
 	

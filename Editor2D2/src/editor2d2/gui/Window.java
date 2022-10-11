@@ -9,10 +9,12 @@ import javax.swing.filechooser.FileFilter;
 import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
+import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
-import editor2d2.gui.modal.views.ModalView;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.Asset;
+import editor2d2.modules.GUIFactory;
+import editor2d2.subservice.Handle;
+import editor2d2.subservice.Vendor;
 
 public class Window implements Vendor {
 
@@ -39,6 +41,8 @@ public class Window implements Vendor {
 	
 	
 	private Window(int width, int height, String title) {
+		GUIFactory.initialize();
+		
 		this.window = new JFrame();
 		this.window.setSize(width, height);
 		this.window.setLocationRelativeTo(null);
@@ -53,7 +57,7 @@ public class Window implements Vendor {
 		this.modal = new ModalWindow(this);
 		this.fileSystemDialog = new JFileChooser();
 		
-		Application.subscriptionService.register("modal", this);
+		Application.subscriptionService.register(Handle.MODAL, this);
 	}
 	
 	

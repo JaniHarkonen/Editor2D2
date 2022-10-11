@@ -9,14 +9,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
+import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
-import editor2d2.gui.modal.views.DataModal;
-import editor2d2.gui.modal.views.ImageModal;
-import editor2d2.gui.modal.views.ModalView;
-import editor2d2.gui.modal.views.ObjectModal;
-import editor2d2.model.project.assets.Asset;
-import editor2d2.model.subservice.Subscriber;
-import editor2d2.model.subservice.Vendor;
+import editor2d2.model.project.Asset;
+import editor2d2.modules.GUIFactory;
+import editor2d2.subservice.Handle;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
 public class WindowToolbar extends JMenuBar implements Subscriber {
 	
@@ -36,6 +35,12 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		repaint();
 	}
 	
+	@Override
+	public void onNotification(Handle handle, Vendor vendor) {
+		if( handle == Handle.MODAL )
+		regenerate();
+	}
+	
 		// Generates the toolbar
 	private void generate() {
 		
@@ -49,14 +54,16 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		
 			// Asset menu
 		JMenu menuAsset = new JMenu("Asset");
-		Window host = (Window) Application.subscriptionService.get("modal", "WindowToolbar", this);
+		Window host = (Window) Application.subscriptionService.get(Handle.MODAL, "WindowToolbar", this);
 		
 		if( host != null )
 		{
 			ModalWindow modal = host.getModalWindow();
-			menuAsset.add(createAssetMenuItem("Create image", new ImageModal(modal, true)));
-			menuAsset.add(createAssetMenuItem("Create object", new ObjectModal(modal, true)));
-			menuAsset.add(createAssetMenuItem("Create data", new DataModal(modal, true)));
+			String[] ctypes = GUIFactory.getClassTypes();
+			
+				// Populate Asset menu
+			for( String type : ctypes )
+			menuAsset.add(createAssetMenuItem("Create " + type, GUIFactory.createModalView(type, modal)));
 		}
 		
 			// Meta data settings
@@ -80,15 +87,5 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 				Application.window.popup(mv);
 			}
 		});
-	}
-	
-	@Override
-	public void onNotification(String handle, Vendor vendor) {
-		switch( handle )
-		{
-			case "modal":
-				regenerate();
-				break;
-		}
 	}
 }

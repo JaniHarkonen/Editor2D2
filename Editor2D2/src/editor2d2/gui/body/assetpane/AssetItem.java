@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
-import editor2d2.model.project.assets.Asset;
+import editor2d2.model.project.Asset;
 
 public class AssetItem extends GUIComponent {
 	

@@ -4,14 +4,15 @@ import java.awt.image.BufferedImage;
 
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
-import editor2d2.model.project.Scene;
-import editor2d2.model.project.assets.Image;
-import editor2d2.model.project.layers.ObjectLayer;
-import editor2d2.model.project.layers.TileLayer;
-import editor2d2.model.project.scene.Camera;
-import editor2d2.model.project.scene.placeables.Tile;
-import editor2d2.model.subservice.Subscriber;
-import editor2d2.model.subservice.Subscription;
+import editor2d2.model.project.scene.Scene;
+import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.image.layer.TileLayer;
+import editor2d2.modules.image.placeable.Tile;
+import editor2d2.modules.object.layer.InstanceLayer;
+import editor2d2.subservice.Handle;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Subscription;
 
 /**
  * This class is set to contain utility methods for running debugging tests
@@ -59,7 +60,7 @@ public class DebugUtils {
 					// Layer
 				TileLayer tl1 = new TileLayer(scene1, 32);
 				tl1.setName("tiles");
-				ObjectLayer ol1 = new ObjectLayer(scene1);
+				InstanceLayer ol1 = new InstanceLayer(scene1);
 				ol1.setName("objs");
 				
 					// Tiles
@@ -116,7 +117,7 @@ public class DebugUtils {
 	 * 
 	 * @param handle Handle whose information to print.
 	 */
-	public static void printSubscription(String handle) {
+	public static void printSubscription(Handle handle) {
 		Subscription subsc = Application.subscriptionService.getSubscription(handle);
 		
 		if( subsc == null )

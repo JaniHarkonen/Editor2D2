@@ -1,1 +1,32 @@
-T
+TODO - ArchitecturalRethink
+
+- critically examine the current architecture
+- make sure that the current architecture is ready for the next
+  software components
+
+- figure out the role of the Controller as well as AppState
+	* SubscriptionService should be instantiated by Controller as it
+	  receives "requests" from the GUI and updates the model
+	* AppState is a separate entity from the Controller, Controller
+	  does things, while AppState stores things
+	* fields used by the Controller should be delegated to the AppState
+	* AppState should have methods only for setting and getting
+	
+	? Make Controller static instead of a singleton as it has no state
+		-> otherwise: Application.controller.subscriberService
+		
+	* Application HAS AN AppState	(PRIVATE)
+	* Application HAS A Controller	(PUBLIC)
+	* Application HAS Resources		(PUBLIC)
+	* Application HAS A Window		(PUBLIC)
+	
+	* Controller HAS A SubscriptionService
+	* Controller DEALS WITH AN AppState
+	
+	* Window HAS A SubscriptionService
+	
+	* make sure that changes to the model go through Controller
+		-> example: creating new assets
+		-> example: placing placeables
+		-> example: creating new layers
+		...
