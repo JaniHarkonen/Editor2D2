@@ -31,9 +31,9 @@ public class LayerPane extends GUIComponent {
 		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		container.add(new JLabel(source.getName()));
 		
-		Layer selectedLayer = Application.controller.getLayer();
+		Layer selectedLayer = Application.controller.getActiveLayer();
 		
-		if( selectedLayer != null && Application.controller.getLayer() == this.source )
+		if( selectedLayer != null && selectedLayer == this.source )
 		container.setBackground(Color.RED);
 		
 			// Handle selection
@@ -51,7 +51,7 @@ public class LayerPane extends GUIComponent {
 	
 		// Called upon clicking the layer pane
 	private void onClick() {
-		Application.controller.setLayer(this.source);
+		Application.controller.selectLayer(this.source);
 		update();
 	}
 }

@@ -1,10 +1,12 @@
 package editor2d2.model.app;
 
+import editor2d2.Application;
 import editor2d2.DebugUtils;
 import editor2d2.model.Handles;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
+import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
@@ -18,15 +20,6 @@ public class Controller implements Vendor {
 		// to notify the GUI when the AppState changes
 	public final SubscriptionService subscriptionService;
 	
-		// Reference to the currently open project
-	private Project project;
-	
-		// Reference to the currently active Layer
-	private Layer layer;
-	
-		// Reference to the selected placeable
-	private Placeable selectedPlaceable;
-	
 		// Whether the Controller has been instantiated
 	private static boolean isInstantiated = false;
 	
@@ -35,9 +28,6 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
-		this.project = null;
-		this.selectedPlaceable = null;
-		this.layer = null;
 		
 		DebugUtils.controllerDebugSetup(this);
 	}
@@ -50,37 +40,50 @@ public class Controller implements Vendor {
 		return new Controller(appState);
 	}
 	
+	
 		// Returns a reference to the currently open project
-	public Project getProject() {
-		return this.project;
+	public Project getActiveProject() {
+		return this.appState.activeProject;
 	}
 	
 		// Returns a reference to the selected placeable
 	public Placeable getSelectedPlaceable() {
-		return this.selectedPlaceable;
+		return this.appState.selectedPlaceable;
 	}
 	
 		// Returns a reference to the currently active Layer
-	public Layer getLayer() {
-		return this.layer;
+	public Layer getActiveLayer() {
+		return this.appState.activeLayer;
 	}
 	
 		// Opens a new project and sets it as the active one
 	public void openProject(Project project) {
-		this.project = project;
-		
+		this.appState.activeProject = project;
 		this.subscriptionService.register(Handles.ACTIVE_PROJECT, this);
+	}
+	
+		// Creates a new Scene of a given anme and adds it to the
+		// currently active Project
+	public void createNewScene(String name) {
+		Scene newScene = new Scene();
+		newScene.setName(name);
+		getActiveProject().addScene(newScene);
+	}
+	
+		// Adds a given Asset to the currently active Project
+	public void addNewAsset(Asset newAsset) {
+		getActiveProject().addAsset(newAsset);
+		Application.window.getModalWindow().getAssetPane().update();
 	}
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
-		this.selectedPlaceable = asset.createPlaceable();
-		
+		this.appState.selectedPlaceable = asset.createPlaceable();
 		this.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
 	}
 	
 		// Sets the currently active Layer
-	public void setLayer(Layer layer) {
-		this.layer = layer;
+	public void selectLayer(Layer layer) {
+		this.appState.activeLayer = layer;
 	}
 }

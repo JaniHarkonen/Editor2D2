@@ -37,7 +37,7 @@ public class LayerManagerPane extends GUIComponent {
 			container.add(containerControls);
 			
 				// Layer panes
-			for( Layer layer : Application.controller.getProject().getScene("small scene").getLayers() )
+			for( Layer layer : Application.controller.getActiveProject().getScene("small scene").getLayers() )
 			container.add((new LayerPane(layer)).render());
 			
 		}
@@ -59,13 +59,13 @@ public class LayerManagerPane extends GUIComponent {
 	
 		// Called upon editing a layer (...)
 	private void onEditLayer() {
-		this.editedLayer = Application.controller.getLayer();
+		this.editedLayer = Application.controller.getActiveLayer();
 		update();
 	}
 	
 		// Called upon adding a new layer (+)
 	private void onAddLayer() {
-		Scene scene = Application.controller.getProject().getScene("small scene");
+		Scene scene = Application.controller.getActiveProject().getScene("small scene");
 		InstanceLayer newLayer = new InstanceLayer(scene);
 		newLayer.setName("Object layer " + System.currentTimeMillis());
 		scene.addLayer(newLayer);
@@ -75,12 +75,12 @@ public class LayerManagerPane extends GUIComponent {
 	
 		// Called upon deleting a layer (-)
 	private void onDeleteLayer() {
-		Layer target = Application.controller.getLayer();
+		Layer target = Application.controller.getActiveLayer();
 		
 		if( target == null )
 		return;
 		
-		Application.controller.getProject().getScene("small scene").removeLayer(target);
+		Application.controller.getActiveProject().getScene("small scene").removeLayer(target);
 		
 		update();
 	}

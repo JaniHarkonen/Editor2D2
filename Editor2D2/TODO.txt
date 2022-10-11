@@ -1,30 +1,5 @@
-TODO - ArchitecturalRethink
-
-- route all changes to the model (AppState and Project) through the Controller
-
-- figure out the role of the Controller as well as AppState
-	* SubscriptionService should be instantiated by Controller as it
-	  receives "requests" from the GUI and updates the model
-	* AppState is a separate entity from the Controller, Controller
-	  does things, while AppState stores things
-	* fields used by the Controller should be delegated to the AppState
-	* AppState should have methods only for setting and getting
-	
-	? Make Controller static instead of a singleton as it has no state
-		-> otherwise: Application.controller.subscriberService
+TODO - ...
 		
-	V Application HAS AN AppState	(PRIVATE)
-	V Application HAS A Controller	(PUBLIC)
-	V Application HAS Resources		(PUBLIC)
-	V Application HAS A Window		(PUBLIC)
-	
-	V Controller HAS A SubscriptionService
-	V Controller DEALS WITH AN AppState
-	
-	V Window HAS A SubscriptionService
-	
-	* make sure that changes to the model go through Controller
-		-> example: creating new assets
-		-> example: placing placeables
-		-> example: creating new layers
-		...
+- return to LayerManagerPane after TOOLS
+	-- also check other classes inside "layermgrpane"
+- return to SceneView after TOOLS

@@ -164,6 +164,10 @@ public class SceneView extends GUIComponent {
 				
 				if( SwingUtilities.isLeftMouseButton(e) )
 				{
+						// WARNING! WARNING! CONTAINS UNWANTED ACCESS TO THE
+						// PROJECT, SHOULD GO THROUGH CONTROLLER INSTEAD,
+						// LEFT LIKE THIS TEMPORARILY AS THIS FUNCTIONALITY
+						// WILL BE REPLACED BY THE INTRODUCTION OF "TOOLS"
 					Placeable p = Application.controller.getSelectedPlaceable();
 					
 					if( p != null )
@@ -171,7 +175,7 @@ public class SceneView extends GUIComponent {
 						Placeable dupp = p.duplicate();
 						int pcx = (int) (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
 						int pcy = (int) (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
-						Layer layer = Application.controller.getLayer();
+						Layer layer = Application.controller.getActiveLayer();
 						DebugUtils.log(layer, this);
 						
 						if( layer != null )

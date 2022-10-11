@@ -43,7 +43,7 @@ public class Root extends GUIComponent implements Subscriber {
 		if( vendor == null )
 		this.targetProject = null;
 		else
-		this.targetProject = vendor.getProject();
+		this.targetProject = vendor.getActiveProject();
 	}
 	
 
@@ -144,9 +144,7 @@ public class Root extends GUIComponent implements Subscriber {
 		return;
 		
 			// Creates a new Scene and adds it to the target project
-		Scene newScene = new Scene();
-		newScene.setName(name);
-		this.targetProject.addScene(newScene);
+		Application.controller.createNewScene(name);
 		
 		update();
 	}
@@ -158,7 +156,7 @@ public class Root extends GUIComponent implements Subscriber {
 		switch( handle )
 		{
 			case Handles.ACTIVE_PROJECT:
-				this.targetProject = ((Controller) vendor).getProject();
+				this.targetProject = ((Controller) vendor).getActiveProject();
 				break;
 			
 			case Handles.SELECTED_PLACEABLE:

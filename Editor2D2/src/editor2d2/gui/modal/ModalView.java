@@ -100,8 +100,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		// Updates the Project and the Asset Pane to the creation
 		// of a new Asset
 	protected void finalizeCreation() {
-		Application.controller.getProject().addAsset(this.source);
-		Application.window.getModalWindow().getAssetPane().update();
+		Application.controller.addNewAsset(this.source);
 	}
 	
 	
