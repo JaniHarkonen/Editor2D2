@@ -1,7 +1,6 @@
 TODO - ArchitecturalRethink
 
-- implement undermentioned changes to Application, Controller and
-  Window
+- route all changes to the model (AppState and Project) through the Controller
 
 - figure out the role of the Controller as well as AppState
 	* SubscriptionService should be instantiated by Controller as it
@@ -14,15 +13,15 @@ TODO - ArchitecturalRethink
 	? Make Controller static instead of a singleton as it has no state
 		-> otherwise: Application.controller.subscriberService
 		
-	* Application HAS AN AppState	(PRIVATE)
-	* Application HAS A Controller	(PUBLIC)
-	* Application HAS Resources		(PUBLIC)
-	* Application HAS A Window		(PUBLIC)
+	V Application HAS AN AppState	(PRIVATE)
+	V Application HAS A Controller	(PUBLIC)
+	V Application HAS Resources		(PUBLIC)
+	V Application HAS A Window		(PUBLIC)
 	
-	* Controller HAS A SubscriptionService
-	* Controller DEALS WITH AN AppState
+	V Controller HAS A SubscriptionService
+	V Controller DEALS WITH AN AppState
 	
-	* Window HAS A SubscriptionService
+	V Window HAS A SubscriptionService
 	
 	* make sure that changes to the model go through Controller
 		-> example: creating new assets

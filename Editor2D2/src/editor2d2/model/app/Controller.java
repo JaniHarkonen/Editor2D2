@@ -1,16 +1,23 @@
 package editor2d2.model.app;
 
-import editor2d2.Application;
 import editor2d2.DebugUtils;
 import editor2d2.model.Handles;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
 public class Controller implements Vendor {
 
+		// Reference to the AppState that the Controller manipulates
+	private AppState appState;
+	
+		// Reference to the SubscriptionService that the Controller uses
+		// to notify the GUI when the AppState changes
+	public final SubscriptionService subscriptionService;
+	
 		// Reference to the currently open project
 	private Project project;
 	
@@ -25,7 +32,9 @@ public class Controller implements Vendor {
 	
 	
 		// This class is a singleton, only instantiate once
-	private Controller() {
+	private Controller(AppState appState) {
+		this.appState = appState;
+		this.subscriptionService = new SubscriptionService();
 		this.project = null;
 		this.selectedPlaceable = null;
 		this.layer = null;
@@ -34,11 +43,11 @@ public class Controller implements Vendor {
 	}
 	
 		// Instantiates the Controller
-	public static Controller instantiate() {
+	public static Controller instantiate(AppState appState) {
 		if( isInstantiated == true )
 		return null;
 		
-		return new Controller();
+		return new Controller(appState);
 	}
 	
 		// Returns a reference to the currently open project
@@ -60,14 +69,14 @@ public class Controller implements Vendor {
 	public void openProject(Project project) {
 		this.project = project;
 		
-		Application.subscriptionService.register(Handles.ACTIVE_PROJECT, this);
+		this.subscriptionService.register(Handles.ACTIVE_PROJECT, this);
 	}
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
 		this.selectedPlaceable = asset.createPlaceable();
 		
-		Application.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
+		this.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
 	}
 	
 		// Sets the currently active Layer

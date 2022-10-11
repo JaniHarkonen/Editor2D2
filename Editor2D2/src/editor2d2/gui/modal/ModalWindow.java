@@ -54,7 +54,7 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		});
 		
 			// Subscribe for the Asset Pane reference
-		this.assetPane = (AssetPane) Application.subscriptionService.get(Handles.ASSET_PANE, "ModalWindow", this);
+		this.assetPane = (AssetPane) Application.window.subscriptionService.get(Handles.ASSET_PANE, "ModalWindow", this);
 	}
 	
 	

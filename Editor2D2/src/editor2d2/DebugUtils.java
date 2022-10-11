@@ -10,8 +10,6 @@ import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.modules.image.placeable.Tile;
 import editor2d2.modules.object.layer.InstanceLayer;
-import editor2d2.subservice.Subscriber;
-import editor2d2.subservice.Subscription;
 
 /**
  * This class is set to contain utility methods for running debugging tests
@@ -106,31 +104,6 @@ public class DebugUtils {
 		dummy.addAsset(img);
 		
 		controller.openProject(dummy);
-	}
-	
-	/**
-	 * Prints a subscription information of a given handle including: <br/>
-	 * - handle ID<br/>
-	 * - vendor reference<br/>
-	 * - list of subscribers
-	 * 
-	 * @param handle Handle whose information to print.
-	 */
-	public static void printSubscription(String handle) {
-		Subscription subsc = Application.subscriptionService.getSubscription(handle);
-		
-		if( subsc == null )
-		{
-			System.out.println("Handle " + handle + " is null!");
-			return;
-		}
-		
-		System.out.println("Handle: " + handle);
-		System.out.println("Vendor: " + subsc.getVendor());
-		System.out.println("Subscribers: ");
-		
-		for( Subscriber sub : subsc.getSubscribers() )
-		System.out.println("\t" + sub);
 	}
 	
 	/**

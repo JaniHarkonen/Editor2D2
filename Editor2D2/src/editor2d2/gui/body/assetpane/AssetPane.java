@@ -20,7 +20,7 @@ public class AssetPane extends GUIComponent implements Vendor {
 	public AssetPane(Project source) {
 		this.source = source;
 		
-		Application.subscriptionService.register(Handles.ASSET_PANE, this);
+		Application.window.subscriptionService.register(Handles.ASSET_PANE, this);
 	}
 	
 

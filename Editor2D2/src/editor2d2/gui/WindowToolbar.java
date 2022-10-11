@@ -53,7 +53,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		
 			// Asset menu
 		JMenu menuAsset = new JMenu("Asset");
-		Window host = (Window) Application.subscriptionService.get(Handles.MODAL, "WindowToolbar", this);
+		Window host = (Window) Application.window.subscriptionService.get(Handles.MODAL, "WindowToolbar", this);
 		
 		if( host != null )
 		{

@@ -8,23 +8,11 @@ public class SubscriptionService {
 		// A mapping of handles to their subscriptions
 	private Map<String, Subscription> subscriptions;
 	
-		// Whether the Subscription Service has been initialized
-	private static boolean isInstantiated = false;
-	
-	
 		// Singleton class, only instantiate once
-	private SubscriptionService() {
+	public SubscriptionService() {
 		this.subscriptions = new HashMap<String, Subscription>();
 	}
 	
-	
-		// Creates only a single instance of the Subscription Service
-	public static SubscriptionService instantiate() {
-		if( isInstantiated == true )
-		return null;
-		
-		return new SubscriptionService();
-	}
 	
 		// Registers a vendor to a handle
 	public void register(String handle, Vendor vendor) {

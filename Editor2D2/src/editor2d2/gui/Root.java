@@ -37,8 +37,8 @@ public class Root extends GUIComponent implements Subscriber {
 	public Root() {
 		this.currentTabIndex = -1;
 		
-		Controller vendor = (Controller) Application.subscriptionService.get(Handles.ACTIVE_PROJECT, "Root", this);
-		Application.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
+		Controller vendor = (Controller) Application.controller.subscriptionService.get(Handles.ACTIVE_PROJECT, "Root", this);
+		Application.controller.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;
