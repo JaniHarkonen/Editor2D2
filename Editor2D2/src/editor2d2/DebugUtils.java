@@ -10,7 +10,6 @@ import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.modules.image.placeable.Tile;
 import editor2d2.modules.object.layer.InstanceLayer;
-import editor2d2.subservice.Handle;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Subscription;
 
@@ -117,7 +116,7 @@ public class DebugUtils {
 	 * 
 	 * @param handle Handle whose information to print.
 	 */
-	public static void printSubscription(Handle handle) {
+	public static void printSubscription(String handle) {
 		Subscription subsc = Application.subscriptionService.getSubscription(handle);
 		
 		if( subsc == null )

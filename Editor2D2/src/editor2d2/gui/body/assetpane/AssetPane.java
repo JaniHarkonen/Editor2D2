@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.Handles;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
-import editor2d2.subservice.Handle;
 import editor2d2.subservice.Vendor;
 
 public class AssetPane extends GUIComponent implements Vendor {
@@ -20,7 +20,7 @@ public class AssetPane extends GUIComponent implements Vendor {
 	public AssetPane(Project source) {
 		this.source = source;
 		
-		Application.subscriptionService.register(Handle.ASSET_PANE, this);
+		Application.subscriptionService.register(Handles.ASSET_PANE, this);
 	}
 	
 

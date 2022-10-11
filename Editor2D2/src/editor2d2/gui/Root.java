@@ -21,9 +21,9 @@ import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.GUIFactory;
-import editor2d2.subservice.Handle;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
+import editor2d2.model.Handles;
 
 public class Root extends GUIComponent implements Subscriber {
 	
@@ -37,8 +37,8 @@ public class Root extends GUIComponent implements Subscriber {
 	public Root() {
 		this.currentTabIndex = -1;
 		
-		Controller vendor = (Controller) Application.subscriptionService.get(Handle.ACTIVE_PROJECT, "Root", this);
-		Application.subscriptionService.subscribe(Handle.SELECTED_PLACEABLE, "Root", this);
+		Controller vendor = (Controller) Application.subscriptionService.get(Handles.ACTIVE_PROJECT, "Root", this);
+		Application.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;
@@ -153,15 +153,15 @@ public class Root extends GUIComponent implements Subscriber {
 
 
 	@Override
-	public void onNotification(Handle handle, Vendor vendor) {
+	public void onNotification(String handle, Vendor vendor) {
 		
 		switch( handle )
 		{
-			case ACTIVE_PROJECT:
+			case Handles.ACTIVE_PROJECT:
 				this.targetProject = ((Controller) vendor).getProject();
 				break;
 			
-			case SELECTED_PLACEABLE:
+			case Handles.SELECTED_PLACEABLE:
 				break;
 			
 			default: return;

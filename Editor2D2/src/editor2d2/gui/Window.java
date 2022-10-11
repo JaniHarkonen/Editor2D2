@@ -13,7 +13,6 @@ import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
 import editor2d2.modules.GUIFactory;
-import editor2d2.subservice.Handle;
 import editor2d2.subservice.Vendor;
 
 public class Window implements Vendor {
@@ -57,7 +56,7 @@ public class Window implements Vendor {
 		this.modal = new ModalWindow(this);
 		this.fileSystemDialog = new JFileChooser();
 		
-		Application.subscriptionService.register(Handle.MODAL, this);
+		Application.subscriptionService.register(Handles.MODAL, this);
 	}
 	
 	

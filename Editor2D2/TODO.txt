@@ -1,8 +1,9 @@
 TODO - ArchitecturalRethink
 
-- critically examine the current architecture
-- make sure that the current architecture is ready for the next
-  software components
+- port SubscriptionService back to using strings to allow multiple
+  independent SubscriptionService instances
+- implement undermentioned changes to Application, Controller and
+  Window
 
 - figure out the role of the Controller as well as AppState
 	* SubscriptionService should be instantiated by Controller as it

@@ -13,8 +13,8 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Window;
 import editor2d2.gui.body.assetpane.AssetPane;
+import editor2d2.gui.Handles;
 import editor2d2.model.project.Asset;
-import editor2d2.subservice.Handle;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -54,13 +54,13 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		});
 		
 			// Subscribe for the Asset Pane reference
-		this.assetPane = (AssetPane) Application.subscriptionService.get(Handle.ASSET_PANE, "ModalWindow", this);
+		this.assetPane = (AssetPane) Application.subscriptionService.get(Handles.ASSET_PANE, "ModalWindow", this);
 	}
 	
 	
 	@Override
-	public void onNotification(Handle handle, Vendor vendor) {
-		if( handle == Handle.ASSET_PANE )
+	public void onNotification(String handle, Vendor vendor) {
+		if( handle == Handles.ASSET_PANE )
 		this.assetPane = (AssetPane) vendor;
 	}
 	

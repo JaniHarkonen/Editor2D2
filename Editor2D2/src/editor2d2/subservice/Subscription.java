@@ -7,7 +7,7 @@ import java.util.Map;
 public class Subscription {
 
 		// Subscription handle that will be used to subscribe to the vendor
-	private final Handle handle;
+	private final String handle;
 	
 		// Reference to the vendor that previously updated this handle
 	private Vendor vendor;
@@ -16,7 +16,7 @@ public class Subscription {
 	private final Map<String, Subscriber> subscribers;
 	
 	
-	public Subscription(Handle handle) {
+	public Subscription(String handle) {
 		this.handle = handle;
 		this.vendor = null;
 		this.subscribers = new HashMap<String, Subscriber>();
@@ -64,7 +64,7 @@ public class Subscription {
 	}
 	
 		// Returns the handle
-	public Handle getHandle() {
+	public String getHandle() {
 		return this.handle;
 	}
 	

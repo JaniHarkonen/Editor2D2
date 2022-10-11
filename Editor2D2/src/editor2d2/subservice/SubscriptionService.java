@@ -6,7 +6,7 @@ import java.util.Map;
 public class SubscriptionService {
 
 		// A mapping of handles to their subscriptions
-	private Map<Handle, Subscription> subscriptions;
+	private Map<String, Subscription> subscriptions;
 	
 		// Whether the Subscription Service has been initialized
 	private static boolean isInstantiated = false;
@@ -14,7 +14,7 @@ public class SubscriptionService {
 	
 		// Singleton class, only instantiate once
 	private SubscriptionService() {
-		this.subscriptions = new HashMap<Handle, Subscription>();
+		this.subscriptions = new HashMap<String, Subscription>();
 	}
 	
 	
@@ -27,7 +27,7 @@ public class SubscriptionService {
 	}
 	
 		// Registers a vendor to a handle
-	public void register(Handle handle, Vendor vendor) {
+	public void register(String handle, Vendor vendor) {
 		Subscription subscription = this.subscriptions.get(handle);
 		
 		if( subscription == null )
@@ -40,7 +40,7 @@ public class SubscriptionService {
 	}
 	
 		// Subscribes a subscriber to a given handle with a given subscriber ID
-	public void subscribe(Handle handle, String subId, Subscriber self) {
+	public void subscribe(String handle, String subId, Subscriber self) {
 		if( subId == null || handle == null )
 		return;
 		
@@ -57,7 +57,7 @@ public class SubscriptionService {
 	}
 	
 		// Unsubscribes a with a given ID subscriber from a given handle
-	public void unsubscribe(Handle handle, String subId) {
+	public void unsubscribe(String handle, String subId) {
 		if( subId == null )
 		return;
 		
@@ -81,7 +81,7 @@ public class SubscriptionService {
 	 * @return Returns a reference to the vendor or NULL, if the vendor hasn't
 	 * registered yet.
 	 */
-	public Vendor get(Handle handle, String subId, Subscriber self) {
+	public Vendor get(String handle, String subId, Subscriber self) {
 		if( handle == null || subId == null || self == null )
 		return null;
 		
@@ -96,7 +96,7 @@ public class SubscriptionService {
 	}
 	
 		// Returns the vendor of a given handle WITHOUT subscribing to the handle
-	public Vendor getWithoutSubscription(Handle handle) {
+	public Vendor getWithoutSubscription(String handle) {
 		Subscription subscription = this.subscriptions.get(handle);
 		
 		if( subscription == null )
@@ -106,7 +106,7 @@ public class SubscriptionService {
 	}
 	
 		// Returns a reference to the subscription with a given handle
-	public Subscription getSubscription(Handle handle) {
+	public Subscription getSubscription(String handle) {
 		return this.subscriptions.get(handle);
 	}
 }
