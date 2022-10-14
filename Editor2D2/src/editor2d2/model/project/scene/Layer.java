@@ -1,5 +1,7 @@
 package editor2d2.model.project.scene;
 
+import java.util.ArrayList;
+
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.HasAsset;
@@ -105,6 +107,31 @@ public abstract class Layer implements HasAsset {
 	public int getIndex() {
 		return this.index;
 	}
+	
+		// Returns a list of Placeables in the Placeable grid inside
+		// a given rectangle
+		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
+		// THE CELLULAR COORDINATES OF THE RECTANGLE
+	public ArrayList<Placeable> selectPlaceables(double sx, double sy, double ex, double ey) {
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+		
+		int scx = (int) (sx / this.objectGrid.getCellWidth()),
+			scy = (int) (sy / this.objectGrid.getCellHeight()),
+			ecx = (int) (ex / this.objectGrid.getCellWidth()),
+			ecy = (int) (ey / this.objectGrid.getCellHeight());
+		
+		for( int x = scx; x < ecx; x++ )
+		for( int y = scy; y < ecy; y++ )
+		selection.add((Placeable) this.objectGrid.get(x, y));
+		
+		return selection;
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(double sx, double sy) {
+		return selectPlaceables(sx, sy, sx, sy);
+	}
+	
+	
 	
 		// Sets the Scene the layer belongs to
 	public void setScene(Scene scene) {
