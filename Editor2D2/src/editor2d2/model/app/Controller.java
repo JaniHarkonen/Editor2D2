@@ -1,8 +1,12 @@
 package editor2d2.model.app;
 
+import java.util.ArrayList;
+
 import editor2d2.Application;
 import editor2d2.DebugUtils;
 import editor2d2.model.Handles;
+import editor2d2.model.app.tool.Tool;
+import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
@@ -41,20 +45,7 @@ public class Controller implements Vendor {
 	}
 	
 	
-		// Returns a reference to the currently open project
-	public Project getActiveProject() {
-		return this.appState.activeProject;
-	}
-	
-		// Returns a reference to the selected placeable
-	public Placeable getSelectedPlaceable() {
-		return this.appState.selectedPlaceable;
-	}
-	
-		// Returns a reference to the currently active Layer
-	public Layer getActiveLayer() {
-		return this.appState.activeLayer;
-	}
+	/********************** REQUESTS ***************************/
 	
 		// Opens a new project and sets it as the active one
 	public void openProject(Project project) {
@@ -85,5 +76,60 @@ public class Controller implements Vendor {
 		// Sets the currently active Layer
 	public void selectLayer(Layer layer) {
 		this.appState.activeLayer = layer;
+	}
+	
+		// Selects a tool that will be used to insert Placeables
+		// into the active Scene
+	public void selectTool(Tool tool) {
+		this.appState.selectedTool = tool;
+	}
+	
+		// Uses the currently selected tool
+	public int useTool(ToolContext tc) {
+		tc.controller = this;
+		
+		if( tc.targetLayer == null )
+		tc.targetLayer = this.appState.activeLayer;
+		
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+		selection.add(this.appState.selectedPlaceable);
+		
+		tc.selection = selection;
+		
+		return this.appState.selectedTool.use(tc);
+	}
+	
+		// Undoes the latest action
+	public void undoAction() {
+		this.appState.actionHistory.undo();
+	}
+
+	
+	/************************* GETTERS ************************/
+	
+		// Returns a reference to the currently open project
+	public Project getActiveProject() {
+		return this.appState.activeProject;
+	}
+	
+		// Returns a reference to the selected placeable
+	public Placeable getSelectedPlaceable() {
+		return this.appState.selectedPlaceable;
+	}
+	
+		// Returns a reference to the currently active Layer
+	public Layer getActiveLayer() {
+		return this.appState.activeLayer;
+	}
+	
+		// Returns a reference to the currently selected Tool
+	public Tool getSelectedTool() {
+		return this.appState.selectedTool;
+	}
+	
+		// Returns a reference to the ActionHistory that tracks
+		// performed Actions
+	public ActionHistory getActionHistory() {
+		return this.appState.actionHistory;
 	}
 }

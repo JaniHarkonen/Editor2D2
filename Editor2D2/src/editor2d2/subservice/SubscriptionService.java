@@ -8,7 +8,7 @@ public class SubscriptionService {
 		// A mapping of handles to their subscriptions
 	private Map<String, Subscription> subscriptions;
 	
-		// Singleton class, only instantiate once
+	
 	public SubscriptionService() {
 		this.subscriptions = new HashMap<String, Subscription>();
 	}

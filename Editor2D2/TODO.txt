@@ -1,5 +1,14 @@
-TODO - ...
-		
+TODO - Tools
+
+...
+
+LATER
 - return to LayerManagerPane after TOOLS
 	-- also check other classes inside "layermgrpane"
-- return to SceneView after TOOLS
+- re-examine the architecture of Actions
+	-> possibly combine ActionContext with the Action
+	   to avoid having to create an extra class for each
+	   action
+- currently there are off-by-one issues with undoing and
+  redoing actions, fix these and make sure that the
+  ActionHistory actually works

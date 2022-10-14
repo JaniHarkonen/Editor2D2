@@ -16,16 +16,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
-import editor2d2.model.project.scene.Layer;
+import editor2d2.model.app.tool.Tool;
+import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.model.project.scene.camera.CameraBounds;
-import editor2d2.model.project.scene.placeable.Placeable;
 
 public class SceneView extends GUIComponent {
 	
@@ -131,6 +130,11 @@ public class SceneView extends GUIComponent {
 			public void mousePressed(MouseEvent e) {
 				int mb = e.getButton();
 				
+				if( mb == MB_MIDDLE )
+				{
+					//Application.controller.undoAction();
+					update();
+				}
 			}
 			
 			@Override
@@ -164,26 +168,20 @@ public class SceneView extends GUIComponent {
 				
 				if( SwingUtilities.isLeftMouseButton(e) )
 				{
-						// WARNING! WARNING! CONTAINS UNWANTED ACCESS TO THE
-						// PROJECT, SHOULD GO THROUGH CONTROLLER INSTEAD,
-						// LEFT LIKE THIS TEMPORARILY AS THIS FUNCTIONALITY
-						// WILL BE REPLACED BY THE INTRODUCTION OF "TOOLS"
-					Placeable p = Application.controller.getSelectedPlaceable();
+						// Configures a context in which the tool is to be used and
+						// requests the Controller to use the currently selected tool
+						// in that context
+					ToolContext tc = new ToolContext();
+					tc.isContinuation = false;
+					tc.locationX = (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
+					tc.locationY = (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
+					tc.order = Tool.PRIMARY_FUNCTION;
 					
-					if( p != null )
-					{
-						Placeable dupp = p.duplicate();
-						int pcx = (int) (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
-						int pcy = (int) (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
-						Layer layer = Application.controller.getActiveLayer();
-						DebugUtils.log(layer, this);
-						
-						if( layer != null )
-						{
-							layer.attemptPlace(pcx, pcy, dupp);
-							update();
-						}
-					}
+					int outcome = Application.controller.useTool(tc);
+					
+						// Update GUI if the tool had an impact on the model
+					if( Tool.checkSuccessfulUse(outcome) )
+					update();
 				}
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
