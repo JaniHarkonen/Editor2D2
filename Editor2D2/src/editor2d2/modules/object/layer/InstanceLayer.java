@@ -30,7 +30,9 @@ public class InstanceLayer extends Layer {
 		place((double) x, y, (Instance) p);
 	}
 	
-	public void place(double x, double y, Instance inst) {
+	@Override
+	public void place(double x, double y, Placeable p) {
+		Instance inst = (Instance) p;
 		Gridable cell = this.objectGrid.get(x, y);
 		
 			// Out of bounds
@@ -56,15 +58,14 @@ public class InstanceLayer extends Layer {
 		((ObjectArray) cell).add(inst);
 	}
 
-
-	@Override
-	protected boolean filterCheck(Gridable p) {
-		return p instanceof Instance;
-	}
-
-
 	@Override
 	public Asset getReferencedAsset() {
 		return new EObject();
+	}
+	
+	
+	@Override
+	protected boolean filterCheck(Gridable p) {
+		return p instanceof Instance;
 	}
 }

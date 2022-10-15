@@ -1,14 +1,25 @@
 TODO - Tools
 
-...
+OVERVIEW
+- flesh out the existing tools so that they can be used
+  for any Placeable
+- achieve close to full functionality for layers
+
+SPECIFICS
+V determine if ActionContexts can be combined with their
+  respective Actions
+V fully develope TPlace (includes APlace)
+- fully develope TSelect (includes TSelect)
+
+- switching between layers
+- placing onto any layer
+- switching between Scenes impacts the layer pane
+- ability to change opacity from the slider
+- determine if "visiblity"-checkbox is needed
 
 LATER
 - return to LayerManagerPane after TOOLS
 	-- also check other classes inside "layermgrpane"
-- re-examine the architecture of Actions
-	-> possibly combine ActionContext with the Action
-	   to avoid having to create an extra class for each
-	   action
 - currently there are off-by-one issues with undoing and
   redoing actions, fix these and make sure that the
   ActionHistory actually works

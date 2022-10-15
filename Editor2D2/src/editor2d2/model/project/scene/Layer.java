@@ -2,6 +2,7 @@ package editor2d2.model.project.scene;
 
 import java.util.ArrayList;
 
+import editor2d2.DebugUtils;
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.HasAsset;
@@ -48,6 +49,15 @@ public abstract class Layer implements HasAsset {
 		this.objectGrid.put(cx, cy, p);
 	}
 	
+		// Places a given Placeable object into a cell in the object grid
+		// converting its coordinates into cellular coordinates
+		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
+		// COORDINATES
+	public void place(double x, double y, Placeable p) {
+		DebugUtils.log("HÅPPENS", this);
+		place((int) (x / this.objectGrid.getCellWidth()), (int) (y / this.objectGrid.getCellHeight()), p);
+	}
+	
 		// Attempts to place a Gridable object into a cell checking it first
 		// using the layer filter
 		// THIS METHOD SHOULD BE FAVORED OVER place
@@ -56,6 +66,17 @@ public abstract class Layer implements HasAsset {
 		if( filterCheck(p) )
 		place(cx, cy, p);
 	}
+	
+		// Attempts to place a Placeable object into a cell checking it first
+		// using the layer filter. The coordinates will be converted into
+		// cellular coordinates.
+		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
+		// COORDIANTES
+	public void attemptPlace(double x, double y, Placeable p) {
+		if( filterCheck(p) )
+		place(x, y, p);
+	}
+	
 	
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {

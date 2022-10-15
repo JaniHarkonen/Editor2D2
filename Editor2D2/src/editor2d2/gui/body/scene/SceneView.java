@@ -173,8 +173,8 @@ public class SceneView extends GUIComponent {
 						// in that context
 					ToolContext tc = new ToolContext();
 					tc.isContinuation = false;
-					tc.locationX = (cam.getInSceneX(e.getX()));//(int) (cam.getInSceneX(e.getX()) / 32);
-					tc.locationY = (cam.getInSceneY(e.getY()));//(int) (cam.getInSceneY(e.getY()) / 32);
+					tc.locationX = cam.getInSceneX(e.getX());//(int) (cam.getInSceneX(e.getX()) / 32);
+					tc.locationY = cam.getInSceneY(e.getY());//(int) (cam.getInSceneY(e.getY()) / 32);
 					tc.order = Tool.PRIMARY_FUNCTION;
 					
 					int outcome = Application.controller.useTool(tc);

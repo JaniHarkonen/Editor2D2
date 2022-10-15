@@ -31,7 +31,7 @@ public class APlace extends Action {
 	@Override
 	protected void performImpl(ActionContext c) {
 		APlaceContext ac = (APlaceContext) c;
-		ac.target.attemptPlace((int) ac.locationX, (int) ac.locationY, ac.placeable);
+		ac.target.attemptPlace(ac.locationX, ac.locationY, ac.placeable);
 		
 		this.placementLayer = ac.target;
 		this.placement = ac.placeable;
