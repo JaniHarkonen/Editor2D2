@@ -135,17 +135,41 @@ public class SceneView extends GUIComponent {
 					//Application.controller.undoAction();
 					update();
 				}
+				
+				if( mb == MB_LEFT )
+				{
+					ToolContext tc = new ToolContext();
+					tc.isContinuation = false;
+					tc.locationX = cam.getInSceneX(e.getX());
+					tc.locationY = cam.getInSceneY(e.getY());
+					tc.order = Tool.PRIMARY_FUNCTION;
+					
+					int outcome = Application.controller.useTool(tc);
+				}
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				int mb = e.getButton();
 				
-					// Left mouse button released
+					// Right mouse button released
 				if( mb == MB_RIGHT )
 				{
 					container.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					sceneDragger.stopDragging();
+				}
+				
+				if( mb == MB_LEFT )
+				{
+					ToolContext tc = new ToolContext();
+					tc.isContinuation = false;
+					tc.locationX = cam.getInSceneX(e.getX());
+					tc.locationY = cam.getInSceneY(e.getY());
+					tc.order = Tool.PRIMARY_FUNCTION;
+					
+					int outcome = Application.controller.useTool(tc, true);
+					if( Tool.checkSuccessfulUse(outcome) )
+					update();
 				}
 			}
 		});
@@ -172,16 +196,16 @@ public class SceneView extends GUIComponent {
 						// requests the Controller to use the currently selected tool
 						// in that context
 					ToolContext tc = new ToolContext();
-					tc.isContinuation = false;
-					tc.locationX = cam.getInSceneX(e.getX());//(int) (cam.getInSceneX(e.getX()) / 32);
-					tc.locationY = cam.getInSceneY(e.getY());//(int) (cam.getInSceneY(e.getY()) / 32);
+					tc.isContinuation = true;
+					tc.locationX = cam.getInSceneX(e.getX());
+					tc.locationY = cam.getInSceneY(e.getY());
 					tc.order = Tool.PRIMARY_FUNCTION;
 					
 					int outcome = Application.controller.useTool(tc);
 					
 						// Update GUI if the tool had an impact on the model
-					if( Tool.checkSuccessfulUse(outcome) )
-					update();
+					/*if( Tool.checkSuccessfulUse(outcome) )
+					update();*/
 				}
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only

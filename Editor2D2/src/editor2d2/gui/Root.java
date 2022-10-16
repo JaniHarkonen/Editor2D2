@@ -62,7 +62,7 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		Placeable p = Application.controller.getSelectedPlaceable();
+		Placeable p = Application.controller.selectionManager.getSelectedPlaceable();
 		
 		if( p != null )
 		{

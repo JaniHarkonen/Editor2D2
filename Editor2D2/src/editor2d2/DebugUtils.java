@@ -108,16 +108,65 @@ public class DebugUtils {
 	
 	/**
 	 * Prints a message in console using System.out.println containing
-	 * a reference to the caller.
+	 * a reference to the caller. <br /> <br />
 	 * 
-	 * THIS METHOD SHOULD BE FAVORED OVER System.out.println to avoid having
-	 * to scour through the code to determine where a log is being printed
-	 * from.
+	 * <b>THIS METHOD SHOULD BE FAVORED OVER</b> System.out.println to avoid
+	 * having to scour through the code to determine where a log is being
+	 * printed from.
 	 * @param msg Message to log to the console.
 	 * @param ref Method caller.
 	 */
 	public static void log(Object msg, Object ref) {
 		System.out.println(ref + " :");
 		System.out.println(msg);
+	}
+	
+	/**
+	 * Prints a given set of coordinates in console using the DebugUtils.log-
+	 * method. <br />
+	 * Example log:<br />
+	 * (108, 254) <br /> <br />
+	 * 
+	 * See DebugUtils.log for further explanation.
+	 * @param x X-coordinate to be printed.
+	 * @param y Y-coordinate to be printed. 
+	 * @param ref Method caller.
+	 */
+	public static void logCoordinates(Number x, Number y, Object ref) {
+		log("(" + x + ", " + y + ")", ref);
+	}
+	
+	/**
+	 * Prints the coordinates of a given area in console using the
+	 * DebugUtils.log-method. <br />
+	 * Example log:<br />
+	 * (100, 100) <-> (200, 200) <br /> <br />
+	 * 
+	 * @param x1 Starting X-coorindate of the area.
+	 * @param y1 Starting Y-coordinate of the area.
+	 * @param x2 Ending X-coordinate of the area.
+	 * @param y2 Ending Y-coordinate of the area.
+	 * @param ref Method caller.
+	 */
+	public static void logArea(Number x1, Number y1, Number x2, Number y2, Object ref) {
+		log("(" + x1 + ", " + y1 + ") <-> (" + x2 + ", " + y2 + ")", ref);
+	}
+	
+	/**
+	 * Prints a given set of coordinate and dimensions in console using the
+	 * DebugUtils.log-method. <br />
+	 * Example log:<br />
+	 * P = (108, 254) <br />
+	 * D = (55, 55)<br /> <br />
+	 * 
+	 * See DebugUtils.log for further explanation.
+	 * @param x X-coordinate to be printed.
+	 * @param y Y-coordinate to be printed.
+	 * @param width Width to be printed.
+	 * @param height Height to be printed. 
+	 * @param ref Method caller.
+	 */
+	public static void logPositionDimensions(Number x, Number y, Number width, Number height, Object ref) {
+		log("P = (" + x + ", " + y + ")\nD = (" + width + ", " + height + ")", ref);
 	}
 }

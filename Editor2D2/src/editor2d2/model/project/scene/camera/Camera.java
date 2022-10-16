@@ -85,7 +85,7 @@ public class Camera {
 					
 					drawable.draw(rctxt);
 					
-						// DEBUG
+						// DEBUG - Counts the number of rendered objects
 					if( drawable instanceof ObjectArray )
 					renderCount += ((ObjectArray) drawable).objects.size();
 					else

@@ -1,6 +1,5 @@
 package editor2d2.modules.object.placeable;
 
-import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -68,12 +67,6 @@ public class Instance extends Placeable {
 		at.scale(f_w / img.getWidth(), f_h / img.getHeight());
 		
 		rctxt.gg.drawImage(img, at, null);
-		
-		if( this.isSelected )
-		{
-			rctxt.gg.setColor(Color.RED);
-			rctxt.gg.drawRect((int) f_x, (int) f_y, (int) f_w, (int) f_h);
-		}
 	}
 	
 	@Override

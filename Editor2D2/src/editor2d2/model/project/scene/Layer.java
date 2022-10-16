@@ -2,7 +2,6 @@ package editor2d2.model.project.scene;
 
 import java.util.ArrayList;
 
-import editor2d2.DebugUtils;
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.HasAsset;
@@ -54,7 +53,6 @@ public abstract class Layer implements HasAsset {
 		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
 		// COORDINATES
 	public void place(double x, double y, Placeable p) {
-		DebugUtils.log("HÅPPENS", this);
 		place((int) (x / this.objectGrid.getCellWidth()), (int) (y / this.objectGrid.getCellHeight()), p);
 	}
 	
@@ -81,6 +79,31 @@ public abstract class Layer implements HasAsset {
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		place(cx, cy, null);
+	}
+	
+		// Returns a list of Placeables in the Placeable grid inside
+		// a given rectangle
+		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
+		// THE CELLULAR COORDINATES OF THE RECTANGLE
+	public ArrayList<Placeable> selectPlaceables(double sx, double sy, double ex, double ey) {
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+		
+		Grid grid = this.objectGrid;
+		
+		int scx = grid.clampX((int) (sx / this.objectGrid.getCellWidth())),
+			scy = grid.clampY((int) (sy / this.objectGrid.getCellHeight())),
+			ecx = grid.clampX((int) (ex / this.objectGrid.getCellWidth()) + 1),
+			ecy = grid.clampY((int) (ey / this.objectGrid.getCellHeight()) + 1);
+		
+		for( int x = scx; x < ecx; x++ )
+		for( int y = scy; y < ecy; y++ )
+		selection.add((Placeable) this.objectGrid.get(x, y));
+		
+		return selection;
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(double sx, double sy) {
+		return selectPlaceables(sx, sy, sx, sy);
 	}
 	
 	
@@ -128,30 +151,6 @@ public abstract class Layer implements HasAsset {
 	public int getIndex() {
 		return this.index;
 	}
-	
-		// Returns a list of Placeables in the Placeable grid inside
-		// a given rectangle
-		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
-		// THE CELLULAR COORDINATES OF THE RECTANGLE
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy, double ex, double ey) {
-		ArrayList<Placeable> selection = new ArrayList<Placeable>();
-		
-		int scx = (int) (sx / this.objectGrid.getCellWidth()),
-			scy = (int) (sy / this.objectGrid.getCellHeight()),
-			ecx = (int) (ex / this.objectGrid.getCellWidth()),
-			ecy = (int) (ey / this.objectGrid.getCellHeight());
-		
-		for( int x = scx; x < ecx; x++ )
-		for( int y = scy; y < ecy; y++ )
-		selection.add((Placeable) this.objectGrid.get(x, y));
-		
-		return selection;
-	}
-	
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy) {
-		return selectPlaceables(sx, sy, sx, sy);
-	}
-	
 	
 	
 		// Sets the Scene the layer belongs to

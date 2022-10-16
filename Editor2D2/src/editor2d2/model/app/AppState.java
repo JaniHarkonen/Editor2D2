@@ -1,10 +1,9 @@
 package editor2d2.model.app;
 
-import editor2d2.model.app.tool.TPlace;
+import editor2d2.model.app.tool.TSelect;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
-import editor2d2.model.project.scene.placeable.Placeable;
 
 public class AppState {
 
@@ -14,9 +13,6 @@ public class AppState {
 		// Reference to the currently active Layer
 	public Layer activeLayer;
 	
-		// Reference to the selected Placeable
-	public Placeable selectedPlaceable;
-	
 		// Reference to the selected Tool
 	public Tool selectedTool;
 	
@@ -24,8 +20,9 @@ public class AppState {
 		// can be used to undo and redo them
 	public ActionHistory actionHistory;
 	
+	
 	public AppState() {
-		this.selectedTool = new TPlace();			// DEBUG LINE, REMOVE
+		this.selectedTool = new TSelect();			// DEBUG LINE, REMOVE
 		this.actionHistory = new ActionHistory();
 	}
 }
