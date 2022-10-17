@@ -1,12 +1,11 @@
-package editor2d2.model.project.scene.camera;
+package editor2d2.model.project.scene;
 
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 
+import editor2d2.common.Bounds;
 import editor2d2.common.grid.Grid;
-import editor2d2.model.project.scene.Layer;
-import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Drawable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.object.layer.ObjectArray;
@@ -59,7 +58,7 @@ public class Camera {
 			rctxt.gg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) lay.getOpacity()));
 			
 			Grid grid = lay.getObjectGrid();
-			CameraBounds bounds = getBounds();
+			Bounds bounds = getBounds();
 			
 				// Grid dimensions
 			int cw = grid.getCellWidth(),
@@ -139,11 +138,11 @@ public class Camera {
 	
 	
 		// Returns the bounds of the view of the Camera
-	public CameraBounds getBounds() {
+	public Bounds getBounds() {
 		double 	wh = this.portWidth / 2 / this.z,
 				hh = this.portHeight / 2 / this.z;
 		
-		return new CameraBounds(this.x - wh, this.y - hh, this.x + wh, this.y + hh);
+		return new Bounds(this.x - wh, this.y - hh, this.x + wh, this.y + hh);
 	}
 	
 		// Returns the X-coordinate of the camera

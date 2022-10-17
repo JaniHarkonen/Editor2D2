@@ -2,7 +2,7 @@ package editor2d2.model.project.scene.placeable;
 
 import java.awt.Graphics2D;
 
-import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.model.project.scene.Camera;
 
 
 /**

@@ -1,5 +1,7 @@
 package editor2d2.model.project.scene.placeable;
 
+import editor2d2.common.Bounds;
+import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
@@ -98,6 +100,17 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Returns the cellular Y-coordinate
 	public int getCellY() {
 		return this.cellY;
+	}
+	
+		// Returns the bounds of the Placeable
+		// CAN BE OVERRIDDEN FOR PLACEABLES THAT DON'T RESPECT
+		// CELLULAR COORDINATES
+	public Bounds getBounds() {
+		double 	x = getX(),
+				y = getY();
+		Grid og = this.layer.getObjectGrid();
+		
+		return new Bounds(x, y, x + og.getCellWidth(), getY() + og.getCellHeight());
 	}
 	
 		// Returns a reference to the layer the placeable is placed in

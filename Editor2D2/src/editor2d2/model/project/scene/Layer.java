@@ -38,6 +38,27 @@ public abstract class Layer implements HasAsset {
 	}
 	
 	
+	/**
+	 * Converts an opacity value between 0 and 255 into a percentage
+	 * between 0.0 and 1.0.
+	 * @param opacity255 Opacity value between 255.
+	 * @return Returns a percentage value between 0.0 - 1.0.
+	 */
+	public static double opacity255ToPercentage(double opacity255) {
+		return Math.min(1d, Math.max(0d, opacity255 / 255d));
+	}
+	
+	/**
+	 * Converts a percentage value between 0.0 and 1.0 into an opacity
+	 * value between 0 and 255.
+	 * @param percentage Percentage value between 0.0 and 1.0.
+	 * @return Returns an opacity value between 0 and 255.
+	 */
+	public static double opacityPercentageTo255(double percentage) {
+		return Math.min(255d, Math.max(0d, percentage * 255d));
+	}
+	
+	
 		// Places a given Gridable object into a cell in the object grid
 		// CAN BE OVERRIDDEN FOR MORE COMPLICATED PLACEABLES
 	public void place(int cx, int cy, Placeable p) {
@@ -81,29 +102,33 @@ public abstract class Layer implements HasAsset {
 		place(cx, cy, null);
 	}
 	
-		// Returns a list of Placeables in the Placeable grid inside
-		// a given rectangle
-		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
-		// THE CELLULAR COORDINATES OF THE RECTANGLE
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy, double ex, double ey) {
+	public ArrayList<Placeable> selectPlaceables(int cx1, int cy1, int cx2, int cy2) {
 		ArrayList<Placeable> selection = new ArrayList<Placeable>();
 		
-		Grid grid = this.objectGrid;
-		
-		int scx = grid.clampX((int) (sx / this.objectGrid.getCellWidth())),
-			scy = grid.clampY((int) (sy / this.objectGrid.getCellHeight())),
-			ecx = grid.clampX((int) (ex / this.objectGrid.getCellWidth()) + 1),
-			ecy = grid.clampY((int) (ey / this.objectGrid.getCellHeight()) + 1);
-		
-		for( int x = scx; x < ecx; x++ )
-		for( int y = scy; y < ecy; y++ )
+		for( int x = cx1; x < cx2; x++ )
+		for( int y = cy1; y < cy2; y++ )
 		selection.add((Placeable) this.objectGrid.get(x, y));
 		
 		return selection;
 	}
 	
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy) {
-		return selectPlaceables(sx, sy, sx, sy);
+		// Returns a list of Placeables in the Placeable grid inside
+		// a given rectangle
+		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
+		// THE CELLULAR COORDINATES OF THE RECTANGLE
+	public ArrayList<Placeable> selectPlaceables(double x1, double y1, double x2, double y2) {
+		Grid grid = this.objectGrid;
+		
+		int cx1 = grid.clampX((int) (x1 / grid.getCellWidth())),
+			cy1 = grid.clampY((int) (y1 / grid.getCellHeight())),
+			cx2 = grid.clampX((int) (x2 / grid.getCellWidth()) + 1),
+			cy2 = grid.clampY((int) (y2 / grid.getCellHeight()) + 1);
+		
+		return selectPlaceables(cx1, cy1, cx2, cy2);
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(double x, double y) {
+		return selectPlaceables(x, y, x, y);
 	}
 	
 	

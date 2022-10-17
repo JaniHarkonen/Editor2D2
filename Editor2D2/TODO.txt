@@ -1,4 +1,4 @@
-TODO - Tools
+TODO - ToolDevelopment
 
 OVERVIEW
 - flesh out the existing tools so that they can be used
@@ -13,7 +13,7 @@ V fully develope TSelect (includes TSelect)
 
 V switching between layers
 V placing onto any layer
-- selecting on any layer
+V selecting on any layer
 - switching between Scenes impacts the layer pane
 V ability to change opacity from the slider
 - determine if "visiblity"-checkbox is needed
@@ -24,3 +24,9 @@ LATER
 - currently there are off-by-one issues with undoing and
   redoing actions, fix these and make sure that the
   ActionHistory actually works
+- Placeables should not reference the Controller
+	-> fix references to the Controller upon drawing and
+	   figure out a way to determine if a Placeable is
+	   selected without the Controller's SelectionManager
+- convert occurrences of opacity to percentage conversion
+  to using Layer's conversion methods

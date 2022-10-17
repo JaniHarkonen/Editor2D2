@@ -16,15 +16,17 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import editor2d2.Application;
+import editor2d2.common.Bounds;
 import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.model.app.tool.TPlace;
+import editor2d2.model.app.tool.TSelect;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
+import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.camera.Camera;
-import editor2d2.model.project.scene.camera.CameraBounds;
 
 public class SceneView extends GUIComponent {
 	
@@ -94,7 +96,7 @@ public class SceneView extends GUIComponent {
 				gg.draw(bounds_scene);
 				
 					// Render the Camera bounds
-				CameraBounds cbounds = cam.getBounds();
+				Bounds cbounds = cam.getBounds();
 				
 				gg.setColor(Color.RED);
 				Rectangle2D.Double bounds_cam = new Rectangle2D.Double(
@@ -133,6 +135,11 @@ public class SceneView extends GUIComponent {
 				if( mb == MB_MIDDLE )
 				{
 					//Application.controller.undoAction();
+					if( Application.controller.getSelectedTool().getName().equals("Select") )
+					Application.controller.selectTool(new TPlace());
+					else
+					Application.controller.selectTool(new TSelect());
+					
 					update();
 				}
 				

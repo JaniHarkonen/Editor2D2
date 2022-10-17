@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
+import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.camera.Camera;
 import editor2d2.modules.data.layer.DataLayer;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
