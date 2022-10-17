@@ -6,6 +6,7 @@ import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.modules.data.layer.DataLayer;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.modules.image.placeable.Tile;
@@ -59,6 +60,8 @@ public class DebugUtils {
 				tl1.setName("tiles");
 				InstanceLayer ol1 = new InstanceLayer(scene1);
 				ol1.setName("objs");
+				DataLayer dl1 = new DataLayer(scene1, 32);
+				dl1.setName("weapon.dat");
 				
 					// Tiles
 				int d = 0;
@@ -73,6 +76,7 @@ public class DebugUtils {
 				
 			scene1.addLayer(tl1);
 			scene1.addLayer(ol1);
+			scene1.addLayer(dl1);
 			
 				// Scene2
 			Scene scene2 = new Scene("BIG scene O_O");

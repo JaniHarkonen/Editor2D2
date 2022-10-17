@@ -145,6 +145,9 @@ public class SceneView extends GUIComponent {
 					tc.order = Tool.PRIMARY_FUNCTION;
 					
 					int outcome = Application.controller.useTool(tc);
+					
+					if( Tool.checkSuccessfulUse(outcome) )
+					update();
 				}
 			}
 			
@@ -168,6 +171,7 @@ public class SceneView extends GUIComponent {
 					tc.order = Tool.PRIMARY_FUNCTION;
 					
 					int outcome = Application.controller.useTool(tc, true);
+					
 					if( Tool.checkSuccessfulUse(outcome) )
 					update();
 				}
@@ -204,8 +208,8 @@ public class SceneView extends GUIComponent {
 					int outcome = Application.controller.useTool(tc);
 					
 						// Update GUI if the tool had an impact on the model
-					/*if( Tool.checkSuccessfulUse(outcome) )
-					update();*/
+					if( Tool.checkSuccessfulUse(outcome) )
+					update();
 				}
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only

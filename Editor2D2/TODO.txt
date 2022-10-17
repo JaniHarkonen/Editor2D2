@@ -11,11 +11,11 @@ V determine if ActionContexts can be combined with their
 V fully develope TPlace (includes APlace)
 V fully develope TSelect (includes TSelect)
 
-- switching between layers
-- placing onto any layer
+V switching between layers
+V placing onto any layer
 - selecting on any layer
 - switching between Scenes impacts the layer pane
-- ability to change opacity from the slider
+V ability to change opacity from the slider
 - determine if "visiblity"-checkbox is needed
 
 LATER

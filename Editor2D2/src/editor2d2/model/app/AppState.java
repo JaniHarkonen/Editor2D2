@@ -1,6 +1,6 @@
 package editor2d2.model.app;
 
-import editor2d2.model.app.tool.TSelect;
+import editor2d2.model.app.tool.TPlace;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
@@ -22,7 +22,7 @@ public class AppState {
 	
 	
 	public AppState() {
-		this.selectedTool = new TSelect();			// DEBUG LINE, REMOVE
+		this.selectedTool = new TPlace();			// DEBUG LINE, REMOVE
 		this.actionHistory = new ActionHistory();
 	}
 }

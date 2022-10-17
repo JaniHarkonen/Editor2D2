@@ -21,6 +21,12 @@ public class LayerManagerPane extends GUIComponent {
 		this.editedLayer = null;
 	}
 	
+	
+		// Called by one of the child LayerPanes upon being clicked
+	public void onLayerPaneClick() {
+		update();
+	}
+	
 
 	@Override
 	protected JPanel draw() {
@@ -38,7 +44,7 @@ public class LayerManagerPane extends GUIComponent {
 			
 				// Layer panes
 			for( Layer layer : Application.controller.getActiveProject().getScene("small scene").getLayers() )
-			container.add((new LayerPane(layer)).render());
+			container.add((new LayerPane(this, layer)).render());
 			
 		}
 		else
