@@ -1,22 +1,8 @@
-TODO - ToolDevelopment
+TODO - ...
 
 OVERVIEW
-- flesh out the existing tools so that they can be used
-  for any Placeable
-- achieve close to full functionality for layers
 
 SPECIFICS
-V determine if ActionContexts can be combined with their
-  respective Actions
-V fully develope TPlace (includes APlace)
-V fully develope TSelect (includes TSelect)
-
-V switching between layers
-V placing onto any layer
-V selecting on any layer
-- switching between Scenes impacts the layer pane
-V ability to change opacity from the slider
-- determine if "visiblity"-checkbox is needed
 
 LATER
 - return to LayerManagerPane after TOOLS
