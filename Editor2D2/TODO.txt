@@ -28,5 +28,3 @@ LATER
 	-> fix references to the Controller upon drawing and
 	   figure out a way to determine if a Placeable is
 	   selected without the Controller's SelectionManager
-- convert occurrences of opacity to percentage conversion
-  to using Layer's conversion methods

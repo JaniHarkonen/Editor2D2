@@ -93,7 +93,7 @@ public class LayerPropertiesPane extends GUIComponent {
 			});
 			
 				// Opacity field
-			this.txtOpacity.setText(""+(opacity * 255));
+			this.txtOpacity.setText(""+(Layer.opacityPercentageTo255(opacity)));
 			JLabel labOpacityTitle = new JLabel("Opacity:");
 			
 		containerOpacity.add(labOpacityTitle);
@@ -125,7 +125,7 @@ public class LayerPropertiesPane extends GUIComponent {
 		// Called upon clicking "Apply", applies changes to the source layer
 	private void onApply() {
 		String name = this.txtName.getText();
-		double opacity = (Double.parseDouble(this.txtOpacity.getText()) / 255);
+		double opacity = Layer.opacity255ToPercentage(Double.parseDouble(this.txtOpacity.getText()));
 		
 		this.source.setName(name);
 		this.source.setOpacity(opacity);
