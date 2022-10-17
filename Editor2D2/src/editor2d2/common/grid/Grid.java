@@ -65,6 +65,16 @@ public class Grid {
 		put((int) x / this.cellWidth, (int) y / this.cellHeight, element);
 	}
 	
+		// Clamps a cellular X-coordinate to fit this Grid
+	public int clampX(int cx) {
+		return Math.min(this.rowLength, Math.max(0, cx));
+	}
+	
+		// Clamps a cellular Y-coordinate to fit this Grid
+	public int clampY(int cy) {
+		return Math.min(this.columnLength, Math.max(0, cy));
+	}
+	
 	
 		// GETTERS/SETTERS
 	

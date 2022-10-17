@@ -6,7 +6,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
@@ -70,11 +73,27 @@ public class LayerPropertiesPane extends GUIComponent {
 		double opacity = this.source.getOpacity();
 		JPanel containerOpacity = GUIUtilities.createDefaultPanel();
 		
+		final Layer otherSource = this.source;
+		
 				// Opacity slider
 			JSlider sldOpacity = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (100 * opacity));
+			sldOpacity.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					JSlider source = (JSlider) e.getSource();
+					
+					if( !source.getValueIsAdjusting() )
+					{
+						DebugUtils.log(source.getValue(), this);
+						otherSource.setOpacity(source.getValue() / 100d);
+						update();
+					}
+				}
+			});
 			
 				// Opacity field
-			this.txtOpacity.setText(""+(opacity * 255));
+			this.txtOpacity.setText(""+(Layer.opacityPercentageTo255(opacity)));
 			JLabel labOpacityTitle = new JLabel("Opacity:");
 			
 		containerOpacity.add(labOpacityTitle);
@@ -106,7 +125,7 @@ public class LayerPropertiesPane extends GUIComponent {
 		// Called upon clicking "Apply", applies changes to the source layer
 	private void onApply() {
 		String name = this.txtName.getText();
-		double opacity = (Double.parseDouble(this.txtOpacity.getText()) / 255);
+		double opacity = Layer.opacity255ToPercentage(Double.parseDouble(this.txtOpacity.getText()));
 		
 		this.source.setName(name);
 		this.source.setOpacity(opacity);

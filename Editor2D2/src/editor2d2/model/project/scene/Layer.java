@@ -38,6 +38,27 @@ public abstract class Layer implements HasAsset {
 	}
 	
 	
+	/**
+	 * Converts an opacity value between 0 and 255 into a percentage
+	 * between 0.0 and 1.0.
+	 * @param opacity255 Opacity value between 255.
+	 * @return Returns a percentage value between 0.0 - 1.0.
+	 */
+	public static double opacity255ToPercentage(double opacity255) {
+		return Math.min(1d, Math.max(0d, opacity255 / 255d));
+	}
+	
+	/**
+	 * Converts a percentage value between 0.0 and 1.0 into an opacity
+	 * value between 0 and 255.
+	 * @param percentage Percentage value between 0.0 and 1.0.
+	 * @return Returns an opacity value between 0 and 255.
+	 */
+	public static double opacityPercentageTo255(double percentage) {
+		return Math.min(255d, Math.max(0d, percentage * 255d));
+	}
+	
+	
 		// Places a given Gridable object into a cell in the object grid
 		// CAN BE OVERRIDDEN FOR MORE COMPLICATED PLACEABLES
 	public void place(int cx, int cy, Placeable p) {
@@ -46,6 +67,14 @@ public abstract class Layer implements HasAsset {
 		p.changeLayer(this);
 		
 		this.objectGrid.put(cx, cy, p);
+	}
+	
+		// Places a given Placeable object into a cell in the object grid
+		// converting its coordinates into cellular coordinates
+		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
+		// COORDINATES
+	public void place(double x, double y, Placeable p) {
+		place((int) (x / this.objectGrid.getCellWidth()), (int) (y / this.objectGrid.getCellHeight()), p);
 	}
 	
 		// Attempts to place a Gridable object into a cell checking it first
@@ -57,9 +86,49 @@ public abstract class Layer implements HasAsset {
 		place(cx, cy, p);
 	}
 	
+		// Attempts to place a Placeable object into a cell checking it first
+		// using the layer filter. The coordinates will be converted into
+		// cellular coordinates.
+		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
+		// COORDIANTES
+	public void attemptPlace(double x, double y, Placeable p) {
+		if( filterCheck(p) )
+		place(x, y, p);
+	}
+	
+	
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		place(cx, cy, null);
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(int cx1, int cy1, int cx2, int cy2) {
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+		
+		for( int x = cx1; x < cx2; x++ )
+		for( int y = cy1; y < cy2; y++ )
+		selection.add((Placeable) this.objectGrid.get(x, y));
+		
+		return selection;
+	}
+	
+		// Returns a list of Placeables in the Placeable grid inside
+		// a given rectangle
+		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
+		// THE CELLULAR COORDINATES OF THE RECTANGLE
+	public ArrayList<Placeable> selectPlaceables(double x1, double y1, double x2, double y2) {
+		Grid grid = this.objectGrid;
+		
+		int cx1 = grid.clampX((int) (x1 / grid.getCellWidth())),
+			cy1 = grid.clampY((int) (y1 / grid.getCellHeight())),
+			cx2 = grid.clampX((int) (x2 / grid.getCellWidth()) + 1),
+			cy2 = grid.clampY((int) (y2 / grid.getCellHeight()) + 1);
+		
+		return selectPlaceables(cx1, cy1, cx2, cy2);
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(double x, double y) {
+		return selectPlaceables(x, y, x, y);
 	}
 	
 	
@@ -107,30 +176,6 @@ public abstract class Layer implements HasAsset {
 	public int getIndex() {
 		return this.index;
 	}
-	
-		// Returns a list of Placeables in the Placeable grid inside
-		// a given rectangle
-		// CAN BE OVERRIDDEN, BY DEFAULT THIS ONLY TAKES INTO ACCOUNT
-		// THE CELLULAR COORDINATES OF THE RECTANGLE
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy, double ex, double ey) {
-		ArrayList<Placeable> selection = new ArrayList<Placeable>();
-		
-		int scx = (int) (sx / this.objectGrid.getCellWidth()),
-			scy = (int) (sy / this.objectGrid.getCellHeight()),
-			ecx = (int) (ex / this.objectGrid.getCellWidth()),
-			ecy = (int) (ey / this.objectGrid.getCellHeight());
-		
-		for( int x = scx; x < ecx; x++ )
-		for( int y = scy; y < ecy; y++ )
-		selection.add((Placeable) this.objectGrid.get(x, y));
-		
-		return selection;
-	}
-	
-	public ArrayList<Placeable> selectPlaceables(double sx, double sy) {
-		return selectPlaceables(sx, sy, sx, sy);
-	}
-	
 	
 	
 		// Sets the Scene the layer belongs to

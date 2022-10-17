@@ -6,7 +6,7 @@ import java.awt.geom.Rectangle2D;
 
 import editor2d2.common.grid.Grid;
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.data.asset.Data;
@@ -71,6 +71,15 @@ public class DataCell extends Placeable {
 		rctxt.gg.drawString(srcValue, tx, ty);
 	}
 	
+	@Override
+	public Placeable duplicate() {
+		DataCell dupl = new DataCell();
+		copyAttributes(this, dupl);
+		
+		return dupl;
+	}
+	
+	
 		// Returns the cellular width of the data cell
 	public int getCellWidth() {
 		return this.cellWidth;
@@ -90,6 +99,7 @@ public class DataCell extends Placeable {
 	public Asset getReferencedAsset() {
 		return getData();
 	}
+	
 	
 		// Sets the cellular dimensions of the data cell
 	public void setCellDimensions(int cw, int ch) {

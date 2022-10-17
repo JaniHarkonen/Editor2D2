@@ -1,7 +1,5 @@
 package editor2d2.model.app;
 
-import java.util.ArrayList;
-
 import editor2d2.Application;
 import editor2d2.DebugUtils;
 import editor2d2.model.Handles;
@@ -11,7 +9,6 @@ import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
@@ -19,6 +16,10 @@ public class Controller implements Vendor {
 
 		// Reference to the AppState that the Controller manipulates
 	private AppState appState;
+	
+		// Reference to the SelectionManager that handles Placeable
+		// selections
+	public final SelectionManager selectionManager;
 	
 		// Reference to the SubscriptionService that the Controller uses
 		// to notify the GUI when the AppState changes
@@ -32,6 +33,7 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
+		this.selectionManager = new SelectionManager();
 		
 		DebugUtils.controllerDebugSetup(this);
 	}
@@ -69,7 +71,9 @@ public class Controller implements Vendor {
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
-		this.appState.selectedPlaceable = asset.createPlaceable();
+		/*this.appState.selectedPlaceables.clear();
+		this.appState.selectedPlaceables.add(asset.createPlaceable());*/
+		this.selectionManager.setSelection(asset.createPlaceable());
 		this.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
 	}
 	
@@ -84,19 +88,24 @@ public class Controller implements Vendor {
 		this.appState.selectedTool = tool;
 	}
 	
-		// Uses the currently selected tool
-	public int useTool(ToolContext tc) {
+		// Uses/stops using the currently selected Tool
+	public int useTool(ToolContext tc, boolean stop) {
 		tc.controller = this;
 		
 		if( tc.targetLayer == null )
 		tc.targetLayer = this.appState.activeLayer;
 		
-		ArrayList<Placeable> selection = new ArrayList<Placeable>();
-		selection.add(this.appState.selectedPlaceable);
+		tc.selection = this.selectionManager.getSelection();
 		
-		tc.selection = selection;
-		
+		if( stop )
+		return this.appState.selectedTool.stop(tc);
+		else
 		return this.appState.selectedTool.use(tc);
+	}
+	
+		// Uses the currently selected Tool
+	public int useTool(ToolContext tc) {
+		return useTool(tc, false);
 	}
 	
 		// Undoes the latest action
@@ -110,11 +119,6 @@ public class Controller implements Vendor {
 		// Returns a reference to the currently open project
 	public Project getActiveProject() {
 		return this.appState.activeProject;
-	}
-	
-		// Returns a reference to the selected placeable
-	public Placeable getSelectedPlaceable() {
-		return this.appState.selectedPlaceable;
 	}
 	
 		// Returns a reference to the currently active Layer

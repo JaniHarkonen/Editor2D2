@@ -1,8 +1,7 @@
 package editor2d2.model.app.tool;
 
-import java.util.ArrayList;
-
-import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.model.app.actions.select.ASelect;
+import editor2d2.model.app.actions.select.ASelectContext;
 
 public class TSelect extends Tool {
 	
@@ -35,7 +34,7 @@ public class TSelect extends Tool {
 	
 	@Override
 	public int stop(ToolContext c) {
-		if( c.order != Tool.PRIMARY_FUNCTION )
+		if( c.order != Tool.PRIMARY_FUNCTION || c.targetLayer == null )
 		return USE_FAILED;
 		
 		double 	sx = this.startX,
@@ -55,7 +54,14 @@ public class TSelect extends Tool {
 			ey = this.startY;
 		}
 		
-		ArrayList<Placeable> selection = c.targetLayer.selectPlaceables(sx, sy, ex, ey);
+			// Pass the selection area coordinates into the ActionContext
+		ASelectContext ac = new ASelectContext(c);
+		ac.startX = sx;
+		ac.startY = sy;
+		ac.endX = ex;
+		ac.endY = ey;
+		
+		(new ASelect()).perform(ac);
 		
 		return USE_SUCCESSFUL;
 	}

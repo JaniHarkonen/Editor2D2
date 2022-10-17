@@ -1,12 +1,13 @@
 package editor2d2.modules.image.placeable;
 
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import editor2d2.Application;
 import editor2d2.common.grid.Grid;
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.scene.camera.Camera;
+import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
@@ -60,6 +61,13 @@ public class Tile extends Placeable {
 		at.scale(f_w / img.getWidth(), f_h / img.getHeight());
 		
 		rctxt.gg.drawImage(img, at, null);
+		
+			// DEBUG, remove later
+		if( Application.controller.selectionManager.checkSelected(this) )
+		{
+			rctxt.gg.setColor(Color.RED);
+			rctxt.gg.drawRect((int) f_x, (int) f_y, (int) f_w, (int) f_h);
+		}
 	}
 	
 	@Override

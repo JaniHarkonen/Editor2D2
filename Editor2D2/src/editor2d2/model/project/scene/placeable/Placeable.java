@@ -1,5 +1,7 @@
 package editor2d2.model.project.scene.placeable;
 
+import editor2d2.common.Bounds;
+import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
@@ -25,8 +27,6 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Reference to the layer the placeable is placed in
 	protected Layer layer;
 	
-	protected boolean isSelected;
-	
 	
 	protected Placeable() {
 		this.asset = null;
@@ -35,7 +35,6 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		this.cellX = -1;
 		this.cellY = -1;
 		this.layer = null;
-		this.isSelected = false;
 	}
 	
 	
@@ -103,6 +102,17 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return this.cellY;
 	}
 	
+		// Returns the bounds of the Placeable
+		// CAN BE OVERRIDDEN FOR PLACEABLES THAT DON'T RESPECT
+		// CELLULAR COORDINATES
+	public Bounds getBounds() {
+		double 	x = getX(),
+				y = getY();
+		Grid og = this.layer.getObjectGrid();
+		
+		return new Bounds(x, y, x + og.getCellWidth(), getY() + og.getCellHeight());
+	}
+	
 		// Returns a reference to the layer the placeable is placed in
 	public Layer getLayer() {
 		return this.layer;
@@ -111,11 +121,6 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Returns a reference to the Asset this Placeable is based on
 	public Asset getAsset() {
 		return this.asset;
-	}
-	
-		// Returns whether the Placeable has been selected
-	public boolean getSelected() {
-		return this.isSelected;
 	}
 	
 		// Sets the coordinate offsets
@@ -136,10 +141,5 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return;
 		
 		this.asset = asset;
-	}
-	
-		// Selects the Placeable
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
 	}
 }

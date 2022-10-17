@@ -14,15 +14,21 @@ import editor2d2.model.project.scene.Layer;
 
 public class LayerPane extends GUIComponent {
 	
+		// Manager pane that the LayerPane belongs to
+	private LayerManagerPane manager;
+	
+		// Reference to the source Layer that the LayerPane
+		// represents
 	private Layer source;
 	
 	
-	public LayerPane(Layer source) {
+	public LayerPane(LayerManagerPane manager, Layer source) {
 		this.source = source;
+		this.manager = manager;
 	}
 	
-	public LayerPane() {
-		this(null);
+	public LayerPane(LayerManagerPane manager) {
+		this(manager, null);
 	}
 	
 
@@ -52,6 +58,6 @@ public class LayerPane extends GUIComponent {
 		// Called upon clicking the layer pane
 	private void onClick() {
 		Application.controller.selectLayer(this.source);
-		update();
+		this.manager.onLayerPaneClick();
 	}
 }

@@ -1,14 +1,16 @@
-TODO - Tools
+TODO - ...
 
-...
+OVERVIEW
+
+SPECIFICS
 
 LATER
 - return to LayerManagerPane after TOOLS
 	-- also check other classes inside "layermgrpane"
-- re-examine the architecture of Actions
-	-> possibly combine ActionContext with the Action
-	   to avoid having to create an extra class for each
-	   action
 - currently there are off-by-one issues with undoing and
   redoing actions, fix these and make sure that the
   ActionHistory actually works
+- Placeables should not reference the Controller
+	-> fix references to the Controller upon drawing and
+	   figure out a way to determine if a Placeable is
+	   selected without the Controller's SelectionManager

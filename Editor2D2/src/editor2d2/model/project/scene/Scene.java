@@ -2,8 +2,6 @@ package editor2d2.model.project.scene;
 
 import java.util.ArrayList;
 
-import editor2d2.model.project.scene.camera.Camera;
-
 public class Scene {
 	
 		// Name of the scene
