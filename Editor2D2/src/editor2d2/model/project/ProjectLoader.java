@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.modules.image.layer.TileLayer;
 import johnnyutils.johnparser.Parser;
 import johnnyutils.johnparser.parser.ParsedCommand;
 

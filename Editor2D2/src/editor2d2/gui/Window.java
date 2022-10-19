@@ -11,7 +11,6 @@ import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
-import editor2d2.modules.GUIFactory;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
@@ -61,8 +60,6 @@ public class Window implements Vendor {
 	
 		// Runs the setup for the Window
 	public void setup() {
-		GUIFactory.initialize();
-		
 		this.window = new JFrame();
 		this.window.setSize(this.width, this.height);
 		this.window.setLocationRelativeTo(null);

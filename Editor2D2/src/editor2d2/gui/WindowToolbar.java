@@ -12,7 +12,7 @@ import editor2d2.Application;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
-import editor2d2.modules.GUIFactory;
+import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -58,11 +58,11 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		if( host != null )
 		{
 			ModalWindow modal = host.getModalWindow();
-			String[] ctypes = GUIFactory.getClassTypes();
+			String[] ctypes = FactoryService.getClassTypes();
 			
 				// Populate Asset menu
 			for( String type : ctypes )
-			menuAsset.add(createAssetMenuItem("Create " + type, GUIFactory.createModalView(type, modal)));
+			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
 		}
 		
 			// Meta data settings

@@ -4,22 +4,6 @@ OVERVIEW
 - create at least a skeleton for saving and loading of Projects
 
 SPECIFICS
-- implement a new factory system that replaces the
-  need for Declarations
-	-- the new system will function similarly to
-	   the Declarations, however, there all factories
-	   can be found in the same Factories-instance
-	-- there will be no need for Lambda-based factories
-	   anymore, which should make the code run slightly
-	   faster
-	-- this task is a requirement before attempting to
-	   write the Project loader as it will bring clarity
-	   to the architecture
-	-- without these changes the architecture risks
-	   becoming convoluted as factory methods may have
-	   to be further separated into static container
-	   classes (such as GUIFactory)
-
 - add ability to create a new Project
 - add ability to save a Project
 	-- create a Writer-class that takes a Project and 
