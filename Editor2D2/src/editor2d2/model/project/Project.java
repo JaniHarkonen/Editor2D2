@@ -17,10 +17,14 @@ public class Project {
 		// List of external assets imported to the project
 	private final ArrayList<Asset> assets;
 	
+		// Mapping of Assets to their identifiers
+	private final Map<String, Asset> assetMap;
+	
 	
 	public Project() {
 		this.scenes = new HashMap<String, Scene>();
 		this.assets = new ArrayList<Asset>();
+		this.assetMap = new HashMap<String, Asset>();
 	}
 	
 	
@@ -38,6 +42,7 @@ public class Project {
 		return;
 		
 		this.assets.add(asset);
+		this.assetMap.put(asset.getIdentifier(), asset);
 	}
 	
 	
@@ -59,6 +64,11 @@ public class Project {
 		// Returns a reference to the list of Assets in the project
 	public ArrayList<Asset> getAllAssets() {
 		return this.assets;
+	}
+	
+		// Returns a reference to an Asset given its identifier
+	public Asset getAsset(String identifier) {
+		return this.assetMap.get(identifier);
 	}
 	
 		// Sets the name of the project

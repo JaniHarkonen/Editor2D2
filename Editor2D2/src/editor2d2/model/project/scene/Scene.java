@@ -32,7 +32,6 @@ public class Scene {
 		this.name = name;
 	}
 	
-	
 		// GETTERS/SETTERS
 	
 		// Returns the name of the Scene

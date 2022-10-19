@@ -57,12 +57,12 @@ public class Window implements Vendor {
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		
-		GUIFactory.initialize();
 	}
 	
 		// Runs the setup for the Window
 	public void setup() {
+		GUIFactory.initialize();
+		
 		this.window = new JFrame();
 		this.window.setSize(this.width, this.height);
 		this.window.setLocationRelativeTo(null);
