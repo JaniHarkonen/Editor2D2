@@ -4,11 +4,6 @@ OVERVIEW
 - create at least a skeleton for saving and loading of Projects
 
 SPECIFICS
-- determine a way to avoid having to create a new loader for
-  each Placeable that is to be loaded
-	-- Assets can recreate the loader each time as they can
-	   be in a random order
-
 - add ability to create a new Project
 - add ability to save a Project
 
