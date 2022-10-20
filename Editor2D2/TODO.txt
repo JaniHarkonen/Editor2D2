@@ -4,7 +4,6 @@ OVERVIEW
 - create at least a skeleton for saving and loading of Projects
 
 SPECIFICS
-- add ability to create a new Project
 - add ability to save a Project
 
 LATER

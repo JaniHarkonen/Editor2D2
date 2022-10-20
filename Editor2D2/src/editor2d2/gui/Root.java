@@ -86,7 +86,6 @@ public class Root extends GUIComponent implements Subscriber {
 		
 			// Creates Scene tabs for all the Scenes in the target project
 			// Only renders the Scene for the currently open tab
-		int s = 1;
 		ArrayList<Scene> scenes = this.targetProject.getAllScenes();
 		for( int i = 0; i < scenes.size(); i++ )
 		{
@@ -97,7 +96,6 @@ public class Root extends GUIComponent implements Subscriber {
 			sp_container = (new ScenePane(scene)).render();
 			
 			tpScenes.add(scene.getName(), sp_container);
-			s++;
 		}
 		
 		tpScenes.setSelectedIndex(this.currentTabIndex);
