@@ -35,6 +35,9 @@ public class FactoryService {
 	}
 	
 	public static void declareAsset(int index, String assetClass, String placeableClass, AbstractFactories<? extends Asset> factories) {
+		if( factoriesMap.get(assetClass) != null )
+		return;
+		
 		FactoryContainer fc = new FactoryContainer(assetClass, placeableClass, factories);
 		
 		if( index >= 0 && index < factoriesList.size() )
@@ -43,6 +46,32 @@ public class FactoryService {
 		factoriesList.add(fc);
 		
 		factoriesMap.put(assetClass, fc);
+	}
+	
+	public static void declareAsset(String assetClass, String placeableClass, AbstractFactories<? extends Asset> factories) {
+		declareAsset(-1, assetClass, placeableClass, factories);
+	}
+	
+	public static void declareAsset(int index, String assetClass) {
+		declareAsset(index, assetClass, null, null);
+	}
+	
+	public static void declareAsset(String assetClass) {
+		declareAsset(-1, assetClass);
+	}
+	
+	public static void declarePlaceableClass(String assetClass, String placeableClass) {
+		FactoryContainer fc = factoriesMap.get(assetClass);
+		
+		if( fc.placeableClass == null )
+		fc.placeableClass = placeableClass;
+	}
+	
+	public static void declarePlaceableFactories(String assetClass, AbstractFactories<? extends Asset> factories) {
+		FactoryContainer fc = factoriesMap.get(assetClass);
+		
+		if( fc.factories == null )
+		fc.factories = factories;
 	}
 	
 	

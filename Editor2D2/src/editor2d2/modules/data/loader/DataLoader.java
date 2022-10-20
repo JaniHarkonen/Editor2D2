@@ -1,32 +1,41 @@
 package editor2d2.modules.data.loader;
 
-import editor2d2.gui.modal.ModalWindow;
-import editor2d2.model.project.scene.Scene;
+import java.awt.Color;
+
+import editor2d2.model.project.loader.AbstractLoader;
+import editor2d2.model.project.scene.Layer;
 import editor2d2.modules.data.asset.Data;
-import editor2d2.modules.data.layer.DataLayer;
-import editor2d2.modules.data.modal.DataModal;
 import editor2d2.modules.data.placeable.DataCell;
-import editor2d2.modules.data.proppane.DataCellPropertiesPane;
+import johnnyutils.johnparser.parser.ParsedCommand;
 
-public class DataLoader {
+public class DataLoader extends AbstractLoader<Data> {
 
-	public DataLayer createLayer(Scene scene, int gridSize) {
-		return new DataLayer(scene, gridSize);
+	@Override
+	public Data loadAsset(ParsedCommand pc) {
+		String name = pc.getString(0);
+		String identifier = pc.getReference(1);
+		String value = pc.getString(2);
+		int colr = (int) pc.getNumeral(3),
+			colg = (int) pc.getNumeral(4),
+			colb = (int) pc.getNumeral(5);
+		
+		Data data = new Data();
+		data.setName(name);
+		data.setIdentifier(identifier);
+		data.setValue(value);
+		data.setColor(new Color(colr, colg, colb));
+		
+		return data;
 	}
-	
-	public Data createAsset() {
-		return new Data();
-	}
-	
-	public DataCell createPlaceable() {
-		return new DataCell();
-	}
-	
-	public DataModal createModal(ModalWindow modal, boolean isFactorySettings) {
-		return new DataModal(modal, isFactorySettings);
-	}
-	
-	public DataCellPropertiesPane createPropertiesPane(DataCell source) {
-		return new DataCellPropertiesPane(source);
+
+	@Override
+	public DataCell loadPlaceable(ParsedCommand pc, Data source, Layer targetLayer) {
+		int cx = (int) pc.getNumeral(0);
+		int cy = (int) pc.getNumeral(1);
+		
+		DataCell target = source.createPlaceable();
+		targetLayer.place(cx, cy, target);
+		
+		return target;
 	}
 }

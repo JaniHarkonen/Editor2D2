@@ -7,6 +7,7 @@ import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.modules.data.asset.Data;
 import editor2d2.modules.data.layer.DataLayer;
+import editor2d2.modules.data.loader.DataLoader;
 import editor2d2.modules.data.modal.DataModal;
 import editor2d2.modules.data.placeable.DataCell;
 import editor2d2.modules.data.proppane.DataCellPropertiesPane;
@@ -51,5 +52,10 @@ public class Factories extends AbstractFactories<Data> {
 	@Override
 	public DataCellPropertiesPane createPropertiesPane(Placeable source) {
 		return new DataCellPropertiesPane(source);
+	}
+	
+	@Override
+	public DataLoader createLoader() {
+		return new DataLoader();
 	}
 }

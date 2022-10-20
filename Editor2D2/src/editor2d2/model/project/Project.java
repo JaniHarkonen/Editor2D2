@@ -12,7 +12,7 @@ public class Project {
 	private String name;
 	
 		// Scenes the project consists of
-	private final Map<String, Scene> scenes;
+	private final ArrayList<Scene> scenes;
 	
 		// List of external assets imported to the project
 	private final ArrayList<Asset> assets;
@@ -22,7 +22,7 @@ public class Project {
 	
 	
 	public Project() {
-		this.scenes = new HashMap<String, Scene>();
+		this.scenes = new ArrayList<Scene>();
 		this.assets = new ArrayList<Asset>();
 		this.assetMap = new HashMap<String, Asset>();
 	}
@@ -33,7 +33,7 @@ public class Project {
 		if( scene == null )
 		return;
 		
-		this.scenes.put(scene.getName(), scene);
+		this.scenes.add(scene);
 	}
 	
 		// Adds an asset into the project
@@ -53,11 +53,24 @@ public class Project {
 	
 		// Returns a reference to a Scene of a given name
 	public Scene getScene(String name) {
-		return this.scenes.get(name);
+		for( Scene s : this.scenes )
+		if( s.getName().equals(name) )
+		return s;
+		
+		return null;
+	}
+	
+		// Returns a refrence to a Scene given its position in the
+		// Scene list
+	public Scene getScene(int index) {
+		if( index < 0 || index >= this.scenes.size() )
+		return null;
+		
+		return this.scenes.get(index);
 	}
 	
 		// Returns a reference to the mapping of Scenes to the names of the Scenes
-	public Map<String, Scene> getAllScenes() {
+	public ArrayList<Scene> getAllScenes() {
 		return this.scenes;
 	}
 	

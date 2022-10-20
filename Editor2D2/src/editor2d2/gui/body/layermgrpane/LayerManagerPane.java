@@ -4,6 +4,7 @@ package editor2d2.gui.body.layermgrpane;
 import javax.swing.JPanel;
 
 import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
@@ -43,7 +44,8 @@ public class LayerManagerPane extends GUIComponent {
 			container.add(containerControls);
 			
 				// Layer panes
-			for( Layer layer : Application.controller.getActiveProject().getScene("small scene").getLayers() )
+			//DebugUtils.log(Application.controller.getActiveProject().getAllScenes().size(), this);
+			for( Layer layer : Application.controller.getActiveProject().getScene(0).getLayers() )
 			container.add((new LayerPane(this, layer)).render());
 			
 		}

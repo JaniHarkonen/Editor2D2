@@ -3,7 +3,6 @@ package editor2d2.modules.object.asset;
 import java.util.ArrayList;
 
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.placeable.Instance;
 
@@ -38,7 +37,7 @@ public class EObject extends Asset {
 	
 	
 	@Override
-	public Placeable createPlaceable() {
+	public Instance createPlaceable() {
 		Instance inst = new Instance();
 		inst.setObject(this);
 		inst.setSprite(this.sprite);

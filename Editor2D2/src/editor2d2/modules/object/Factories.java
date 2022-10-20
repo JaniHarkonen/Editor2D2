@@ -7,6 +7,7 @@ import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.layer.InstanceLayer;
+import editor2d2.modules.object.loader.ObjectLoader;
 import editor2d2.modules.object.modal.ObjectModal;
 import editor2d2.modules.object.placeable.Instance;
 import editor2d2.modules.object.proppane.InstancePropertiesPane;
@@ -50,4 +51,8 @@ public class Factories extends AbstractFactories<EObject> {
 		return new InstancePropertiesPane(source);
 	}
 
+	@Override
+	public ObjectLoader createLoader() {
+		return new ObjectLoader();
+	}
 }

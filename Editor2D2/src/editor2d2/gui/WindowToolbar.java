@@ -9,9 +9,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
+import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
+import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
+import editor2d2.model.project.Project;
+import editor2d2.model.project.loader.ProjectLoader;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -44,9 +48,24 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	private void generate() {
 		
 			// Project menu
+		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileSystemDialogSettings settings = new FileSystemDialogSettings();
+				FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
+				
+				if( !res.isApproved )
+				return;
+				
+				Project p = (new ProjectLoader()).loadProject(res.filepaths[0]);
+				Application.controller.openProject(p);
+			}
+		});
+		
 		JMenu menuProject = new JMenu("Project");
 		menuProject.add(new JMenuItem("New project"));
-		menuProject.add(new JMenuItem("Open project"));
+		menuProject.add(itemOpenProject);
 		menuProject.add(new JMenuItem("Save project"));
 		menuProject.add(new JMenuItem("Save project as..."));
 		menuProject.add(new JMenuItem("Compile map"));

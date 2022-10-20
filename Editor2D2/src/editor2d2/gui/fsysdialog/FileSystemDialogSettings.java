@@ -37,16 +37,20 @@ public class FileSystemDialogSettings {
 	 * - <b>FileSystemDialogSettings.FILES_ONLY <br/>
 	 * - FileSystemDialogSettings.DIRECTORIES_ONLY <br/>
 	 * - FileSystemDialogSettings.FILES_AND_DIRECTORIES</b>
+	 * <br/>
+	 * Default: <b>FILES_ONLY</b>
 	 */
 	public int selectionMode = FILES_ONLY;
 	
 	/**
-	 * Whether multiple selection is allowed when opening files/directories.
+	 * Whether multiple selection is allowed when opening files/directories. <br/>
+	 * Default: <b>false</b>
 	 */
 	public boolean allowMultiple = false;
 	
 	/**
-	 * Whether to allow the all file types to be selected.
+	 * Whether to allow the all file types to be selected. <br/>
+	 * Default: <b>false</b>
 	 */
 	public boolean allowAll = false;
 	

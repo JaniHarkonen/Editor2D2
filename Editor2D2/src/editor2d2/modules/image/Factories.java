@@ -7,6 +7,7 @@ import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
+import editor2d2.modules.image.loader.ImageLoader;
 import editor2d2.modules.image.modal.ImageModal;
 import editor2d2.modules.image.placeable.Tile;
 import editor2d2.modules.image.proppane.TilePropertiesPane;
@@ -50,4 +51,8 @@ public class Factories extends AbstractFactories<Image> {
 		return new TilePropertiesPane(source);
 	}
 
+	@Override
+	public ImageLoader createLoader() {
+		return new ImageLoader();
+	}
 }

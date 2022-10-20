@@ -4,10 +4,13 @@ OVERVIEW
 - create at least a skeleton for saving and loading of Projects
 
 SPECIFICS
+- determine a way to avoid having to create a new loader for
+  each Placeable that is to be loaded
+	-- Assets can recreate the loader each time as they can
+	   be in a random order
+
 - add ability to create a new Project
 - add ability to save a Project
-	-- create a Writer-class that takes a Project and 
-- add ability to load a Project
 
 LATER
 - return to LayerManagerPane after TOOLS
@@ -27,10 +30,10 @@ SKETCHES
 ---- Editor2D savefile ----
 
 assets
-	data "collision data" DATA00001 "0" 112100100
+	data "collision data" DATA00001 "0" 255 0 0
 	image "unknown image" IMG555WETIP "D:\epic\assoomer_logo.png"
 	image "coomer" IMG555WECOOM "D:\epic\coomer_profile.png"
-	object OBJ555WECOOM 128 64 0
+	object "cj_coomer" OBJ555WECOOM 128 64 0
 /assets
 
 scene "first scene" 640 480

@@ -3,7 +3,6 @@ package editor2d2.modules.image.asset;
 import java.awt.image.BufferedImage;
 
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.image.placeable.Tile;
 
 public class Image extends Asset {
@@ -24,7 +23,7 @@ public class Image extends Asset {
 	
 	
 	@Override
-	public Placeable createPlaceable() {
+	public Tile createPlaceable() {
 		Tile tile = new Tile();
 		tile.setImage(this);
 		

@@ -1,6 +1,6 @@
 package editor2d2.gui;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -87,14 +87,16 @@ public class Root extends GUIComponent implements Subscriber {
 			// Creates Scene tabs for all the Scenes in the target project
 			// Only renders the Scene for the currently open tab
 		int s = 1;
-		for( Map.Entry<String, Scene> en : this.targetProject.getAllScenes().entrySet() )
+		ArrayList<Scene> scenes = this.targetProject.getAllScenes();
+		for( int i = 0; i < scenes.size(); i++ )
 		{
+			Scene scene = scenes.get(i);
 			JPanel sp_container = new JPanel();
 			
-			if( this.currentTabIndex == s )
-			sp_container = (new ScenePane(en.getValue())).render();
+			if( this.currentTabIndex == i + 1 )
+			sp_container = (new ScenePane(scene)).render();
 			
-			tpScenes.add(en.getKey(), sp_container);
+			tpScenes.add(scene.getName(), sp_container);
 			s++;
 		}
 		

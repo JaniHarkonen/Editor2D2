@@ -3,7 +3,6 @@ package editor2d2.modules.data.asset;
 import java.awt.Color;
 
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.data.placeable.DataCell;
 
 public class Data extends Asset {
@@ -24,7 +23,7 @@ public class Data extends Asset {
 	
 	
 	@Override
-	public Placeable createPlaceable() {
+	public DataCell createPlaceable() {
 		DataCell dcell = new DataCell();
 		dcell.setData(this);
 		
