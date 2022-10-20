@@ -87,6 +87,7 @@ public class ProjectLoader {
 		catch( IOException e )
 		{
 			e.printStackTrace();
+			return null;
 		}
 		
 		return this.targetProject;

@@ -11,6 +11,7 @@ import editor2d2.modules.object.loader.ObjectLoader;
 import editor2d2.modules.object.modal.ObjectModal;
 import editor2d2.modules.object.placeable.Instance;
 import editor2d2.modules.object.proppane.InstancePropertiesPane;
+import editor2d2.modules.object.writer.ObjectWriter;
 
 public class Factories extends AbstractFactories<EObject> {
 
@@ -54,5 +55,10 @@ public class Factories extends AbstractFactories<EObject> {
 	@Override
 	public ObjectLoader createLoader() {
 		return new ObjectLoader();
+	}
+	
+	@Override
+	public ObjectWriter createWriter() {
+		return new ObjectWriter();
 	}
 }

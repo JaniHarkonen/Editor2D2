@@ -11,6 +11,7 @@ import editor2d2.modules.image.loader.ImageLoader;
 import editor2d2.modules.image.modal.ImageModal;
 import editor2d2.modules.image.placeable.Tile;
 import editor2d2.modules.image.proppane.TilePropertiesPane;
+import editor2d2.modules.image.writer.ImageWriter;
 
 public class Factories extends AbstractFactories<Image> {
 
@@ -54,5 +55,10 @@ public class Factories extends AbstractFactories<Image> {
 	@Override
 	public ImageLoader createLoader() {
 		return new ImageLoader();
+	}
+	
+	@Override
+	public ImageWriter createWriter() {
+		return new ImageWriter();
 	}
 }

@@ -8,6 +8,7 @@ import editor2d2.model.project.loader.AbstractLoader;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.model.project.writer.AbstractWriter;
 
 public abstract class AbstractFactories<A extends Asset> {
 
@@ -25,4 +26,6 @@ public abstract class AbstractFactories<A extends Asset> {
 	public abstract PropertiesPane createPropertiesPane(Placeable source);
 	
 	public abstract AbstractLoader<A> createLoader();
+	
+	public abstract AbstractWriter createWriter();
 }

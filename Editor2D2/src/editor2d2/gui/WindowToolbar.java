@@ -16,6 +16,7 @@ import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
+import editor2d2.model.project.writer.ProjectWriter;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -139,6 +140,6 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		// Saves the currently open Project into the file it was last
 		// saved in
 	private void actionOnSaveProject() {
-		
+		(new ProjectWriter()).writeProject("C:\\Users\\User\\Desktop\\SHASHASHA.txt", Application.controller.getActiveProject());
 	}
 }

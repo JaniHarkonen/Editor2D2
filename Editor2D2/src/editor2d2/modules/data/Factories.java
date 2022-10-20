@@ -11,6 +11,7 @@ import editor2d2.modules.data.loader.DataLoader;
 import editor2d2.modules.data.modal.DataModal;
 import editor2d2.modules.data.placeable.DataCell;
 import editor2d2.modules.data.proppane.DataCellPropertiesPane;
+import editor2d2.modules.data.writer.DataWriter;
 
 public class Factories extends AbstractFactories<Data> {
 	
@@ -57,5 +58,10 @@ public class Factories extends AbstractFactories<Data> {
 	@Override
 	public DataLoader createLoader() {
 		return new DataLoader();
+	}
+	
+	@Override
+	public DataWriter createWriter() {
+		return new DataWriter();
 	}
 }
