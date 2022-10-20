@@ -1,10 +1,8 @@
 TODO - LoadSave
 
 OVERVIEW
-- create at least a skeleton for saving and loading of Projects
 
 SPECIFICS
-- add ability to save a Project
 
 LATER
 - return to LayerManagerPane after TOOLS
