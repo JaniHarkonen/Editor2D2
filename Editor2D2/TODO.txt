@@ -13,7 +13,6 @@ SPECIFICS
 	-- add ability to remove folders of Assets
 - create drop menu for AssetPane
 	-- add ability to select multiple Assets
-	-- add ability to edit Assets
 	
 
 LATER

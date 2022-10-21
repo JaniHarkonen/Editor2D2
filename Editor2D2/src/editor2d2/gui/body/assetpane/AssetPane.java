@@ -23,6 +23,7 @@ import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.modules.FactoryService;
+import editor2d2.modules.data.asset.Data;
 import editor2d2.subservice.Vendor;
 
 public class AssetPane extends GUIComponent implements Vendor {
@@ -83,7 +84,17 @@ public class AssetPane extends GUIComponent implements Vendor {
 			// Create right-click context menu
 		JPopupMenu pmAssets = new JPopupMenu();
 		pmAssets.add(menuCreate);
-		pmAssets.add(new JMenuItem("Edit"));
+		
+		JMenuItem itemEdit = new JMenuItem(new AbstractAction("Edit") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionEdit();
+				update();
+			}
+		});
+		
+		pmAssets.add(itemEdit);
 		
 		JMenuItem itemRename = new JMenuItem(new AbstractAction("Rename") {
 			
@@ -142,9 +153,28 @@ public class AssetPane extends GUIComponent implements Vendor {
 		});
 	}
 	
+		// Opens a ModalWindow for the selected Asset
+	@SuppressWarnings("unchecked")
+	private void actionEdit() {
+		Asset asset = this.assetSelectionManager.getSelectedItem();
+		
+		if( asset == null )
+		return;
+		
+		ModalWindow mw = Application.window.getModalWindow();
+		ModalView<Asset> mv = (ModalView<Asset>) FactoryService.getFactories(asset.getAssetClassName()).createModal(mw, false);
+		mv.setAsset(asset);
+		
+		Application.window.popup(mv);
+	}
+	
 		// Shows an input dialog box for renaming the selected Asset
 	private void actionRename() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
+		
+		if( asset == null )
+		return;
+		
 		String newName = (String) JOptionPane.showInputDialog("Enter the new name:", asset.getName());
 		
 		if( newName == null || newName.equals("") )
