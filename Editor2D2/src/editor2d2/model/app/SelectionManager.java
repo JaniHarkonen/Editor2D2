@@ -4,26 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import editor2d2.model.project.scene.placeable.Placeable;
+public class SelectionManager<T> {
 
-public class SelectionManager {
-
-		// List of currently selected Placeables
-	private final Map<Placeable, Boolean> selection;
+		// List of currently selected items
+	private final Map<T, Boolean> selection;
 	
-		// Reference to the Placeable that was first selected
-	private Placeable firstSelection;
+		// Reference to the item that was first selected
+	private T firstSelection;
 	
 	
 	public SelectionManager() {
-		this.selection = new HashMap<Placeable, Boolean>();
+		this.selection = new HashMap<T, Boolean>();
 		this.firstSelection = null;
 	}
 	
 	
-		// Sets the selection of Placeables by copying the
-		// given list of Placeables
-	public void setSelection(ArrayList<Placeable> selection) {
+		// Sets the selection of items by copying the
+		// given list of items
+	public void setSelection(ArrayList<T> selection) {
 		if( selection == null )
 		return;
 		
@@ -34,8 +32,8 @@ public class SelectionManager {
 		this.selection.put(selection.get(i), true);
 	}
 	
-		// Sets the selection to consist of a single Placeable
-	public void setSelection(Placeable selection) {
+		// Sets the selection to consist of a single item
+	public void setSelection(T selection) {
 		if( selection == null )
 		return;
 		
@@ -44,26 +42,26 @@ public class SelectionManager {
 		this.selection.put(selection, true);
 	}
 	
-		// Adds a given Placeable to the selection excluding
+		// Adds a given item to the selection excluding
 		// it, if it's already been selected
-	public void addSelection(Placeable selection) {
+	public void addSelection(T selection) {
 		this.selection.put(selection, true);
 	}
 	
-		// Adds a given list of Placeables to the selection
+		// Adds a given list of items to the selection
 		// excluding the ones that are already selected
-	public void addSelection(ArrayList<Placeable> selection) {
+	public void addSelection(ArrayList<T> selection) {
 		for( int i = 0; i < selection.size(); i++ )
 		addSelection(selection.get(i));
 	}
 	
-		// Removes a given Placeable from the selection
-	public void removeSelection(Placeable selection) {
+		// Removes a given item from the selection
+	public void removeSelection(T selection) {
 		this.selection.remove(selection);
 	}
 	
-		// Removes a given list of Placeables from the selection
-	public void removeSelection(ArrayList<Placeable> selection) {
+		// Removes a given list of items from the selection
+	public void removeSelection(ArrayList<T> selection) {
 		for( int i = 0; i < selection.size(); i++ )
 		removeSelection(selection.get(i));
 	}
@@ -76,14 +74,16 @@ public class SelectionManager {
 	
 	/*********************** GETTERS **************************/
 	
-		// Returns a copy of the list of selected Placeables
-	public ArrayList<Placeable> getSelection() {
-		ArrayList<Placeable> copy = new ArrayList<Placeable>();
+		// Returns a copy of the list of selected items
+	public ArrayList<T> getSelection() {
+		ArrayList<T> copy = new ArrayList<T>();
+		
+		if( this.firstSelection != null )
 		copy.add(this.firstSelection);
 		
-		for( Map.Entry<Placeable, Boolean> en : this.selection.entrySet() )
+		for( Map.Entry<T, Boolean> en : this.selection.entrySet() )
 		{
-			Placeable p = en.getKey();
+			T p = en.getKey();
 			
 			if( p != this.firstSelection )
 			copy.add(this.firstSelection);
@@ -92,15 +92,15 @@ public class SelectionManager {
 		return copy;
 	}
 	
-		// Returns the first Placeable in the list of selected
-		// Placeables
-	public Placeable getSelectedPlaceable() {
+		// Returns the first item in the list of selected
+		// items
+	public T getSelectedItem() {
 		return this.firstSelection;
 	}
 	
-		// Returns whether a given Placeable is included in the
+		// Returns whether a given item is included in the
 		// selection
-	public boolean checkSelected(Placeable p) {
+	public boolean checkSelected(T p) {
 		return this.selection.containsKey(p);
 	}
 }

@@ -45,6 +45,20 @@ public class Project {
 		this.assetMap.put(asset.getIdentifier(), asset);
 	}
 	
+		// Removes a given asset from the Project
+	public void removeAsset(Asset asset) {
+		this.assetMap.remove(asset.getIdentifier());
+		
+		for( int i = 0; i < this.assets.size(); i++ )
+		{
+			if( this.assets.get(i) != asset )
+			continue;
+			
+			this.assets.remove(i);
+			return;
+		}
+	}
+	
 	
 		// Returns the name of the map project
 	public String getName() {

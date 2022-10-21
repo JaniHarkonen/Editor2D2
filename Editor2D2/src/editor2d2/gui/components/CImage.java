@@ -36,10 +36,11 @@ public class CImage extends GUIComponent {
 	@Override
 	@SuppressWarnings("serial")
 	protected JPanel draw() {
-		container = new JPanel() {
+		this.container = new JPanel() {
 			
 			@Override
 			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
 				Graphics2D gg = (Graphics2D) g;
 				
 					// Draw at (0, 0) if no transform is present
@@ -50,7 +51,7 @@ public class CImage extends GUIComponent {
 			}
 		};
 		
-		return container;
+		return this.container;
 	}
 	
 	/***************************** GETTERS & SETTERS ********************************/
