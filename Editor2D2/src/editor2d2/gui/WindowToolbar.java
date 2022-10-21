@@ -9,10 +9,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
+import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
+import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
-import editor2d2.modules.GUIFactory;
+import editor2d2.model.project.Project;
+import editor2d2.model.project.loader.ProjectLoader;
+import editor2d2.model.project.writer.ProjectWriter;
+import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -41,13 +46,38 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	}
 	
 		// Generates the toolbar
+	@SuppressWarnings("serial")
 	private void generate() {
 		
 			// Project menu
+		JMenuItem itemNewProject = new JMenuItem(new AbstractAction("New project") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionOnNewProject();
+			}
+		});
+
+		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionOnLoadProject();
+			}
+		});
+		
+		JMenuItem itemSaveProject = new JMenuItem(new AbstractAction("Save project") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionOnSaveProject();
+			}
+		});
+		
 		JMenu menuProject = new JMenu("Project");
-		menuProject.add(new JMenuItem("New project"));
-		menuProject.add(new JMenuItem("Open project"));
-		menuProject.add(new JMenuItem("Save project"));
+		menuProject.add(itemNewProject);
+		menuProject.add(itemOpenProject);
+		menuProject.add(itemSaveProject);
 		menuProject.add(new JMenuItem("Save project as..."));
 		menuProject.add(new JMenuItem("Compile map"));
 		
@@ -58,11 +88,11 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		if( host != null )
 		{
 			ModalWindow modal = host.getModalWindow();
-			String[] ctypes = GUIFactory.getClassTypes();
+			String[] ctypes = FactoryService.getClassTypes();
 			
 				// Populate Asset menu
 			for( String type : ctypes )
-			menuAsset.add(createAssetMenuItem("Create " + type, GUIFactory.createModalView(type, modal)));
+			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
 		}
 		
 			// Meta data settings
@@ -86,5 +116,30 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 				Application.window.popup(mv);
 			}
 		});
+	}
+	
+		// Creates a new Project and opens it in the editor
+	private void actionOnNewProject() {
+		Project p = new Project();
+		Application.controller.openProject(p);
+	}
+	
+		// Loads a Project from an external file and opens it
+		// in editor
+	private void actionOnLoadProject() {
+		FileSystemDialogSettings settings = new FileSystemDialogSettings();
+		FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
+		
+		if( !res.isApproved )
+		return;
+		
+		Project p = (new ProjectLoader()).loadProject(res.filepaths[0]);
+		Application.controller.openProject(p);
+	}
+	
+		// Saves the currently open Project into the file it was last
+		// saved in
+	private void actionOnSaveProject() {
+		(new ProjectWriter()).writeProject("C:\\Users\\User\\Desktop\\SHASHASHA.txt", Application.controller.getActiveProject());
 	}
 }

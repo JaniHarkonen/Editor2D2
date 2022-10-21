@@ -35,6 +35,12 @@ public class Grid {
 	}
 	
 	
+		// Returns the element stored in a given cell with no
+		// additional checks for slightly faster performance
+	public Gridable getFast(int cx, int cy) {
+		return this.grid.get(cy * this.rowLength + cx);
+	}
+	
 		// Returns the element stored in a given cell
 		// or NULL if no element is in the cell
 		// or NullCell if the cell was invalid
@@ -42,7 +48,7 @@ public class Grid {
 		if( !checkCellValid(cx, cy) )
 		return new NullCell();
 		
-		return this.grid.get(cy * this.rowLength + cx);
+		return getFast(cx, cy);
 	}
 	
 		// Returns the element stored in a cell given its

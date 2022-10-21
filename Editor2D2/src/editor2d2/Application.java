@@ -3,6 +3,7 @@ package editor2d2;
 import editor2d2.gui.Window;
 import editor2d2.model.app.AppState;
 import editor2d2.model.app.Controller;
+import editor2d2.modules.FactoryService;
 import editor2d2.resources.Resources;
 
 public class Application {
@@ -23,6 +24,7 @@ public class Application {
 	
 	
 	public static void main(String[] args) {
+		FactoryService.initialize();
 		resources = Resources.instantiate();
 		appState = new AppState();
 		controller = Controller.instantiate(appState);

@@ -7,6 +7,7 @@ import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
+import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.SubscriptionService;
@@ -58,8 +59,18 @@ public class Controller implements Vendor {
 		// Creates a new Scene of a given anme and adds it to the
 		// currently active Project
 	public void createNewScene(String name) {
+		
+			// Create a Camera for the Scene
+		Camera sceneCamera = new Camera();
+		sceneCamera.setPortDimensions(358, 210);
+		
+			// Create the Scene itself
 		Scene newScene = new Scene();
 		newScene.setName(name);
+		newScene.setDimensions(200, 200);
+		newScene.setCamera(sceneCamera);
+		
+		
 		getActiveProject().addScene(newScene);
 	}
 	
@@ -71,8 +82,6 @@ public class Controller implements Vendor {
 	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
-		/*this.appState.selectedPlaceables.clear();
-		this.appState.selectedPlaceables.add(asset.createPlaceable());*/
 		this.selectionManager.setSelection(asset.createPlaceable());
 		this.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
 	}

@@ -1,26 +1,3 @@
-TODO - LoadSave
-
-OVERVIEW
-
-SPECIFICS
-
-LATER
-- return to LayerManagerPane after TOOLS
-	-- also check other classes inside "layermgrpane"
-- currently there are off-by-one issues with undoing and
-  redoing actions, fix these and make sure that the
-  ActionHistory actually works
-- Placeables should not reference the Controller
-	-> fix references to the Controller upon drawing and
-	   figure out a way to determine if a Placeable is
-	   selected without the Controller's SelectionManager
-	   
-	   
-	   
-SKETCHES
-
----- Editor2D savefile ----
-
 assets
 	data "collision data" DATA00001 "0" 255 0 0
 	image "unknown image" IMG555WETIP "D:\epic\assoomer_logo.png"

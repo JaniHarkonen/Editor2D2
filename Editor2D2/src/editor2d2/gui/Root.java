@@ -1,6 +1,6 @@
 package editor2d2.gui;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,14 +16,14 @@ import editor2d2.gui.body.Toolbar;
 import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
 import editor2d2.gui.body.scene.ScenePane;
+import editor2d2.model.Handles;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.GUIFactory;
+import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
-import editor2d2.model.Handles;
 
 public class Root extends GUIComponent implements Subscriber {
 	
@@ -66,7 +66,7 @@ public class Root extends GUIComponent implements Subscriber {
 		
 		if( p != null )
 		{
-			PropertiesPane pp = GUIFactory.createPropertiesPane(p.getAsset().getAssetClassName(), p);//PropertiesPane.createPropertiesPane(Application.controller.getSelectedPlaceable());
+			PropertiesPane pp = FactoryService.getFactories(p.getAsset().getAssetClassName()).createPropertiesPane(p);
 			if( pp != null )
 			containerRightSide.add(pp.render());	// Placeable properties
 		}
@@ -86,16 +86,16 @@ public class Root extends GUIComponent implements Subscriber {
 		
 			// Creates Scene tabs for all the Scenes in the target project
 			// Only renders the Scene for the currently open tab
-		int s = 1;
-		for( Map.Entry<String, Scene> en : this.targetProject.getAllScenes().entrySet() )
+		ArrayList<Scene> scenes = this.targetProject.getAllScenes();
+		for( int i = 0; i < scenes.size(); i++ )
 		{
+			Scene scene = scenes.get(i);
 			JPanel sp_container = new JPanel();
 			
-			if( this.currentTabIndex == s )
-			sp_container = (new ScenePane(en.getValue())).render();
+			if( this.currentTabIndex == i + 1 )
+			sp_container = (new ScenePane(scene)).render();
 			
-			tpScenes.add(en.getKey(), sp_container);
-			s++;
+			tpScenes.add(scene.getName(), sp_container);
 		}
 		
 		tpScenes.setSelectedIndex(this.currentTabIndex);

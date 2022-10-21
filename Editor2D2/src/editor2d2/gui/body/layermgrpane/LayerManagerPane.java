@@ -43,15 +43,17 @@ public class LayerManagerPane extends GUIComponent {
 			container.add(containerControls);
 			
 				// Layer panes
-			for( Layer layer : Application.controller.getActiveProject().getScene("small scene").getLayers() )
-			container.add((new LayerPane(this, layer)).render());
-			
+			if( Application.controller.getActiveProject().getAllScenes().size() > 0 )
+			{
+				for( Layer layer : Application.controller.getActiveProject().getScene(0).getLayers() )
+				container.add((new LayerPane(this, layer)).render());
+			}
 		}
 		else
 		{
 				// Controls
-			JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-				containerControls.add(new ClickableButton("<", (e) -> { onBackToLayerManager(); }));
+			JPanel	containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+					containerControls.add(new ClickableButton("<", (e) -> { onBackToLayerManager(); }));
 			container.add(containerControls);
 			
 				// Layer properties pane
