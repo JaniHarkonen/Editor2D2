@@ -6,7 +6,6 @@ OVERVIEW
 - add a drop menu to AssetsPane
 
 SPECIFICS
-- AssetItems should have icons
 - create folder support
 	-- ? folders should translate to folders in file system
 	-- add ability to create folders of Assets
@@ -28,8 +27,13 @@ LATER
 - ? should SelectionManagers be declared in the AppState
 - de-messify Root
 - ? should JOptionsPane be placed under Window
+- speedup Tile rendering performance by getting the subimage
+  only when the Image the Tile is based on changes
+	-- check other Placeables for render optimizations
+	-- pay attention to memory usage as well
 	   
 TASKS LEFT
+- finish Tools and Actions (undo, redo)
 - add Tools to the Toolbar
 - add Meta Data modal
 - create abstractions for compiling
@@ -38,8 +42,9 @@ TASKS LEFT
 	   need to be written
 - make sure that all the functionalities work with minor
   bugs
+- hotkeys
 - finalize graphics
-- remove DebugUtils and other debug prints
+- remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils
 - fix remaining minor bugs
 - create a TEMPLATE module

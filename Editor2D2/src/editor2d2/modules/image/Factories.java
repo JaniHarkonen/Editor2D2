@@ -1,10 +1,13 @@
 package editor2d2.modules.image;
 
+import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
+import editor2d2.modules.image.aitem.ImageAssetItem;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.modules.image.loader.ImageLoader;
@@ -60,5 +63,10 @@ public class Factories extends AbstractFactories<Image> {
 	@Override
 	public ImageWriter createWriter() {
 		return new ImageWriter();
+	}
+	
+	@Override
+	public ImageAssetItem createAssetItem(AssetPane host, Asset source) {
+		return new ImageAssetItem(host, source);
 	}
 }

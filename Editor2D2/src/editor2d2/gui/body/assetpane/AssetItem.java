@@ -9,37 +9,31 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
-import editor2d2.gui.components.CImage;
 import editor2d2.model.project.Asset;
 
-public class AssetItem extends GUIComponent {
+public abstract class AssetItem extends GUIComponent {
 	
 		// Reference to the hosting AssetPane
-	private AssetPane host;
+	protected AssetPane host;
 	
 		// Source Asset the item is based on
-	private Asset source;
+	protected Asset source;
 	
 		// Whether the mouse is hovering over the AssetItem
-	private boolean isMouseOver;
+	protected boolean isMouseOver;
 	
 		// Reference to the container JPanel
-	private JPanel container;
+	protected JPanel container;
 	
 	
-	public AssetItem(AssetPane host, Asset source) {
+	protected AssetItem(AssetPane host, Asset source) {
 		this.host = host;
 		this.source = source;
 		this.isMouseOver = false;
 		this.container = GUIUtilities.createDefaultPanel();
-		
-		CImage icon = new CImage();
-		icon.setImage(Application.resources.getGraphic("icon-null-object"));
-		
-		this.container.add(icon.render());
+		this.container.add(drawIcon());
 		this.container.add(new JLabel(this.source.getName()));
 		
 		this.container.addMouseListener(new MouseAdapter() {
@@ -82,4 +76,6 @@ public class AssetItem extends GUIComponent {
 		
 		return this.container;
 	}
+	
+	protected abstract JPanel drawIcon();
 }

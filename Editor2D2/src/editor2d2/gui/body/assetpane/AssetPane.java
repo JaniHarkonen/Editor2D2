@@ -23,7 +23,6 @@ import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.modules.FactoryService;
-import editor2d2.modules.data.asset.Data;
 import editor2d2.subservice.Vendor;
 
 public class AssetPane extends GUIComponent implements Vendor {
@@ -65,7 +64,7 @@ public class AssetPane extends GUIComponent implements Vendor {
 		
 			// Draw AssetItems
 		for( Asset a : this.source.getAllAssets() )
-		container.add((new AssetItem(this, a)).render());
+		container.add(FactoryService.getFactories(a.getAssetClassName()).createAssetItem(this, a).render());
 		
 			// Create Asset creation sub-menu
 		JMenu menuCreate = new JMenu("Create");

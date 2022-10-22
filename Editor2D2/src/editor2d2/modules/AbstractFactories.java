@@ -1,6 +1,8 @@
 package editor2d2.modules;
 
 import editor2d2.gui.body.PropertiesPane;
+import editor2d2.gui.body.assetpane.AssetItem;
+import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
@@ -28,4 +30,6 @@ public abstract class AbstractFactories<A extends Asset> {
 	public abstract AbstractLoader<A> createLoader();
 	
 	public abstract AbstractWriter createWriter();
+	
+	public abstract AssetItem createAssetItem(AssetPane host, Asset source);
 }

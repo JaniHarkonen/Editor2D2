@@ -19,12 +19,9 @@ public class DataCell extends Placeable {
 		// Cellular height of the data cell
 	private int cellHeight;
 	
-		// Reference to the Data object this cell is derived from
-	//private Data data;
-	
 	
 	public DataCell() {
-		//this.data = null;
+		
 	}
 	
 	

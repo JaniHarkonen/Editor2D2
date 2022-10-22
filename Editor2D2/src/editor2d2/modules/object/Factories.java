@@ -1,10 +1,13 @@
 package editor2d2.modules.object;
 
+import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
+import editor2d2.modules.object.aitem.ObjectAssetItem;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.layer.InstanceLayer;
 import editor2d2.modules.object.loader.ObjectLoader;
@@ -60,5 +63,10 @@ public class Factories extends AbstractFactories<EObject> {
 	@Override
 	public ObjectWriter createWriter() {
 		return new ObjectWriter();
+	}
+	
+	@Override
+	public ObjectAssetItem createAssetItem(AssetPane host, Asset source) {
+		return new ObjectAssetItem(host, source);
 	}
 }
