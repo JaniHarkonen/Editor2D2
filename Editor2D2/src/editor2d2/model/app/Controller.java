@@ -91,7 +91,7 @@ public class Controller implements Vendor {
 	
 		// Adds a given Asset to the currently active Project
 	public void addNewAsset(Asset newAsset) {
-		getActiveProject().addAsset(newAsset, getActiveProject().getRootFolder());
+		getActiveProject().addAsset(newAsset, getOpenFolder());
 		Application.window.getModalWindow().getAssetPane().update();
 	}
 	

@@ -57,6 +57,9 @@ public class SelectionManager<T> {
 	
 		// Removes a given item from the selection
 	public void removeSelection(T selection) {
+		if( selection == this.firstSelection )
+		this.firstSelection = null;
+		
 		this.selection.remove(selection);
 	}
 	
@@ -64,6 +67,9 @@ public class SelectionManager<T> {
 	public void removeSelection(ArrayList<T> selection) {
 		for( int i = 0; i < selection.size(); i++ )
 		removeSelection(selection.get(i));
+		
+		if( this.selection.size() > 0 )
+		this.firstSelection = getSelection().get(0);
 	}
 	
 		// De-selects everything
@@ -86,7 +92,7 @@ public class SelectionManager<T> {
 			T p = en.getKey();
 			
 			if( p != this.firstSelection )
-			copy.add(this.firstSelection);
+			copy.add(p);
 		}
 		
 		return copy;

@@ -39,9 +39,15 @@ public abstract class AssetItem extends GUIComponent {
 		this.container.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
-				if( GUIUtilities.checkLeftClick(e) )
-				actionSelect();
+			public void mouseClicked(MouseEvent e) {
+				if( !GUIUtilities.checkLeftClick(e) )
+				return;
+				
+				if( e.getClickCount() == 1 )
+				actionSelect(e);
+				
+				if( e.getClickCount() == 2 )
+				actionPrimaryFunction(e);
 			}
 			
 			@Override
@@ -80,9 +86,26 @@ public abstract class AssetItem extends GUIComponent {
 	
 		// Selects the Asset represented by the AssetItem and
 		// updates the Controller and the AssetPane
-	protected void actionSelect() {
-		this.host.selectAsset(this.source);
+	protected void actionSelect(MouseEvent e) {
+		AssetPane host = this.host;
+		Asset src = this.source;
+		
+		if( e.isControlDown() )
+		{
+			if( host.checkSelected(src) )
+			host.deselectAsset(src);
+			else
+			host.addSelection(src);
+		}
+		else
+		host.selectAsset(src);
 		//Application.controller.selectAsset(this.source);
+	}
+	
+		// Opens the editing ModalView for the Asset upon
+		// double-click
+	protected void actionPrimaryFunction(MouseEvent e) {
+		this.host.actionEdit();
 	}
 	
 		// Draws the AssetItem icon inside the draw-method

@@ -1,5 +1,7 @@
 package editor2d2.gui.body.assetpane;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JPanel;
 
 import editor2d2.Application;
@@ -27,7 +29,10 @@ public class FolderItem extends AssetItem {
 	}
 	
 	@Override
-	protected void actionSelect() {
+	protected void actionSelect(MouseEvent e) { }
+	
+	@Override
+	protected void actionPrimaryFunction(MouseEvent e) {
 		Application.controller.openFolder((Folder) this.source);
 	}
 }

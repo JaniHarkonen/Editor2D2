@@ -62,6 +62,18 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		update();
 	}
 	
+		// Adds a given Asset to the selection
+	public void addSelection(Asset a) {
+		this.assetSelectionManager.addSelection(a);
+		update();
+	}
+	
+		// De-selects a given Asset from the selection
+	public void deselectAsset(Asset a) {
+		this.assetSelectionManager.removeSelection(a);
+		update();
+	}
+	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
 		if( handle.equals(editor2d2.model.Handles.OPEN_FOLDER) )
@@ -70,7 +82,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			update();
 		}
 	}
-	
+
 
 	@SuppressWarnings("serial")
 	@Override
@@ -93,57 +105,73 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			else
 			container.add(FactoryService.getFactories(a.getAssetClassName()).createAssetItem(this, a).render());
 		}
-		
-			// Create Asset creation sub-menu
-		JMenu menuCreate = new JMenu("Create");
-		menuCreate.add(new JMenuItem("New folder..."));
-		
-			// Populate
-		for( String type : FactoryService.getClassTypes() )
-		{
-			String title = GUIUtilities.getFirstLetterUppercase(type);
-			ModalWindow modal = Application.window.getModalWindow();
-			ModalView<? extends Asset> mv = FactoryService.getFactories(type).createModal(modal, true);
 			
-			menuCreate.add(createAssetMenuItem(title, mv));
-		}
-		
 			// Create right-click context menu
 		JPopupMenu pmAssets = new JPopupMenu();
-		pmAssets.add(menuCreate);
 		
-		JMenuItem itemEdit = new JMenuItem(new AbstractAction("Edit") {
+				// Context menu - Create
+			JMenu menuCreate = new JMenu("Create");
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionEdit();
-				update();
-			}
-		});
-		
-		pmAssets.add(itemEdit);
-		
-		JMenuItem itemRename = new JMenuItem(new AbstractAction("Rename") {
+					// Context menu - Create - New folder...
+				JMenuItem itemNewFolder = new JMenuItem(new AbstractAction("New folder...") {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						actionNewFolder();
+						update();
+					}
+				});
+				menuCreate.add(itemNewFolder);
+				
+				menuCreate.add(itemNewFolder);
+				
+					// Context menu - Create - Populate
+				for( String type : FactoryService.getClassTypes() )
+				{
+					String title = GUIUtilities.getFirstLetterUppercase(type);
+					ModalWindow modal = Application.window.getModalWindow();
+					ModalView<? extends Asset> mv = FactoryService.getFactories(type).createModal(modal, true);
+					
+					menuCreate.add(createAssetMenuItem(title, mv));
+				}
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionRename();
-				update();
-			}
-		});
-		
-		pmAssets.add(itemRename);
-		
-		JMenuItem itemDelete = new JMenuItem(new AbstractAction("Delete") {
+			pmAssets.add(menuCreate);
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionDelete();
-				update();
-			}
-		});
-		
-		pmAssets.add(itemDelete);
+				// Context menu - Edit
+			JMenuItem itemEdit = new JMenuItem(new AbstractAction("Edit") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionEdit();
+					update();
+				}
+			});
+			
+			pmAssets.add(itemEdit);
+			
+				// Context menu - Rename
+			JMenuItem itemRename = new JMenuItem(new AbstractAction("Rename") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionRename();
+					update();
+				}
+			});
+			
+			pmAssets.add(itemRename);
+			
+				// Context menu - Delete
+			JMenuItem itemDelete = new JMenuItem(new AbstractAction("Delete") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionDelete();
+					update();
+				}
+			});
+			
+			pmAssets.add(itemDelete);
 		
 			// Listen for right-click
 		container.addMouseListener(new MouseAdapter() {
@@ -180,9 +208,23 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		});
 	}
 	
+		// Shows an input dialog box for creating a new Folder
+	private void actionNewFolder() {
+		String folderName = (String) JOptionPane.showInputDialog("Enter folder name:");
+		
+		if( folderName == null || folderName.equals("") )
+		return;
+		
+		Folder newFolder = new Folder();
+		newFolder.setName(folderName);
+		
+		Application.controller.addNewAsset(newFolder);
+		update();
+	}
+	
 		// Opens a ModalWindow for the selected Asset
 	@SuppressWarnings("unchecked")
-	private void actionEdit() {
+	public void actionEdit() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
 		
 		if( asset == null )
