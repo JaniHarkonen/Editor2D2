@@ -3,6 +3,7 @@ package editor2d2.gui.body.assetpane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
@@ -19,27 +20,34 @@ import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.app.Controller;
 import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
-import editor2d2.model.project.Project;
+import editor2d2.model.project.Folder;
 import editor2d2.modules.FactoryService;
+import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
-public class AssetPane extends GUIComponent implements Vendor {
+public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	
-		// Reference to the project the asset pane is representing
-	private Project source;
+		// Reference to the Folder whose Assets are being displayed
+	private Folder openFolder;
 	
 		// Reference to the SelectionManager that handles the selection
 		// of Assets
 	private SelectionManager<Asset> assetSelectionManager;
 	
 	
-	public AssetPane(Project source) {
-		this.source = source;
+	public AssetPane() {
 		this.assetSelectionManager = new SelectionManager<Asset>();
 		
+			// Register this AssetPane
 		Application.window.subscriptionService.register(Handles.ASSET_PANE, this);
+		
+			// Get or subscribe for the open Folder reference
+		String openFolderHandle = editor2d2.model.Handles.OPEN_FOLDER;
+		Controller vendor = (Controller) Application.controller.subscriptionService.get(openFolderHandle, "AssetPane", this); 
+		this.openFolder = vendor.getOpenFolder();
 	}
 	
 	
@@ -54,6 +62,15 @@ public class AssetPane extends GUIComponent implements Vendor {
 		update();
 	}
 	
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		if( handle.equals(editor2d2.model.Handles.OPEN_FOLDER) )
+		{
+			this.openFolder = ((Controller) vendor).getOpenFolder();
+			update();
+		}
+	}
+	
 
 	@SuppressWarnings("serial")
 	@Override
@@ -62,9 +79,20 @@ public class AssetPane extends GUIComponent implements Vendor {
 		container.add(new JLabel("Assets"));
 		container.add(new JLabel("======================================================="));
 		
-			// Draw AssetItems
-		for( Asset a : this.source.getAllAssets() )
-		container.add(FactoryService.getFactories(a.getAssetClassName()).createAssetItem(this, a).render());
+			// Create the "up one folder"-Folder
+		Folder parentFolder = this.openFolder.getParentFolder();
+		
+		if( parentFolder != null )
+		container.add((new FolderItem(this, parentFolder, "..").render()));
+		
+			// Render Assets and sub-folders
+		for( Asset a : this.openFolder.getAllAssets() )
+		{
+			if( a instanceof Folder )
+			container.add((new FolderItem(this, a)).render());
+			else
+			container.add(FactoryService.getFactories(a.getAssetClassName()).createAssetItem(this, a).render());
+		}
 		
 			// Create Asset creation sub-menu
 		JMenu menuCreate = new JMenu("Create");
@@ -184,6 +212,20 @@ public class AssetPane extends GUIComponent implements Vendor {
 		update();
 	}
 	
+		// Deletes all Assets in a given list
+	private void deleteMultipleAssets(ArrayList<Asset> assetList) {
+		for( Asset a : assetList )
+		{
+			if( a instanceof Folder )
+			{
+				deleteMultipleAssets(((Folder) a).getAllAssets());
+				continue;
+			}
+			
+			Application.controller.removeAsset(a);
+		}
+	}
+	
 		// Deletes the currently selected Assets from the Project
 	private void actionDelete() {
 		if( this.assetSelectionManager.getSelection().size() <= 0 )
@@ -198,9 +240,7 @@ public class AssetPane extends GUIComponent implements Vendor {
 		if( result == JOptionPane.NO_OPTION )
 		return;
 		
-		for( Asset a : this.assetSelectionManager.getSelection() )
-		Application.controller.removeAsset(a);
-		
+		deleteMultipleAssets(this.assetSelectionManager.getSelection());
 		update();
 	}
 }

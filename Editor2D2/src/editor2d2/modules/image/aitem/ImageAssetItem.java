@@ -24,7 +24,7 @@ public class ImageAssetItem extends AssetItem {
 		BufferedImage img = null;
 		
 		if( src != null )
-		((Image) this.source).getImage();
+		img = src.getImage();
 		
 		if( img == null )
 		img = Application.resources.getGraphic("icon-null-texture");

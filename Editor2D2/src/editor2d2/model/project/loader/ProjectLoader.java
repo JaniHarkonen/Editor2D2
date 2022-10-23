@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayDeque;
 
 import editor2d2.model.project.Asset;
+import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Layer;
@@ -39,6 +41,13 @@ public class ProjectLoader {
 		// loaded
 	private Layer targetLayer;
 	
+		// Dequeue for keeping track of the Folder structure
+		// of the Project
+	private ArrayDeque<Folder> folderStack;
+	
+		// Folder that Assets are being loaded into
+	private Folder targetFolder;
+	
 		// Reference to the loader that is currently being
 		// used to load Placeable
 	private AbstractLoader currentLoader;
@@ -49,6 +58,8 @@ public class ProjectLoader {
 		this.targetLayer = null;
 		this.currentLoader = null;
 		this.expectedLineType = ANY;
+		this.folderStack = new ArrayDeque<Folder>();
+		this.targetFolder = null;
 	}
 	
 
@@ -61,6 +72,10 @@ public class ProjectLoader {
 		return null;
 		
 		this.targetProject = new Project();
+		
+			// Set root Folder
+		this.targetFolder = new Folder();
+		this.targetProject.setRootFolder(this.targetFolder);
 		
 		try
 		{
@@ -169,19 +184,47 @@ public class ProjectLoader {
 			}
 			
 			default: {
+				
 				switch( this.expectedLineType )
 				{
 						// Load an Asset
-					case ASSET:
-						Asset loadedAsset = FactoryService.getFactories(pc.getCommand()).createLoader().loadAsset(pc);
-						this.targetProject.addAsset(loadedAsset);
+					case ASSET: {
+						switch( pc.getCommand() )
+						{
+								// Create a Folder
+							case "folder": {
+								Folder f = new Folder();
+								String name = pc.getString(0);
+								
+								f.setName(name);
+								this.folderStack.push(this.targetFolder);
+								this.targetFolder.addAsset(f);
+								this.targetFolder = f;
+								
+								break;
+							}
+								
+								// Ending of the Folder
+							case "/folder": this.targetFolder = this.folderStack.pop(); break;
+								
+								// Load an Asset in the currently targeted Folder
+							default: {
+								Asset loadedAsset = FactoryService.getFactories(pc.getCommand()).createLoader().loadAsset(pc);
+								this.targetProject.addAsset(loadedAsset, this.targetFolder);
+								
+								break;
+							}
+						}
+						
 						break;
+					}
 					
 						// Load a Placeable
-					case PLACEABLE:
+					case PLACEABLE: {
 						Asset sourceAsset = this.targetProject.getAsset(pc.getCommand());
 						this.currentLoader.loadPlaceable(pc, sourceAsset, this.targetLayer);
 						break;
+					}
 					
 					default: return PARSE_FAILED;
 				}

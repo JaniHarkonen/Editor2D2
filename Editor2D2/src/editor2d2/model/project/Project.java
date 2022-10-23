@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import editor2d2.DebugUtils;
 import editor2d2.model.project.scene.Scene;
 
 public class Project {
@@ -20,11 +21,15 @@ public class Project {
 		// Mapping of Assets to their identifiers
 	private final Map<String, Asset> assetMap;
 	
+		// Folder in which all the Assets are contained
+	private Folder rootFolder;
+	
 	
 	public Project() {
 		this.scenes = new ArrayList<Scene>();
 		this.assets = new ArrayList<Asset>();
 		this.assetMap = new HashMap<String, Asset>();
+		this.rootFolder = new Folder();
 	}
 	
 	
@@ -37,26 +42,97 @@ public class Project {
 	}
 	
 		// Adds an asset into the project
-	public void addAsset(Asset asset) {
+	public void addAsset(Asset asset, Folder folder) {
 		if( asset == null )
 		return;
 		
-		this.assets.add(asset);
-		this.assetMap.put(asset.getIdentifier(), asset);
+		folder.addAsset(asset);
+		
+		if( !(asset instanceof Folder) )
+		{
+			this.assetMap.put(asset.getIdentifier(), asset);
+			this.assets.add(asset);
+		}
 	}
 	
 		// Removes a given asset from the Project
-	public void removeAsset(Asset asset) {
-		this.assetMap.remove(asset.getIdentifier());
+	public void removeAsset(Asset asset, Folder folder) {
+		if( folder == null )
+		{
+			DebugUtils.log("null folderino detecterido", this);
+			return;
+		}
 		
-		for( int i = 0; i < this.assets.size(); i++ )
+		boolean isFolder = asset instanceof Folder;
+		
+		if( isFolder )
+		{
+			Folder f = (Folder) asset;
+			ArrayList<Asset> folderAssets = f.getAllAssets();
+			
+			while( folderAssets.size() > 0 )
+			removeAsset(folderAssets.get(0), f);
+			
+			f.getParentFolder().removeAsset(f);
+		}
+		else
+		{
+			this.assetMap.remove(asset.getIdentifier());
+			
+			for( int i = 0; i < this.assets.size(); i++ )
+			{
+				if( this.assets.get(i) != asset )
+				continue;
+				
+				this.assets.remove(i);
+				break;
+			}
+			
+			folder.removeAsset(asset);
+		}
+		
+			// Remove from the list
+		/*for( int i = 0; i < this.assets.size(); i++ )
 		{
 			if( this.assets.get(i) != asset )
 			continue;
 			
 			this.assets.remove(i);
-			return;
+			break;
 		}
+		
+		if( !isFolder )
+		{
+				// Remove from the identifier map
+			this.assetMap.remove(asset.getIdentifier());
+			
+				// Find the parent Folder and remove
+			int s = getRootFolder().getAllAssets().size();
+			for( int i = 0; i < s; i++ )
+			
+		}
+		else
+		{
+				// Remove from the parent folder
+			Folder target = (Folder) asset;
+			target.getParentFolder().removeAsset(target);
+			
+				// Remove the contents of the Folder
+			for(  )
+		}*/
+	}
+	
+		// Determines the Folder that a given Asset is
+		// located in and removes it from the Project
+	public void removeAsset(Asset asset) {
+		Folder parentFolder = null;
+		
+		if( asset instanceof Folder )
+		parentFolder = ((Folder) asset).getParentFolder();
+		else
+		parentFolder = getRootFolder().findSubfolderOf(asset);
+		
+		removeAsset(asset, parentFolder);
 	}
 	
 	
@@ -98,8 +174,19 @@ public class Project {
 		return this.assetMap.get(identifier);
 	}
 	
+		// Returns a reference to the root Folder in which all the
+		// Assets are contained
+	public Folder getRootFolder() {
+		return this.rootFolder;
+	}
+	
 		// Sets the name of the project
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+		// Sets the root Folder in which all the Assets are contained
+	public void setRootFolder(Folder folder) {
+		this.rootFolder = folder;
 	}
 }

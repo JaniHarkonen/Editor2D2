@@ -28,23 +28,20 @@ public abstract class AssetItem extends GUIComponent {
 	protected JPanel container;
 	
 	
-	protected AssetItem(AssetPane host, Asset source) {
+	protected AssetItem(AssetPane host, Asset source, String overrideName) {
 		this.host = host;
 		this.source = source;
 		this.isMouseOver = false;
 		this.container = GUIUtilities.createDefaultPanel();
-		this.container.add(drawIcon());
-		this.container.add(new JLabel(this.source.getName()));
 		
+		this.container.add(drawIcon());
+		this.container.add(new JLabel(overrideName));
 		this.container.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if( e.getButton() == GUIUtilities.MB_LEFT )
-				{
-					//Application.controller.selectAsset(source);
-					host.selectAsset(source);
-				}
+				if( GUIUtilities.checkLeftClick(e) )
+				actionSelect();
 			}
 			
 			@Override
@@ -63,19 +60,31 @@ public abstract class AssetItem extends GUIComponent {
 		this.container.setPreferredSize(new Dimension(128, 128));
 	}
 	
+	protected AssetItem(AssetPane host, Asset source) {
+		this(host, source, source.getName());
+	}
+	
 
 	@Override
 	protected JPanel draw() {
 		if( this.isMouseOver )
 		this.container.setBorder(BorderFactory.createEtchedBorder());
 		else
-		this.container.setBorder(null);
+		this.container.setBorder(BorderFactory.createEmptyBorder());
 		
 		if( this.host.checkSelected(this.source) )
-		this.container.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		this.container.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		return this.container;
 	}
 	
+		// Selects the Asset represented by the AssetItem and
+		// updates the Controller and the AssetPane
+	protected void actionSelect() {
+		this.host.selectAsset(this.source);
+		//Application.controller.selectAsset(this.source);
+	}
+	
+		// Draws the AssetItem icon inside the draw-method
 	protected abstract JPanel drawIcon();
 }
