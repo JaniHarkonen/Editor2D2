@@ -8,7 +8,6 @@ OVERVIEW
 SPECIFICS
 - create folder support
 	-- ? folders should translate to folders in file system
-	-- add ability to create folders of Assets
 	-- add ability to remove folders of Assets
 - create drop menu for AssetPane
 	-- add ability to select multiple Assets
