@@ -1,12 +1,13 @@
 package editor2d2.gui.body.assetpane;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -108,9 +109,13 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	@SuppressWarnings("serial")
 	@Override
 	protected JPanel draw() {
-		JPanel container = GUIUtilities.createDefaultPanel();
-		container.add(new JLabel("Assets"));
-		container.add(new JLabel("======================================================="));
+		JPanel container = new JPanel();
+		container.setBorder(BorderFactory.createTitledBorder("Assets"));
+		
+		GridLayout loGrid = new GridLayout(0, 3);
+		loGrid.setHgap(16);
+		loGrid.setVgap(16);
+		container.setLayout(loGrid);
 		
 			// Create the "up one folder"-Folder
 		Folder parentFolder = this.openFolder.getParentFolder();
@@ -142,11 +147,10 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 						updateWithState();
 					}
 				});
-				menuCreate.add(itemNewFolder);
 				
 				menuCreate.add(itemNewFolder);
 				
-					// Context menu - Create - Populate
+					// Context menu - Create - Populate Assets
 				for( String type : FactoryService.getClassTypes() )
 				{
 					String title = GUIUtilities.getFirstLetterUppercase(type);
@@ -198,20 +202,29 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			public void mousePressed(MouseEvent e) {
 				if( GUIUtilities.checkRightClick(e) )
 				pmAssets.show(e.getComponent(), e.getX(), e.getY());
+				
+				final int MB_BACK = 4;
+				
+				if( e.getButton() == MB_BACK )
+				Application.controller.openFolder(openFolder.getParentFolder());
 			}
 		});
 		
+			// Create the scroll pane
 		this.scrollPane = new JScrollPane(container);
 		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
+			// Adjust scroll pane position and configure
+			// scroll speed
 		JScrollBar verticalScrollBar = this.scrollPane.getVerticalScrollBar();
 		verticalScrollBar.setUnitIncrement(16);
 		verticalScrollBar.setValue(this.scrollPanePosition);
 		
+			// Final container for the scroll pane
 		JPanel containerContainer = GUIUtilities.createDefaultPanel();
 		containerContainer.add(this.scrollPane);
-
+		
 		return containerContainer;
 	}
 	
