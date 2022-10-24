@@ -2,6 +2,7 @@ package editor2d2.model.app;
 
 import editor2d2.model.app.tool.TSelect;
 import editor2d2.model.app.tool.Tool;
+import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 
@@ -19,6 +20,9 @@ public class AppState {
 		// Reference to the ActionHistory that tracks actions and
 		// can be used to undo and redo them
 	public ActionHistory actionHistory;
+	
+		// Reference to the currently open Folder
+	public Folder openFolder;
 	
 	
 	public AppState() {

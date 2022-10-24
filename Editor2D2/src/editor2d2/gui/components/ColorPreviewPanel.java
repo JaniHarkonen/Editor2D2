@@ -55,6 +55,8 @@ public class ColorPreviewPanel extends JPanel {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
 		String srcValue = this.value;
 		Color srcColor = this.color;
 		

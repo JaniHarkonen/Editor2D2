@@ -100,12 +100,12 @@ public class DebugUtils {
 		Image img = new Image();
 		img.setName("grass");
 		img.setImage(Application.resources.getGraphic("test-grass"));
-		dummy.addAsset(img);
+		dummy.addAsset(img, dummy.getRootFolder());
 		
 		img = new Image();
 		img.setName("dirt");
 		img.setImage(Application.resources.getGraphic("test-dirt"));
-		dummy.addAsset(img);
+		dummy.addAsset(img, dummy.getRootFolder());
 		
 		controller.openProject(dummy);
 	}

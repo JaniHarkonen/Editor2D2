@@ -62,7 +62,7 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		Placeable p = Application.controller.selectionManager.getSelectedPlaceable();
+		Placeable p = Application.controller.placeableSelectionManager.getSelectedItem();
 		
 		if( p != null )
 		{
@@ -111,7 +111,7 @@ public class Root extends GUIComponent implements Subscriber {
 		containerTopSide.add(tpScenes);
 		
 		spAssets.add(containerTopSide, SwingConstants.TOP);					// Scene pane
-		spAssets.add((new AssetPane(this.targetProject)).render(), SwingConstants.BOTTOM);	// Asset pane
+		spAssets.add((new AssetPane()).render(), SwingConstants.BOTTOM);	// Asset pane
 		spAssets.setDividerLocation(Window.DEFAULT_WINDOW_HEIGHT / 2);
 		
 		containerLeftSide.add(spAssets);

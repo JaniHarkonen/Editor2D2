@@ -1,10 +1,14 @@
 package editor2d2.modules.data;
 
+import editor2d2.gui.body.assetpane.AssetItem;
+import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
+import editor2d2.modules.data.aitem.DataAssetItem;
 import editor2d2.modules.data.asset.Data;
 import editor2d2.modules.data.layer.DataLayer;
 import editor2d2.modules.data.loader.DataLoader;
@@ -63,5 +67,10 @@ public class Factories extends AbstractFactories<Data> {
 	@Override
 	public DataWriter createWriter() {
 		return new DataWriter();
+	}
+	
+	@Override
+	public AssetItem createAssetItem(AssetPane host, Asset source) {
+		return new DataAssetItem(host, source);
 	}
 }

@@ -1,8 +1,11 @@
-TODO - LoadSave
+TODO - ...
 
 OVERVIEW
 
+
 SPECIFICS
+
+	
 
 LATER
 - return to LayerManagerPane after TOOLS
@@ -14,7 +17,31 @@ LATER
 	-> fix references to the Controller upon drawing and
 	   figure out a way to determine if a Placeable is
 	   selected without the Controller's SelectionManager
+- ? should SelectionManagers be declared in the AppState
+- de-messify Root
+- ? should JOptionsPane be placed under Window
+- speedup Tile rendering performance by getting the subimage
+  only when the Image the Tile is based on changes
+	-- check other Placeables for render optimizations
+	-- pay attention to memory usage as well
 	   
+TASKS LEFT
+- finish Tools and Actions (undo, redo)
+- add Tools to the Toolbar
+- add Meta Data modal
+- create abstractions for compiling
+	-- compiler is to be implemented on project-by-project
+	   basis, and thus, only abstract classes and interfaces
+	   need to be written
+- make sure that all the functionalities work with minor
+  bugs
+- hotkeys
+- finalize graphics
+- remove DebugUtils and other debug prints and resources
+	-- JohnnyUtils
+- fix remaining minor bugs
+- create a TEMPLATE module
+- remove comments, add Javadoc
 	   
 	   
 SKETCHES

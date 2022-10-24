@@ -16,12 +16,12 @@ public class ASelect extends Action {
 
 	@Override
 	public void undo() {
-		this.controller.selectionManager.deselect();
+		this.controller.placeableSelectionManager.deselect();
 	}
 
 	@Override
 	public void redo() {
-		this.controller.selectionManager.setSelection(this.selection);
+		this.controller.placeableSelectionManager.setSelection(this.selection);
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class ASelect extends Action {
 		this.controller = ac.controller;
 		
 		if( selection == null || selection.size() <= 0 )
-		this.controller.selectionManager.deselect();
+		this.controller.placeableSelectionManager.deselect();
 		else
 		{
-			this.controller.selectionManager.setSelection(selection);
+			this.controller.placeableSelectionManager.setSelection(selection);
 			this.selection = selection;
 		}
 	}

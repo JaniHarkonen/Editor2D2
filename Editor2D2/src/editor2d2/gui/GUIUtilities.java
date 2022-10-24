@@ -1,5 +1,7 @@
 package editor2d2.gui;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -13,6 +15,14 @@ public class GUIUtilities {
     public static final int BOX_LINE_AXIS = 2;
 
     public static final int BOX_PAGE_AXIS = 3;
+    
+    
+    public static final int MB_LEFT = 1;
+    
+    public static final int MB_MIDDLE = 2;
+    
+    public static final int MB_RIGHT = 3;
+    
 
 		// Do not instantiate, utility methods only
 	private GUIUtilities() { }
@@ -54,5 +64,20 @@ public class GUIUtilities {
 	public static void convertFirstLetterUppercase(String[] strings) {
 		for( int i = 0; i < strings.length; i++ )
 		strings[i] = getFirstLetterUppercase(strings[i]);
+	}
+	
+		// Returns whether a given MouseEvent was fired upon left-click
+	public static boolean checkLeftClick(MouseEvent e) {
+		return (e.getButton() == 1);
+	}
+	
+		// Returns whether a given MouseEvent was fired upon middle-click
+	public static boolean checkMiddleClick(MouseEvent e) {
+		return (e.getButton() == 2);
+	}
+	
+		// Returns whether a given MouseEvent was fired upon right-click
+	public static boolean checkRightClick(MouseEvent e) {
+		return (e.getButton() == 3);
 	}
 }

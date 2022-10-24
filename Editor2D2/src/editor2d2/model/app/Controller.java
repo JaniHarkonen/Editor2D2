@@ -6,10 +6,12 @@ import editor2d2.model.Handles;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.Asset;
+import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
@@ -20,7 +22,7 @@ public class Controller implements Vendor {
 	
 		// Reference to the SelectionManager that handles Placeable
 		// selections
-	public final SelectionManager selectionManager;
+	public final SelectionManager<Placeable> placeableSelectionManager;
 	
 		// Reference to the SubscriptionService that the Controller uses
 		// to notify the GUI when the AppState changes
@@ -34,7 +36,7 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
-		this.selectionManager = new SelectionManager();
+		this.placeableSelectionManager = new SelectionManager<Placeable>();
 		
 		DebugUtils.controllerDebugSetup(this);
 	}
@@ -53,7 +55,20 @@ public class Controller implements Vendor {
 		// Opens a new project and sets it as the active one
 	public void openProject(Project project) {
 		this.appState.activeProject = project;
+		
+		openFolder(project.getRootFolder());
+		
 		this.subscriptionService.register(Handles.ACTIVE_PROJECT, this);
+	}
+	
+		// Opens a given Folder for display in the AssetPane
+	public void openFolder(Folder folder) {
+		this.appState.openFolder = folder;
+		
+		if( folder == null )
+		this.appState.openFolder = getActiveProject().getRootFolder();
+		
+		this.subscriptionService.register(Handles.OPEN_FOLDER, this);
 	}
 	
 		// Creates a new Scene of a given anme and adds it to the
@@ -76,13 +91,23 @@ public class Controller implements Vendor {
 	
 		// Adds a given Asset to the currently active Project
 	public void addNewAsset(Asset newAsset) {
-		getActiveProject().addAsset(newAsset);
+		getActiveProject().addAsset(newAsset, getOpenFolder());
 		Application.window.getModalWindow().getAssetPane().update();
 	}
 	
+		// Removes a given Asset from the currently active Project
+	public void removeAsset(Asset asset) {
+		getActiveProject().removeAsset(asset);
+	}
+	
+	/******************* SELECTION *********************/
+	
 		// Selects an Asset that is to be placed
 	public void selectAsset(Asset asset) {
-		this.selectionManager.setSelection(asset.createPlaceable());
+		if( asset instanceof Folder )
+		return;
+		
+		this.placeableSelectionManager.setSelection(asset.createPlaceable());
 		this.subscriptionService.register(Handles.SELECTED_PLACEABLE, this);
 	}
 	
@@ -90,6 +115,8 @@ public class Controller implements Vendor {
 	public void selectLayer(Layer layer) {
 		this.appState.activeLayer = layer;
 	}
+	
+	/****************** TOOL *********************/
 	
 		// Selects a tool that will be used to insert Placeables
 		// into the active Scene
@@ -104,7 +131,7 @@ public class Controller implements Vendor {
 		if( tc.targetLayer == null )
 		tc.targetLayer = this.appState.activeLayer;
 		
-		tc.selection = this.selectionManager.getSelection();
+		tc.selection = this.placeableSelectionManager.getSelection();
 		
 		if( stop )
 		return this.appState.selectedTool.stop(tc);
@@ -116,6 +143,9 @@ public class Controller implements Vendor {
 	public int useTool(ToolContext tc) {
 		return useTool(tc, false);
 	}
+	
+	
+	/******************** ACTION **********************/
 	
 		// Undoes the latest action
 	public void undoAction() {
@@ -144,5 +174,10 @@ public class Controller implements Vendor {
 		// performed Actions
 	public ActionHistory getActionHistory() {
 		return this.appState.actionHistory;
+	}
+	
+		// Returns a reference to the currently open Folder
+	public Folder getOpenFolder() {
+		return this.appState.openFolder;
 	}
 }
