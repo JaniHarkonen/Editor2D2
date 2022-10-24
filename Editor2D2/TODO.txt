@@ -6,11 +6,8 @@ OVERVIEW
 - add a drop menu to AssetsPane
 
 SPECIFICS
-- create folder support
-	-- ? folders should translate to folders in file system
-	-- add ability to remove folders of Assets
-- create drop menu for AssetPane
-	-- add ability to select multiple Assets
+- implement a proper LayoutManager for AssetPane so that
+  the AssetItems form a grid like in file explorer
 	
 
 LATER

@@ -48,7 +48,7 @@ public abstract class GUIComponent {
 	
 		// Re-renders the component (same as render but doesn't return
 		// the resulting JPanel)
-	public final void update() {
+	public void update() {
 		render();
 	}
 	

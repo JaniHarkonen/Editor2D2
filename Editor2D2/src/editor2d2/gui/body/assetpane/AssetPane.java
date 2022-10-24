@@ -12,9 +12,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
@@ -24,6 +26,7 @@ import editor2d2.model.app.Controller;
 import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Folder;
+import editor2d2.model.project.Project;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -37,12 +40,21 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		// of Assets
 	private SelectionManager<Asset> assetSelectionManager;
 	
+		// Reference to the JScrollPane that can be used to browse the
+		// AssetPane
+	private JScrollPane scrollPane;
+	
+		// Current JScrollPane position
+	private int scrollPanePosition;
+	
 	
 	public AssetPane() {
 		this.assetSelectionManager = new SelectionManager<Asset>();
 		
 			// Register this AssetPane
 		Application.window.subscriptionService.register(Handles.ASSET_PANE, this);
+		
+		this.scrollPanePosition = 0;
 		
 			// Get or subscribe for the open Folder reference
 		String openFolderHandle = editor2d2.model.Handles.OPEN_FOLDER;
@@ -59,19 +71,19 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		// Selects a given Asset
 	public void selectAsset(Asset a) {
 		this.assetSelectionManager.setSelection(a);
-		update();
+		updateWithState();
 	}
 	
 		// Adds a given Asset to the selection
 	public void addSelection(Asset a) {
 		this.assetSelectionManager.addSelection(a);
-		update();
+		updateWithState();
 	}
 	
 		// De-selects a given Asset from the selection
 	public void deselectAsset(Asset a) {
 		this.assetSelectionManager.removeSelection(a);
-		update();
+		updateWithState();
 	}
 	
 	@Override
@@ -79,8 +91,17 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		if( handle.equals(editor2d2.model.Handles.OPEN_FOLDER) )
 		{
 			this.openFolder = ((Controller) vendor).getOpenFolder();
-			update();
+			updateWithState();
 		}
+	}
+	
+		// Saves the position of the scroll bar and updates the
+		// component
+	public void updateWithState() {
+		this.scrollPanePosition = this.scrollPane.getVerticalScrollBar().getValue() - 4;
+		DebugUtils.log("scrollpane POS: " + this.scrollPanePosition, this);
+		DebugUtils.log("scroll MAX: " + (this.scrollPane.getVerticalScrollBar().getMaximum() - this.scrollPane.getHeight()), this);
+		update();
 	}
 
 
@@ -118,7 +139,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						actionNewFolder();
-						update();
+						updateWithState();
 					}
 				});
 				menuCreate.add(itemNewFolder);
@@ -143,7 +164,6 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					actionEdit();
-					update();
 				}
 			});
 			
@@ -155,7 +175,6 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					actionRename();
-					update();
 				}
 			});
 			
@@ -167,7 +186,6 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					actionDelete();
-					update();
 				}
 			});
 			
@@ -183,16 +201,20 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			}
 		});
 		
-		JScrollPane scroller = new JScrollPane(container);
-		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scroller.getVerticalScrollBar().setUnitIncrement(16);
+		this.scrollPane = new JScrollPane(container);
+		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		JScrollBar verticalScrollBar = this.scrollPane.getVerticalScrollBar();
+		verticalScrollBar.setUnitIncrement(16);
+		verticalScrollBar.setValue(this.scrollPanePosition);
 		
 		JPanel containerContainer = GUIUtilities.createDefaultPanel();
-		containerContainer.add(scroller);
-		
+		containerContainer.add(this.scrollPane);
+
 		return containerContainer;
 	}
+	
 	
 		// Creates a clickable menu item for the "Asset"-menu
 	@SuppressWarnings("serial")
@@ -203,7 +225,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Application.window.popup(mv);
-				update();
+				updateWithState();
 			}
 		});
 	}
@@ -219,7 +241,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		newFolder.setName(folderName);
 		
 		Application.controller.addNewAsset(newFolder);
-		update();
+		updateWithState();
 	}
 	
 		// Opens a ModalWindow for the selected Asset
@@ -251,18 +273,18 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		
 			// Creates a new Scene and adds it to the target project
 		asset.setName(newName);
-		update();
+		updateWithState();
 	}
 	
 		// Deletes all Assets in a given list
 	private void deleteMultipleAssets(ArrayList<Asset> assetList) {
 		for( Asset a : assetList )
 		{
-			if( a instanceof Folder )
+			/*if( a instanceof Folder )
 			{
 				deleteMultipleAssets(((Folder) a).getAllAssets());
 				continue;
-			}
+			}*/
 			
 			Application.controller.removeAsset(a);
 		}
@@ -283,6 +305,10 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		return;
 		
 		deleteMultipleAssets(this.assetSelectionManager.getSelection());
-		update();
+		Project project = Application.controller.getActiveProject();
+		Application.controller.getActiveProject().getRootFolder().printFolder();
+		for( Asset a : project.getAllAssets() )
+		System.out.println(a.getName());
+		updateWithState();
 	}
 }

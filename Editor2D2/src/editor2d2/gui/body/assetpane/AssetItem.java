@@ -89,16 +89,20 @@ public abstract class AssetItem extends GUIComponent {
 	protected void actionSelect(MouseEvent e) {
 		AssetPane host = this.host;
 		Asset src = this.source;
+		boolean isSelected = host.checkSelected(src);
 		
 		if( e.isControlDown() )
 		{
-			if( host.checkSelected(src) )
+			if( isSelected )
 			host.deselectAsset(src);
 			else
 			host.addSelection(src);
 		}
 		else
-		host.selectAsset(src);
+		{
+			if( !isSelected )
+			host.selectAsset(src);
+		}
 		//Application.controller.selectAsset(this.source);
 	}
 	

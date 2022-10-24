@@ -29,9 +29,6 @@ public class FolderItem extends AssetItem {
 	}
 	
 	@Override
-	protected void actionSelect(MouseEvent e) { }
-	
-	@Override
 	protected void actionPrimaryFunction(MouseEvent e) {
 		Application.controller.openFolder((Folder) this.source);
 	}

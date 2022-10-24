@@ -2,6 +2,8 @@ package editor2d2.model.project;
 
 import java.util.ArrayList;
 
+import editor2d2.DebugUtils;
+
 public class Folder extends PseudoAsset {
 
 	
@@ -48,6 +50,7 @@ public class Folder extends PseudoAsset {
 			continue;
 			
 			this.assets.remove(i);
+			break;
 		}
 	}
 	
@@ -101,5 +104,18 @@ public class Folder extends PseudoAsset {
 		// Sets the parent Folder
 	public void setParentFolder(Folder parentFolder) {
 		this.parentFolder = parentFolder;
+	}
+	
+	
+		// DEBUG - prints the folder contents
+	public void printFolder() {
+		DebugUtils.log("folder: " + getName(), this);
+		for( Asset a : this.assets )
+		{
+			if( a instanceof Folder )
+			((Folder) a).printFolder();
+			else
+			System.out.println(a);
+		}
 	}
 }
