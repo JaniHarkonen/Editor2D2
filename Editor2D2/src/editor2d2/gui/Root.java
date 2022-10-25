@@ -74,7 +74,7 @@ public class Root extends GUIComponent implements Subscriber {
 		containerRightSide.add((new LayerManagerPane()).render()); 		// Layer manager pane
 		
 			// Scene-asset split
-		JPanel containerTopSide = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_X_AXIS);
+		JPanel containerTopSide = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
 		JSplitPane spAssets = new JSplitPane(SwingConstants.HORIZONTAL);
 		spAssets.setContinuousLayout(true);

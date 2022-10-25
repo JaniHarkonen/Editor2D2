@@ -30,7 +30,7 @@ public abstract class Layer implements HasAsset {
 	
 	protected Layer(Scene scene, int cellWidth, int cellHeight) {
 		this.scene = scene;
-		this.objectGrid = new Grid(scene.getWidth() / cellWidth, scene.getHeight() / cellHeight, cellWidth, cellHeight);
+		this.objectGrid = new Grid(Math.max(1, scene.getWidth() / cellWidth), Math.max(1, scene.getHeight() / cellHeight), cellWidth, cellHeight);
 		this.name = null;
 		this.isVisible = true;
 		this.opacity = 1.0;

@@ -109,6 +109,11 @@ public class Instance extends Placeable {
 		this.sprite = sprite;
 	}
 	
+		// Sets the rotation of the Instance (in degrees)
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
+	}
+	
 		// Returns the scene Object the instance is based on
 	public EObject getObject() {
 		return (EObject) this.asset;

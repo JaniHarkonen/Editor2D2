@@ -1,10 +1,12 @@
-TODO - ...
+TODO - Toolkit
 
 OVERVIEW
-
+- create the functionalities for the rest of the Tools
+- undos and redos aren't necessary yet
 
 SPECIFICS
-
+- write the rest of the Tools
+- write the rest of the Actions
 	
 
 LATER
