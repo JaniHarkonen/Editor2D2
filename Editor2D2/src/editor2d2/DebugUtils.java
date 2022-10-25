@@ -64,7 +64,7 @@ public class DebugUtils {
 				dl1.setName("weapon.dat");
 				
 					// Tiles
-				int d = 0;
+				/*int d = 0;
 				for( int x = 0; x < 6; x++ )
 				{
 					for( int y = 0; y < 6; y++ )
@@ -72,7 +72,7 @@ public class DebugUtils {
 						tl1.place(x, y, new Tile());
 						d++;
 					}
-				}
+				}*/
 				
 			scene1.addLayer(tl1);
 			scene1.addLayer(ol1);
