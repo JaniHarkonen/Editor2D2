@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -21,12 +22,15 @@ import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
-public class SceneView extends GUIComponent {
+public class SceneView extends GUIComponent implements Subscriber {
 	
 		// Reference to the Scene that this view will render
 	private final Scene scene;
@@ -44,6 +48,31 @@ public class SceneView extends GUIComponent {
 		
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
+		
+		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+	}
+	
+	
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		if( HotkeyListener.didKeyUpdate(handle) )
+		{
+			HotkeyListener hl = Application.controller.getHotkeyListener();
+			
+				// Undo
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
+			{
+				Application.controller.undoAction();
+				update();
+			}
+			
+				// Redo
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Y') )
+			{
+				Application.controller.redoAction();
+				update();
+			}
+		}
 	}
 	
 

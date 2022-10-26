@@ -99,7 +99,7 @@ public abstract class Layer implements HasAsset {
 	
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
-		place(cx, cy, null);
+		this.objectGrid.put(cx, cy, null);
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
@@ -140,6 +140,18 @@ public abstract class Layer implements HasAsset {
 	
 	public ArrayList<Placeable> selectPlaceables(double x, double y) {
 		return selectPlaceables(x, y, x, y);
+	}
+	
+		// Returns a given X-coordinate snapped to the corresponding
+		// cellular coordinate in the object Grid
+	public int getCellX(double x) {
+		return (int) (x / this.objectGrid.getCellWidth());
+	}
+	
+		// Returns a given Y-coordinate snapped to the corresponding
+		// cellular coordinate in the object Grid
+	public int getCellY(double y) {
+		return (int) (y / this.objectGrid.getCellHeight());
 	}
 	
 	

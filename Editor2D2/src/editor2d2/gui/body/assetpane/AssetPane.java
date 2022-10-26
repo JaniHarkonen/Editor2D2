@@ -17,13 +17,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.app.Controller;
+import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Folder;
@@ -61,6 +61,9 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		String openFolderHandle = editor2d2.model.Handles.OPEN_FOLDER;
 		Controller vendor = (Controller) Application.controller.subscriptionService.get(openFolderHandle, "AssetPane", this); 
 		this.openFolder = vendor.getOpenFolder();
+		
+			// Subscribe for keyboard input
+		Application.controller.getHotkeyListener().subscribe("AssetPane", this);
 	}
 	
 	
@@ -89,10 +92,15 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
-		if( handle.equals(editor2d2.model.Handles.OPEN_FOLDER) )
+		switch( handle )
 		{
-			this.openFolder = ((Controller) vendor).getOpenFolder();
-			updateWithState();
+			case editor2d2.model.Handles.OPEN_FOLDER:
+				this.openFolder = ((Controller) vendor).getOpenFolder();
+				updateWithState();
+				break;
+			
+			case HotkeyListener.KEY_UPDATED_HANDLE:
+				break;
 		}
 	}
 	
@@ -100,8 +108,6 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		// component
 	public void updateWithState() {
 		this.scrollPanePosition = this.scrollPane.getVerticalScrollBar().getValue() - 4;
-		DebugUtils.log("scrollpane POS: " + this.scrollPanePosition, this);
-		DebugUtils.log("scroll MAX: " + (this.scrollPane.getVerticalScrollBar().getMaximum() - this.scrollPane.getHeight()), this);
 		update();
 	}
 
@@ -292,15 +298,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		// Deletes all Assets in a given list
 	private void deleteMultipleAssets(ArrayList<Asset> assetList) {
 		for( Asset a : assetList )
-		{
-			/*if( a instanceof Folder )
-			{
-				deleteMultipleAssets(((Folder) a).getAllAssets());
-				continue;
-			}*/
-			
-			Application.controller.removeAsset(a);
-		}
+		Application.controller.removeAsset(a);
 	}
 	
 		// Deletes the currently selected Assets from the Project

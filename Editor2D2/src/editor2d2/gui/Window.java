@@ -6,6 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 
+import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
@@ -65,6 +66,8 @@ public class Window implements Vendor {
 		this.window.setLocationRelativeTo(null);
 		this.window.setTitle(this.title);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.window.addKeyListener(Application.controller.getHotkeyListener());
+		this.window.setFocusable(true);
 		
 		this.window.setJMenuBar(new WindowToolbar());
 		this.window.add((new Root()).render());

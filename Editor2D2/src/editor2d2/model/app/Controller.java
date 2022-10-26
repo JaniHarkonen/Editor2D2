@@ -151,6 +151,11 @@ public class Controller implements Vendor {
 	public void undoAction() {
 		this.appState.actionHistory.undo();
 	}
+	
+		// Re-does the next action in the ActionHistory
+	public void redoAction() {
+		this.appState.actionHistory.redo();
+	}
 
 	
 	/************************* GETTERS ************************/
@@ -179,5 +184,10 @@ public class Controller implements Vendor {
 		// Returns a reference to the currently open Folder
 	public Folder getOpenFolder() {
 		return this.appState.openFolder;
+	}
+	
+		// Returns a refernece to the hotkey listener
+	public HotkeyListener getHotkeyListener() {
+		return this.appState.hotkeyListener;
 	}
 }
