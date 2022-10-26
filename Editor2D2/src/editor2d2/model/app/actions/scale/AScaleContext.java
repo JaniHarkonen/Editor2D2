@@ -4,10 +4,13 @@ import editor2d2.model.app.actions.ActionContext;
 import editor2d2.model.app.tool.ToolContext;
 
 public class AScaleContext extends ActionContext {
+	
+	public double scaleIncrement;
+	
 
-	protected AScaleContext(ToolContext tc) {
+	public AScaleContext(ToolContext tc) {
 		super(tc);
-		// TODO Auto-generated constructor stub
+		this.scaleIncrement = 0;
 	}
 
 }
