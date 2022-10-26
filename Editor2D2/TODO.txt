@@ -1,10 +1,14 @@
-TODO - HotKeys
+TODO - UndoToRedo
 
 OVERVIEW
-- create an architecture to listen for key presses
+- implement undos and redos for all the remaining
+  Actions
 
 SPECIFICS
-	
+- check and possibly fix undo and redo for ASelect
+- add undo and redo for AScale
+- add undo and redo for ARotate
+- add undo and redo for AFill
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
@@ -30,9 +34,9 @@ LATER
 	   
 TASKS LEFT
 - finish Tools and Actions (undo, redo)
-- write TMove
 - PropertiesPane should open for already placed Placeables
   too
+- write TMove (undo, redo)
 - add Meta Data modal
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
