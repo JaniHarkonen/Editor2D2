@@ -9,6 +9,11 @@ SPECIFICS
 - add undo and redo for AScale
 - add undo and redo for ARotate
 - add undo and redo for AFill
+
+- use ToolContext's selection instead of Controller's
+  selection inside Actions
+- undoing APlace doesn't work because Instances aren't
+  cellular
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
