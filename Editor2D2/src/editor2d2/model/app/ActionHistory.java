@@ -15,7 +15,7 @@ public class ActionHistory {
 	
 	public ActionHistory() {
 		this.actionHistory = new ArrayList<Action>();
-		this.cursor = 0;
+		this.cursor = -1;
 	}
 	
 	
@@ -23,11 +23,11 @@ public class ActionHistory {
 		// If the cursor position is NOT at the final position, the actions
 		// after the cursor will be removed and overridden.
 	public void log(Action action) {
-		if( this.cursor < this.actionHistory.size() )
+		if( this.cursor < this.actionHistory.size() - 1 )
 		{
-			int s = this.actionHistory.size() - this.cursor;
+			int s = this.actionHistory.size() - this.cursor - 1;
 			for( int i = 0; i < s; i++ )
-			this.actionHistory.remove(this.cursor);
+			this.actionHistory.remove(this.cursor + 1);
 		}
 		
 		this.actionHistory.add(action);
@@ -37,7 +37,7 @@ public class ActionHistory {
 		// Undoes the latest action in the action history and backtracks the
 		// cursor
 	public void undo() {
-		if( this.cursor <= 0 )
+		if( this.cursor < 0 )
 		return;
 		
 		this.actionHistory.get(this.cursor).undo();
@@ -46,16 +46,16 @@ public class ActionHistory {
 	
 		// Re-does the next action and advances the cursor
 	public void redo() {
-		if( this.cursor >= this.actionHistory.size() )
+		if( this.cursor >= this.actionHistory.size() - 1 )
 		return;
 		
-		this.actionHistory.get(this.cursor).redo();
 		this.cursor++;
+		this.actionHistory.get(this.cursor).redo();
 	}
 	
 		// Re-does all actions that were undone
 	public void redoAll() {
-		while( this.cursor < this.actionHistory.size() )
+		while( this.cursor < this.actionHistory.size() - 1 )
 		redo();
 	}
 	
@@ -64,13 +64,13 @@ public class ActionHistory {
 		while( this.cursor >= 0 )
 		undo();
 		
-		this.cursor = 0;
+		this.cursor = -1;
 	}
 	
 		// Resets the action history by removing all actions
 		// and resetting the cursor position
 	public void reset() {
 		this.actionHistory.clear();
-		this.cursor = 0;
+		this.cursor = -1;
 	}
 }

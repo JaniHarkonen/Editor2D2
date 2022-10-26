@@ -99,7 +99,7 @@ public abstract class Layer implements HasAsset {
 	
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
-		place(cx, cy, null);
+		this.objectGrid.put(cx, cy, null);
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {

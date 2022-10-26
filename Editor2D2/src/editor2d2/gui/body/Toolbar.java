@@ -3,6 +3,7 @@ package editor2d2.gui.body;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -15,13 +16,39 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CImage;
+import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.Tools;
 import editor2d2.model.app.tool.Tool;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
-public class Toolbar extends GUIComponent {
+public class Toolbar extends GUIComponent implements Subscriber {
 	
 	public static final int DEFAULT_TOOLBAR_ITEM_WIDTH = 48;
 	public static final int DEFAULT_TOOLBAR_ITEM_HEIGHT = 48;
+	
+	
+	public Toolbar() {
+		Application.controller.getHotkeyListener().subscribe("Toolbar", this);
+	}
+	
+	
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		if( HotkeyListener.didKeyUpdate(handle) )
+		{
+			for( Tool t : Tools.getAvailableTools() )
+			{
+				int keyCode = KeyEvent.getExtendedKeyCodeForChar(t.getShortcutKey().toLowerCase().charAt(0));
+				
+				if( HotkeyListener.isSequenceHeld(vendor, keyCode) )
+				{
+					Application.controller.selectTool(t);
+					update();
+				}
+			}
+		}
+	}
 	
 
 	@Override

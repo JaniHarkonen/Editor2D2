@@ -23,9 +23,14 @@ public class AppState {
 		// Reference to the currently open Folder
 	public Folder openFolder;
 	
+		// Reference to the HotkeyListener that listens for
+		// hotkey presses
+	public HotkeyListener hotkeyListener;
+	
 	
 	public AppState() {
 		this.selectedTool = Tools.getAvailableTools()[0];			// DEBUG LINE, REMOVE
 		this.actionHistory = new ActionHistory();
+		this.hotkeyListener = new HotkeyListener();
 	}
 }
