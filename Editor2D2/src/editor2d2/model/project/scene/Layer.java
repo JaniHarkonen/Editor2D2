@@ -142,6 +142,18 @@ public abstract class Layer implements HasAsset {
 		return selectPlaceables(x, y, x, y);
 	}
 	
+		// Returns a given X-coordinate snapped to the corresponding
+		// cellular coordinate in the object Grid
+	public int getCellX(double x) {
+		return (int) (x / this.objectGrid.getCellWidth());
+	}
+	
+		// Returns a given Y-coordinate snapped to the corresponding
+		// cellular coordinate in the object Grid
+	public int getCellY(double y) {
+		return (int) (y / this.objectGrid.getCellHeight());
+	}
+	
 	
 		// Checks whether a Gridable object can be placed onto the layer
 		// TO BE OVERRIDDEN

@@ -30,6 +30,7 @@ LATER
 	   
 TASKS LEFT
 - finish Tools and Actions (undo, redo)
+- write TMove
 - PropertiesPane should open for already placed Placeables
   too
 - add Meta Data modal
@@ -39,6 +40,7 @@ TASKS LEFT
 	   need to be written
 - make sure that Asset deletion affects the Placeables
   derived from them
+- make sure that each Asset has a unique identifier
 - make sure that all the functionalities work with minor
   bugs
 - hotkeys
