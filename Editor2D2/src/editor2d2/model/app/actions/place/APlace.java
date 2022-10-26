@@ -29,7 +29,7 @@ public class APlace extends Action {
 	}
 
 	@Override
-	protected void performImpl(ActionContext c) {
+	public void performImpl(ActionContext c) {
 		APlaceContext ac = (APlaceContext) c;
 		ac.target.attemptPlace(ac.locationX, ac.locationY, ac.placeable);
 		

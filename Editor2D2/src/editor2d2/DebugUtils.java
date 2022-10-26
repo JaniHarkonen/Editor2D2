@@ -64,7 +64,7 @@ public class DebugUtils {
 				dl1.setName("weapon.dat");
 				
 					// Tiles
-				int d = 0;
+				/*int d = 0;
 				for( int x = 0; x < 6; x++ )
 				{
 					for( int y = 0; y < 6; y++ )
@@ -72,7 +72,7 @@ public class DebugUtils {
 						tl1.place(x, y, new Tile());
 						d++;
 					}
-				}
+				}*/
 				
 			scene1.addLayer(tl1);
 			scene1.addLayer(ol1);
@@ -100,11 +100,13 @@ public class DebugUtils {
 		Image img = new Image();
 		img.setName("grass");
 		img.setImage(Application.resources.getGraphic("test-grass"));
+		img.setIdentifier("ID_GRASS");
 		dummy.addAsset(img, dummy.getRootFolder());
 		
 		img = new Image();
 		img.setName("dirt");
 		img.setImage(Application.resources.getGraphic("test-dirt"));
+		img.setIdentifier("ID_DIRT");
 		dummy.addAsset(img, dummy.getRootFolder());
 		
 		controller.openProject(dummy);

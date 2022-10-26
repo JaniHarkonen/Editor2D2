@@ -4,10 +4,14 @@ import editor2d2.model.app.actions.ActionContext;
 import editor2d2.model.app.tool.ToolContext;
 
 public class AMoveContext extends ActionContext {
+	
+	public double startX;
+	public double startY;
+	public double endX;
+	public double endY;
 
-	protected AMoveContext(ToolContext tc) {
+	public AMoveContext(ToolContext tc) {
 		super(tc);
-		// TODO Auto-generated constructor stub
 	}
 
 }

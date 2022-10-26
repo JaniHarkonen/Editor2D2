@@ -30,7 +30,7 @@ public abstract class Layer implements HasAsset {
 	
 	protected Layer(Scene scene, int cellWidth, int cellHeight) {
 		this.scene = scene;
-		this.objectGrid = new Grid(scene.getWidth() / cellWidth, scene.getHeight() / cellHeight, cellWidth, cellHeight);
+		this.objectGrid = new Grid(Math.max(1, scene.getWidth() / cellWidth), Math.max(1, scene.getHeight() / cellHeight), cellWidth, cellHeight);
 		this.name = null;
 		this.isVisible = true;
 		this.opacity = 1.0;
@@ -100,6 +100,17 @@ public abstract class Layer implements HasAsset {
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		place(cx, cy, null);
+	}
+	
+	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+	
+		Placeable p = (Placeable) this.objectGrid.get(cx, cy);
+		
+		if( p != null )
+		selection.add(p);
+		
+		return selection;
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx1, int cy1, int cx2, int cy2) {

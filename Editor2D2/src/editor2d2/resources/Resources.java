@@ -43,6 +43,14 @@ public final class Resources {
 			loadGraphic("icon-asset-folder", path + "assets\\icon_folder.png");
 			loadGraphic("icon-asset-object", path + "assets\\icon_object.png");
 			
+				// Tool icons
+			loadGraphic("icon-tool-select", path + "assets\\icon_tool_select.png");
+			loadGraphic("icon-tool-move", path + "assets\\icon_tool_move.png");
+			loadGraphic("icon-tool-place", path + "assets\\icon_tool_place.png");
+			loadGraphic("icon-tool-fill", path + "assets\\icon_tool_fill.png");
+			loadGraphic("icon-tool-rotate", path + "assets\\icon_tool_rotate.png");
+			//loadGraphic("icon-tool-scale", path + "assets\\icon_tool_scale.png");
+			
 				// Null icons
 			loadGraphic("icon-null-texture", path + "assets\\icon_null_texture.png");
 			loadGraphic("icon-null-object", path + "assets\\icon_null_object.png");

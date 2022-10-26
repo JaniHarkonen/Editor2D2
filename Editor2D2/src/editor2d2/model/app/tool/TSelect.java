@@ -1,5 +1,6 @@
 package editor2d2.model.app.tool;
 
+import editor2d2.Application;
 import editor2d2.model.app.actions.select.ASelect;
 import editor2d2.model.app.actions.select.ASelectContext;
 
@@ -16,12 +17,13 @@ public class TSelect extends Tool {
 		super();
 		this.name = "Select";
 		this.shortcutKey = "S";
+		this.icon = Application.resources.getGraphic("icon-tool-select");
 	}
 	
 	
 	@Override
 	protected int usePrimary(ToolContext c) {
-		if( c.isContinuation == false )
+		if( !c.isContinuation )
 		{
 			this.startX = c.locationX;
 			this.startY = c.locationY;

@@ -25,7 +25,7 @@ public class ASelect extends Action {
 	}
 
 	@Override
-	protected void performImpl(ActionContext c) {
+	public void performImpl(ActionContext c) {
 		ASelectContext ac = (ASelectContext) c;
 		ArrayList<Placeable> selection = ac.target.selectPlaceables(ac.startX, ac.startY, ac.endX, ac.endY);
 		

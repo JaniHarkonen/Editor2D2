@@ -109,6 +109,17 @@ public class Instance extends Placeable {
 		this.sprite = sprite;
 	}
 	
+		// Sets the rotation of the Instance (in degrees)
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
+	}
+	
+		// Sets the width and the height of the Instance
+	public void setDimensions(double width, double height) {
+		this.width = width;
+		this.height = height;
+	}
+	
 		// Returns the scene Object the instance is based on
 	public EObject getObject() {
 		return (EObject) this.asset;
@@ -130,6 +141,16 @@ public class Instance extends Placeable {
 		// Returns the Image that represents the instance
 	public Image getSprite() {
 		return this.sprite;
+	}
+	
+		// Returns the width of the Instance
+	public double getWidth() {
+		return this.width;
+	}
+	
+		// Returns the height of the Instance
+	public double getHeight() {
+		return this.height;
 	}
 
 }

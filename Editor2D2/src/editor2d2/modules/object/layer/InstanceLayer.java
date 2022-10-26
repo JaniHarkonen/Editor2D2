@@ -16,10 +16,10 @@ import editor2d2.modules.object.placeable.Instance;
 public class InstanceLayer extends Layer {
 	
 		// Width of a grid cell in pixels
-	public static int OBJECT_LAYER_GRID_CELL_WIDTH = 200;//1920;
+	public static int OBJECT_LAYER_GRID_CELL_WIDTH = 1920;
 	
 		// Height of a grid cell in pixels
-	public static int OBJECT_LAYER_GRID_CELL_HEIGHT = 200;//1080;
+	public static int OBJECT_LAYER_GRID_CELL_HEIGHT = 1080;
 	
 	
 	public InstanceLayer(Scene scene) {

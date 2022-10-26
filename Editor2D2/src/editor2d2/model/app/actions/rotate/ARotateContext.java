@@ -4,10 +4,15 @@ import editor2d2.model.app.actions.ActionContext;
 import editor2d2.model.app.tool.ToolContext;
 
 public class ARotateContext extends ActionContext {
+	
+	public double locationX;
+	public double locationY;
+	
 
-	protected ARotateContext(ToolContext tc) {
+	public ARotateContext(ToolContext tc) {
 		super(tc);
-		// TODO Auto-generated constructor stub
+		this.locationX = tc.locationX;
+		this.locationY = tc.locationY;
 	}
 
 }

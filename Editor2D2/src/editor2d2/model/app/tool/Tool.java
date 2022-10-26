@@ -1,5 +1,9 @@
 package editor2d2.model.app.tool;
 
+import java.awt.image.BufferedImage;
+
+import editor2d2.Application;
+
 public abstract class Tool {
 	
 	public static final int PRIMARY_FUNCTION = 1;
@@ -17,10 +21,14 @@ public abstract class Tool {
 		// Shortcut keyboard key
 	protected String shortcutKey;
 	
+		// Icon representing the Tool in the Toolbar
+	protected BufferedImage icon;
+	
 	
 	protected Tool() {
 		this.name = null;
 		this.shortcutKey = "";
+		this.icon = Application.resources.getGraphic("icon-null-object");
 	}
 	
 	
@@ -46,14 +54,17 @@ public abstract class Tool {
 		return outcome;
 	}
 	
+		// Use the primary functionality of the Tool
 	protected int usePrimary(ToolContext c) {
 		return USE_DEFAULT;
 	}
 	
+		// Use the secondary functionality of the Tool
 	protected int useSecondary(ToolContext c) {
 		return USE_DEFAULT;
 	}
 	
+		// Use the tertiary functionality of the Tool
 	protected int useTertiary(ToolContext c) {
 		return USE_DEFAULT;
 	}
@@ -65,15 +76,40 @@ public abstract class Tool {
 	}
 	
 	
+		// Returns the name of the Tool
 	public String getName() {
 		return this.name;
 	}
 	
+		// Returns the shortcut key that can be used
+		// to quick-switch to the Tool
+	public String getShortcutKey() {
+		return this.shortcutKey;
+	}
 	
+		// Returns the BufferedImage icon that represents
+		// the Tool in the Toolbar
+	public BufferedImage getIcon() {
+		return this.icon;
+	}
+	
+		// Sets the name of the Tool
 	public void setName(String name) {
 		if( name == null )
 		return;
 		
 		this.name = name;
+	}
+	
+		// Sets the shortcut key that can be used to
+		// quick-switch to the Tool
+	public void setShortcutKey(String shortcut) {
+		this.shortcutKey = shortcut;
+	}
+	
+		// Sets the icon representing the Tool in the
+		// toolbar
+	public void setIcon(BufferedImage icon) {
+		this.icon = icon;
 	}
 }

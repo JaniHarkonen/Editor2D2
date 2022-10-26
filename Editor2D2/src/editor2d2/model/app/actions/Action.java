@@ -12,5 +12,5 @@ public abstract class Action {
 	public abstract void redo();
 	
 	
-	protected abstract void performImpl(ActionContext c);
+	public abstract void performImpl(ActionContext c);
 }

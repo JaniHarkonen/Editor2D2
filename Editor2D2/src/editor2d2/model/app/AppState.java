@@ -1,6 +1,5 @@
 package editor2d2.model.app;
 
-import editor2d2.model.app.tool.TSelect;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
@@ -26,7 +25,7 @@ public class AppState {
 	
 	
 	public AppState() {
-		this.selectedTool = new TSelect();			// DEBUG LINE, REMOVE
+		this.selectedTool = Tools.getAvailableTools()[0];			// DEBUG LINE, REMOVE
 		this.actionHistory = new ActionHistory();
 	}
 }

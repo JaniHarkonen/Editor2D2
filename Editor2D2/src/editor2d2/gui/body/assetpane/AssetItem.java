@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.model.project.Asset;
@@ -101,9 +102,11 @@ public abstract class AssetItem extends GUIComponent {
 		else
 		{
 			if( !isSelected )
-			host.selectAsset(src);
+			{
+				host.selectAsset(src);
+				Application.controller.selectAsset(this.source);
+			}
 		}
-		//Application.controller.selectAsset(this.source);
 	}
 	
 		// Opens the editing ModalView for the Asset upon

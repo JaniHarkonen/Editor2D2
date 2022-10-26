@@ -21,8 +21,6 @@ import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
-import editor2d2.model.app.tool.TPlace;
-import editor2d2.model.app.tool.TSelect;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Camera;
@@ -44,7 +42,8 @@ public class SceneView extends GUIComponent {
 		this.scene = scene;
 		this.view = createView();
 		
-		this.sceneDragger = new DragBox(0, 0, this.scene.getWidth(), this.scene.getHeight());
+		int d = Integer.MAX_VALUE / 2;
+		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 	}
 	
 
@@ -59,10 +58,6 @@ public class SceneView extends GUIComponent {
 		// Creates the JPanel that will render the Scene by creating an
 		// anonymous class extending JPanel
 	private JPanel createView() {
-		final int	MB_LEFT = 1,
-					MB_MIDDLE = 2,
-					MB_RIGHT = 3;
-		
 		Camera cam = this.scene.getCamera();
 		
 		@SuppressWarnings("serial")
@@ -106,10 +101,6 @@ public class SceneView extends GUIComponent {
 					
 				gg.draw(bounds_cam);
 				
-					// Render the DragBox bounds
-				gg.setColor(Color.BLUE);
-				gg.drawRect((int) sceneDragger.getX(), (int) sceneDragger.getY(), (int) sceneDragger.getWidth(), (int) sceneDragger.getHeight());
-				
 					// Render the placement grid of the layer that is currently active
 				/*dash[0] = 1.0f;
 				dash[1] = 1.0f;
@@ -130,20 +121,8 @@ public class SceneView extends GUIComponent {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				int mb = e.getButton();
 				
-				if( mb == MB_MIDDLE )
-				{
-					//Application.controller.undoAction();
-					if( Application.controller.getSelectedTool().getName().equals("Select") )
-					Application.controller.selectTool(new TPlace());
-					else
-					Application.controller.selectTool(new TSelect());
-					
-					update();
-				}
-				
-				if( mb == MB_LEFT )
+				if( GUIUtilities.checkLeftClick(e) )
 				{
 					ToolContext tc = new ToolContext();
 					tc.isContinuation = false;
@@ -160,16 +139,12 @@ public class SceneView extends GUIComponent {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				int mb = e.getButton();
-				
-					// Right mouse button released
-				if( mb == MB_RIGHT )
+				if( GUIUtilities.checkRightClick(e) )
 				{
 					container.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					sceneDragger.stopDragging();
 				}
-				
-				if( mb == MB_LEFT )
+				else if( GUIUtilities.checkLeftClick(e) )
 				{
 					ToolContext tc = new ToolContext();
 					tc.isContinuation = false;
@@ -218,10 +193,9 @@ public class SceneView extends GUIComponent {
 					if( Tool.checkSuccessfulUse(outcome) )
 					update();
 				}
-				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
 					// on the first click)
-				if( SwingUtilities.isRightMouseButton(e) )
+				else if( SwingUtilities.isRightMouseButton(e) )
 				{
 					if( !sceneDragger.checkDragging() )
 					{
@@ -231,7 +205,7 @@ public class SceneView extends GUIComponent {
 					else
 					{
 						DragBoxPoll dgpoll = sceneDragger.poll(e.getX(), e.getY(), 1);
-						cam.shift(dgpoll.x, dgpoll.y, 0);
+						cam.shift(dgpoll.x / cam.getZ(), dgpoll.y / cam.getZ(), 0);
 						update();
 					}
 				}
