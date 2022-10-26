@@ -152,5 +152,10 @@ public class Instance extends Placeable {
 	public double getHeight() {
 		return this.height;
 	}
+	
+		// Returns the rotation of the Instance (in degrees)
+	public double getRotation() {
+		return this.rotation;
+	}
 
 }
