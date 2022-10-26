@@ -7,9 +7,11 @@ OVERVIEW
 SPECIFICS
 - write the rest of the Tools
 - write the rest of the Actions
-
-- fix flood fill
 	
+	
+REMEMBER: 	Instance layer selection bug is due to
+			an off by one error in the
+			selectPlaceables(int,int,int,int).
 
 LATER
 - return to LayerManagerPane after TOOLS

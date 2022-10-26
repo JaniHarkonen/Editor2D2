@@ -1,12 +1,59 @@
 package editor2d2.model.app.actions.fill;
 
+import editor2d2.common.grid.FloodFiller;
 import editor2d2.common.grid.Grid;
+import editor2d2.common.grid.Gridable;
+import editor2d2.common.grid.NullCell;
 import editor2d2.model.app.actions.Action;
 import editor2d2.model.app.actions.ActionContext;
+import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.object.placeable.Instance;
+import editor2d2.modules.data.placeable.DataCell;
+import editor2d2.modules.image.placeable.Tile;
 
 public class AFill extends Action {
+	
+	private class PlaceableFloodFiller extends FloodFiller<Placeable> {
+		
+			// Layer that whose Grid is to be filled
+		private Layer targetLayer;
+		
+		
+		public PlaceableFloodFiller(Layer targetLayer) {
+			super(targetLayer.getObjectGrid());
+			this.targetLayer = targetLayer;
+		}
+		
+		
+		@Override
+		protected boolean isFree(Placeable p, int cx, int cy) {
+			Gridable g = this.targetGrid.get(cx, cy);
+			
+			if( g instanceof NullCell )
+			return false;
+			
+			
+			Placeable at = (Placeable) this.targetGrid.get(cx, cy);
+			
+			if( at == null )
+			return true;
+			
+			return !at.getAsset().getIdentifier().equals(p.getAsset().getIdentifier());
+		}
+		
+		@Override
+		protected boolean fillAt(Placeable p, int cx, int cy) {
+			return super.fillAt(p.duplicate(), cx, cy);
+		}
+		
+		@Override
+		protected void place(Placeable p, int cx, int cy) {
+			this.targetLayer.attemptPlace(cx, cy, p);
+		}
+	}
+	
+	
+	
 
 	@Override
 	public void undo() {
@@ -22,7 +69,10 @@ public class AFill extends Action {
 	public void performImpl(ActionContext c) {
 		AFillContext ac = (AFillContext) c;
 		
-		if( ac.placeable instanceof Instance )
+		if(
+			!(ac.placeable instanceof Tile) &&
+			!(ac.placeable instanceof DataCell)
+		)
 		return;
 		
 		Grid ogrid = ac.target.getObjectGrid();
@@ -30,55 +80,7 @@ public class AFill extends Action {
 			ch = ogrid.getCellHeight();
 		
 			// Fill the tiles using flood fill
-		ac.placeable.changeLayer(ac.target);
-		ac.placeable.setOffsets(0, 0);
-		floodFill(ogrid, (int) (ac.locationX / cw), (int) (ac.locationY / ch), ac.placeable, 0, 100);
-	}
-	
-	private int floodFill(Grid grid, int cx, int cy, Placeable p, int counter, int max) {
-		if( !isFree(grid, cx, cy, p) || counter >= max )
-		return counter;
-		
-		counter++;
-		
-		p.setCellPosition(cx, cy);
-		grid.put(cx, cy, p);
-		p = p.duplicate();
-		
-		if( isFree(grid, cx, cy - 1, p) )
-		{
-			counter = floodFill(grid, cx, cy - 1, p, counter, max);
-			p = p.duplicate();
-		}
-		
-		if ( isFree(grid, cx + 1, cy, p) )
-		{
-			counter = floodFill(grid, cx + 1, cy, p, counter, max);
-			p = p.duplicate();
-		}
-		
-		if ( isFree(grid, cx, cy + 1, p) )
-		{
-			counter = floodFill(grid, cx, cy + 1, p, counter, max);
-			p = p.duplicate();
-		}
-		
-		if ( isFree(grid, cx - 1, cy, p) )
-		{
-			counter = floodFill(grid, cx - 1, cy, p, counter, max);
-			p = p.duplicate();
-		}
-		
-		return counter;
-	}
-	
-	private boolean isFree(Grid grid, int cx, int cy, Placeable p) {
-		String testIdentifier= p.getAsset().getIdentifier();
-		Placeable otherPlaceable = (Placeable) grid.get(cx, cy);
-		
-		if( otherPlaceable == null )
-		return true;
-		
-		return !otherPlaceable.getAsset().getIdentifier().equals(testIdentifier);
+		PlaceableFloodFiller flooder = new PlaceableFloodFiller(ac.target);
+		flooder.fillTarget(ac.placeable, (int) (ac.locationX / cw), (int) (ac.locationY / ch));
 	}
 }

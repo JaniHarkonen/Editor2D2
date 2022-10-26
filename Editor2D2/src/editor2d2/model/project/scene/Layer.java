@@ -102,6 +102,17 @@ public abstract class Layer implements HasAsset {
 		place(cx, cy, null);
 	}
 	
+	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
+		ArrayList<Placeable> selection = new ArrayList<Placeable>();
+	
+		Placeable p = (Placeable) this.objectGrid.get(cx, cy);
+		
+		if( p != null )
+		selection.add(p);
+		
+		return selection;
+	}
+	
 	public ArrayList<Placeable> selectPlaceables(int cx1, int cy1, int cx2, int cy2) {
 		ArrayList<Placeable> selection = new ArrayList<Placeable>();
 		
