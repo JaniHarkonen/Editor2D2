@@ -52,8 +52,6 @@ public class APlace extends Action {
 			if( at.size() > 0 )
 			{
 				this.replacedPlaceable = at.get(0);
-				
-				if( this.replacedPlaceable != null )
 				this.replacedPlaceable.delete();
 			}
 		}

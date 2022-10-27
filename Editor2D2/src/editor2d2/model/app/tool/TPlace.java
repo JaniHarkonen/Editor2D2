@@ -37,7 +37,7 @@ public class TPlace extends Tool {
 			if( placeablesAt.size() > 0 )
 			{
 				Placeable otherPlaceable = placeablesAt.get(0);
-				if( otherPlaceable != null && otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
+				if( otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
 				return USE_FAILED;
 			}
 		}

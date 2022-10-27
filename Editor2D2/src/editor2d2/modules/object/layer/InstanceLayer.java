@@ -2,7 +2,6 @@ package editor2d2.modules.object.layer;
 
 import java.util.ArrayList;
 
-import editor2d2.DebugUtils;
 import editor2d2.common.Bounds;
 import editor2d2.common.grid.Gridable;
 import editor2d2.common.grid.NullCell;
@@ -71,6 +70,7 @@ public class InstanceLayer extends Layer {
 		for( int x = cx1; x < cx2; x++ )
 		for( int y = cy1; y < cy2; y++ )
 		for( Placeable p : ((ObjectArray) this.objectGrid.get(x, y)).objects )
+		if( p != null )
 		selection.add(p);
 		
 		return selection;
@@ -93,7 +93,6 @@ public class InstanceLayer extends Layer {
 			
 			if( pb.right < x1 || pb.bottom < y1 || pb.left > x2 || pb.top > y2 )
 			{
-				DebugUtils.log("DONT OF TRUMP", this);
 				gridSelection.remove(i - offset);
 				offset++;
 			}

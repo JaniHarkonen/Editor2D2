@@ -118,7 +118,11 @@ public abstract class Layer implements HasAsset {
 		
 		for( int x = cx1; x < cx2; x++ )
 		for( int y = cy1; y < cy2; y++ )
-		selection.add((Placeable) this.objectGrid.get(x, y));
+		{
+			Placeable p = (Placeable) this.objectGrid.get(x, y);
+			if( p != null )
+			selection.add(p);
+		}
 		
 		return selection;
 	}

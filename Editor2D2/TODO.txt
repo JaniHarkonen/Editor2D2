@@ -1,13 +1,10 @@
-TODO - UndoToRedo
+TODO - ...
 
 OVERVIEW
-- implement undos and redos for all the remaining
-  Actions
+
 
 SPECIFICS
 
-- selectPlaceables should not return an ArrayList
-  containing only a null object
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
@@ -32,7 +29,6 @@ LATER
 	-- pay attention to memory usage as well
 	   
 TASKS LEFT
-- finish Tools and Actions (undo, redo)
 - PropertiesPane should open for already placed Placeables
   too
 - write TMove (undo, redo)
