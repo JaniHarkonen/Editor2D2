@@ -32,7 +32,6 @@ public class AFill extends Action {
 			if( g instanceof NullCell )
 			return false;
 			
-			
 			Placeable at = (Placeable) this.targetGrid.get(cx, cy);
 			
 			if( at == null )

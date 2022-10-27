@@ -11,9 +11,7 @@ SPECIFICS
 
 - use ToolContext's selection instead of Controller's
   selection inside Actions
-- undoing APlace doesn't work because Instances aren't
-  cellular
-	-- APlace can undo Tile placements but not replacements
+- APlace can undo Tile placements but not replacements
 	-- store replaced tiles in the memory
 	
 REMEMBER: 	Instance layer selection bug is due to

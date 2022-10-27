@@ -12,6 +12,7 @@ import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.layer.ObjectArray;
 
 public class Instance extends Placeable {
 
@@ -88,6 +89,12 @@ public class Instance extends Placeable {
 		inst.y = this.y;
 		
 		return inst;
+	}
+	
+	@Override
+	public void delete() {
+		ObjectArray oa = (ObjectArray) this.layer.getObjectGrid().get(getCellX(), getCellY());
+		oa.remove(this);
 	}
 	
 	
