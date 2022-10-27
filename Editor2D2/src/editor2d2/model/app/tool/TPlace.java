@@ -3,7 +3,6 @@ package editor2d2.model.app.tool;
 import java.util.ArrayList;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.model.app.actions.place.APlace;
 import editor2d2.model.app.actions.place.APlaceContext;
 import editor2d2.model.project.scene.Layer;
@@ -38,12 +37,11 @@ public class TPlace extends Tool {
 			if( placeablesAt.size() > 0 )
 			{
 				Placeable otherPlaceable = placeablesAt.get(0);
-				if( otherPlaceable != null && otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
+				if( otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
 				return USE_FAILED;
 			}
 		}
 		
-		DebugUtils.log("didididi", this);
 		(new APlace()).perform(new APlaceContext(c));
 		
 		return USE_SUCCESSFUL;

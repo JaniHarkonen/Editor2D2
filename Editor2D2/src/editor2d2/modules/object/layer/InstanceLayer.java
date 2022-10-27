@@ -2,7 +2,6 @@ package editor2d2.modules.object.layer;
 
 import java.util.ArrayList;
 
-import editor2d2.DebugUtils;
 import editor2d2.common.Bounds;
 import editor2d2.common.grid.Gridable;
 import editor2d2.common.grid.NullCell;
@@ -31,13 +30,19 @@ public class InstanceLayer extends Layer {
 		// and places it into the object grid
 	@Override
 	public void place(int x, int y, Placeable p) {
-		place((double) x, y, (Instance) p);
+		place((double) x, y, p);
 	}
 	
 	@Override
 	public void place(double x, double y, Placeable p) {
 		Instance inst = (Instance) p;
-		Gridable cell = this.objectGrid.get(x, y);
+		int cw = this.objectGrid.getCellWidth(),
+			ch = this.objectGrid.getCellHeight();
+		
+		int cx = (int) (x / cw),
+			cy = (int) (y / ch);
+		
+		Gridable cell = this.objectGrid.get(cx, cy);
 		
 			// Out of bounds
 		if( cell instanceof NullCell )
@@ -48,16 +53,12 @@ public class InstanceLayer extends Layer {
 		if( cell == null )
 		{
 			cell = new ObjectArray();
-			this.objectGrid.put(x, y, cell);
+			this.objectGrid.put(cx, cy, cell);
 		}
 		
 		inst.changeLayer(this);
-		
-		int cx = (int) (x / this.objectGrid.getCellWidth()),
-			cy = (int) (y / this.objectGrid.getCellHeight());
-		
 		inst.setCellPosition(cx, cy);
-		inst.setOffsets(x - cx, y - cy);
+		inst.setOffsets(x - cx * cw, y - cy * ch);
 		
 		((ObjectArray) cell).add(inst);
 	}
@@ -69,8 +70,8 @@ public class InstanceLayer extends Layer {
 		for( int x = cx1; x < cx2; x++ )
 		for( int y = cy1; y < cy2; y++ )
 		for( Placeable p : ((ObjectArray) this.objectGrid.get(x, y)).objects )
+		if( p != null )
 		selection.add(p);
-		//selection.add((Placeable) this.objectGrid.get(x, y));
 		
 		return selection;
 	}
@@ -92,7 +93,6 @@ public class InstanceLayer extends Layer {
 			
 			if( pb.right < x1 || pb.bottom < y1 || pb.left > x2 || pb.top > y2 )
 			{
-				DebugUtils.log("DONT OF TRUMP", this);
 				gridSelection.remove(i - offset);
 				offset++;
 			}

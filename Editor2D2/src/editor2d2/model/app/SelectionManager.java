@@ -7,7 +7,7 @@ import java.util.Map;
 public class SelectionManager<T> {
 
 		// List of currently selected items
-	private final Map<T, Boolean> selection;
+	private Map<T, Boolean> selection;
 	
 		// Reference to the item that was first selected
 	private T firstSelection;
@@ -25,7 +25,7 @@ public class SelectionManager<T> {
 		if( selection == null )
 		return;
 		
-		this.selection.clear();
+		this.selection = new HashMap<T, Boolean>();
 		this.firstSelection = selection.get(0);
 		
 		for( int i = 0; i < selection.size(); i++ )
@@ -37,7 +37,7 @@ public class SelectionManager<T> {
 		if( selection == null )
 		return;
 		
-		this.selection.clear();
+		this.selection = new HashMap<T, Boolean>();
 		this.firstSelection = selection;
 		this.selection.put(selection, true);
 	}
@@ -75,7 +75,7 @@ public class SelectionManager<T> {
 		// De-selects everything
 	public void deselect() {
 		this.firstSelection = null;
-		this.selection.clear();
+		this.selection = new HashMap<T, Boolean>();
 	}
 	
 	/*********************** GETTERS **************************/

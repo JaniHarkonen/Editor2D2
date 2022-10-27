@@ -41,10 +41,14 @@ public class SceneView extends GUIComponent implements Subscriber {
 		// Reference to the DragBox that will be used to drag the Scene view
 	private DragBox sceneDragger;
 	
+		// Whether space bar is down
+	private boolean isSpaceDown;
+	
 	
 	public SceneView(Scene scene) {
 		this.scene = scene;
 		this.view = createView();
+		this.isSpaceDown = false;
 		
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
@@ -57,21 +61,22 @@ public class SceneView extends GUIComponent implements Subscriber {
 	public void onNotification(String handle, Vendor vendor) {
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
+			boolean skipUpdate = false;
 			HotkeyListener hl = Application.controller.getHotkeyListener();
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
-			{
-				Application.controller.undoAction();
-				update();
-			}
+			Application.controller.undoAction();
 			
 				// Redo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Y') )
-			{
-				Application.controller.redoAction();
-				update();
-			}
+			Application.controller.redoAction();
+			
+				// Pan-mode
+			this.isSpaceDown = HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SPACE);
+			
+			if( !skipUpdate )
+			update();
 		}
 	}
 	
@@ -81,7 +86,32 @@ public class SceneView extends GUIComponent implements Subscriber {
 		JPanel container = GUIUtilities.createDefaultPanel();
 		container.add(this.view);
 		
+		if( this.isSpaceDown )
+		container.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+		else
+		container.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+		
 		return container;
+	}
+	
+		// Uses the currently selected Tool specifying whether
+		// the use is continuation of a prior use as well as the
+		// order of function
+	private void useTool(double x, double y, boolean isContinuation, int order, boolean stop) {
+		ToolContext tc = new ToolContext();
+		tc.isContinuation = isContinuation;
+		tc.locationX = x;
+		tc.locationY = y;
+		tc.order = order;
+		
+		int outcome = Application.controller.useTool(tc, stop);
+		
+		if( Tool.checkSuccessfulUse(outcome) )
+		update();
+	}
+	
+	private void useTool(double x, double y, boolean isContinuation, int order) {
+		useTool(x, y, isContinuation, order, false);
 	}
 	
 		// Creates the JPanel that will render the Scene by creating an
@@ -150,42 +180,28 @@ public class SceneView extends GUIComponent implements Subscriber {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				int toolUseOrder = -1;
 				
 				if( GUIUtilities.checkLeftClick(e) )
-				{
-					ToolContext tc = new ToolContext();
-					tc.isContinuation = false;
-					tc.locationX = cam.getInSceneX(e.getX());
-					tc.locationY = cam.getInSceneY(e.getY());
-					tc.order = Tool.PRIMARY_FUNCTION;
-					
-					int outcome = Application.controller.useTool(tc);
-					
-					if( Tool.checkSuccessfulUse(outcome) )
-					update();
-				}
+				toolUseOrder = Tool.PRIMARY_FUNCTION;
+				else if( GUIUtilities.checkRightClick(e) && !isSpaceDown )
+				toolUseOrder = Tool.SECONDARY_FUNCTION;
+				
+				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), false, toolUseOrder);
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if( GUIUtilities.checkRightClick(e) )
-				{
-					container.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					sceneDragger.stopDragging();
-				}
+				int toolUseOrder = -1;
+				
+				if( GUIUtilities.checkRightClick(e) && isSpaceDown )
+				sceneDragger.stopDragging();
 				else if( GUIUtilities.checkLeftClick(e) )
-				{
-					ToolContext tc = new ToolContext();
-					tc.isContinuation = false;
-					tc.locationX = cam.getInSceneX(e.getX());
-					tc.locationY = cam.getInSceneY(e.getY());
-					tc.order = Tool.PRIMARY_FUNCTION;
-					
-					int outcome = Application.controller.useTool(tc, true);
-					
-					if( Tool.checkSuccessfulUse(outcome) )
-					update();
-				}
+				toolUseOrder = Tool.PRIMARY_FUNCTION;
+				else if( GUIUtilities.checkRightClick(e) )
+				toolUseOrder = Tool.SECONDARY_FUNCTION;
+				
+				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), false, toolUseOrder, true);
 			}
 		});
 		
@@ -206,29 +222,14 @@ public class SceneView extends GUIComponent implements Subscriber {
 			public void mouseDragged(MouseEvent e) {
 				
 				if( SwingUtilities.isLeftMouseButton(e) )
-				{
-						// Configures a context in which the tool is to be used and
-						// requests the Controller to use the currently selected tool
-						// in that context
-					ToolContext tc = new ToolContext();
-					tc.isContinuation = true;
-					tc.locationX = cam.getInSceneX(e.getX());
-					tc.locationY = cam.getInSceneY(e.getY());
-					tc.order = Tool.PRIMARY_FUNCTION;
-					
-					int outcome = Application.controller.useTool(tc);
-					
-						// Update GUI if the tool had an impact on the model
-					if( Tool.checkSuccessfulUse(outcome) )
-					update();
-				}
+				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, Tool.PRIMARY_FUNCTION);
+				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
 					// on the first click)
-				else if( SwingUtilities.isRightMouseButton(e) )
+				else if( SwingUtilities.isRightMouseButton(e) && isSpaceDown )
 				{
 					if( !sceneDragger.checkDragging() )
 					{
-						container.setCursor(new Cursor(Cursor.MOVE_CURSOR));
 						sceneDragger.startDragging(e.getX(), e.getY(), 1);
 					}
 					else

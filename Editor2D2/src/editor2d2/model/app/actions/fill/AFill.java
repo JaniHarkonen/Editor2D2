@@ -1,5 +1,7 @@
 package editor2d2.model.app.actions.fill;
 
+import java.util.ArrayList;
+
 import editor2d2.common.grid.FloodFiller;
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
@@ -32,18 +34,30 @@ public class AFill extends Action {
 			if( g instanceof NullCell )
 			return false;
 			
-			
 			Placeable at = (Placeable) this.targetGrid.get(cx, cy);
 			
 			if( at == null )
 			return true;
 			
-			return !at.getAsset().getIdentifier().equals(p.getAsset().getIdentifier());
+				// Replace Placeables dervide from a different Asset
+			if( !at.getAsset().getIdentifier().equals(p.getAsset().getIdentifier()) )
+			{
+				replacedPlaceables.add(at);
+				return true;
+			}
+			
+			return false;
 		}
 		
 		@Override
 		protected boolean fillAt(Placeable p, int cx, int cy) {
-			return super.fillAt(p.duplicate(), cx, cy);
+			Placeable duplicate = p.duplicate();
+			boolean successful = super.fillAt(duplicate, cx, cy);
+			
+			if( successful )
+			placements.add(duplicate);
+			
+			return successful;
 		}
 		
 		@Override
@@ -52,17 +66,39 @@ public class AFill extends Action {
 		}
 	}
 	
+		// List of Placeables replaced by the fill
+	private ArrayList<Placeable> replacedPlaceables;
 	
+		// List of Placeables that were placed by the fill
+	private ArrayList<Placeable> placements;
+	
+		// Layer that the fill targets
+	private Layer targetLayer;
+	
+	
+	public AFill() {
+		this.targetLayer = null;
+		this.replacedPlaceables = new ArrayList<Placeable>();
+		this.placements = new ArrayList<Placeable>();
+	}
 	
 
 	@Override
 	public void undo() {
+		for( Placeable p : this.placements )
+		p.delete();
 		
+		for( Placeable p : this.replacedPlaceables )
+		p.changeLayer(this.targetLayer);
 	}
 
 	@Override
 	public void redo() {
+		for( Placeable p : this.replacedPlaceables )
+		p.delete();
 		
+		for( Placeable p : this.placements )
+		p.changeLayer(this.targetLayer);
 	}
 
 	@Override
@@ -75,12 +111,15 @@ public class AFill extends Action {
 		)
 		return;
 		
-		Grid ogrid = ac.target.getObjectGrid();
+		this.targetLayer = ac.target;
+		
+		Grid ogrid = this.targetLayer.getObjectGrid();
 		int cw = ogrid.getCellWidth(),
 			ch = ogrid.getCellHeight();
 		
 			// Fill the tiles using flood fill
-		PlaceableFloodFiller flooder = new PlaceableFloodFiller(ac.target);
+		this.replacedPlaceables = new ArrayList<Placeable>();
+		PlaceableFloodFiller flooder = new PlaceableFloodFiller(this.targetLayer);
 		flooder.fillTarget(ac.placeable, (int) (ac.locationX / cw), (int) (ac.locationY / ch));
 	}
 }

@@ -67,6 +67,23 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 			// A simple change can be used if the Placeable is not yet on any layer
 		if( this.layer == null )
 		this.layer = layer;
+		else
+		{
+			delete();
+			
+			Layer l = this.layer;
+			double 	x = getX(),
+					y = getY();
+			
+			this.layer = null;	// Reset Layer as attemptPlace modifies it 
+			l.attemptPlace(x, y, this);
+		}
+	}
+	
+		// Deletes the Placeable from the Layer it's on
+		// CAN BE OVERRIDDEN
+	public void delete() {
+		this.layer.delete(getCellX(), getCellY());
 	}
 	
 	

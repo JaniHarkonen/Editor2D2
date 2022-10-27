@@ -1,18 +1,26 @@
 package editor2d2.model.app.tool;
 
+import java.util.ArrayList;
+
 import editor2d2.model.app.actions.scale.AScale;
 import editor2d2.model.app.actions.scale.AScaleContext;
+import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.object.placeable.Instance;
 
 public class TScale extends Tool {
 	
 		// Last reported mouse X-coordinate
 	private double previousX;
 	
+		// Duplicates of the initial selection
+	private ArrayList<Placeable> initialSelection;
+	
 
 	public TScale() {
 		super();
 		this.name = "Scale";
 		this.shortcutKey = "D";
+		this.initialSelection = new ArrayList<Placeable>();
 	}
 	
 	
@@ -20,12 +28,24 @@ public class TScale extends Tool {
 	protected int usePrimary(ToolContext c) {
 		
 		if( !c.isContinuation )
-		this.previousX = c.locationX;
+		{
+			this.previousX = c.locationX;
+			this.initialSelection = new ArrayList<Placeable>();
+			
+				// Duplicate each selected Placeable and store
+				// to enable rollback when undoing the Action
+			for( Placeable p : c.selection )
+			{
+				if( p instanceof Instance )
+				this.initialSelection.add(p.duplicate());
+			}
+		}
 		
 		AScaleContext ac = new AScaleContext(c);
 		ac.scaleIncrement = c.locationX - this.previousX;
-		this.previousX = c.locationX;
+		ac.initialSelection = this.initialSelection;
 		
+		this.previousX = c.locationX;
 		(new AScale()).performImpl(ac);
 		
 		return USE_SUCCESSFUL;
@@ -33,10 +53,13 @@ public class TScale extends Tool {
 	
 	@Override
 	public int stop(ToolContext c) {
-		if( c.controller.placeableSelectionManager.getSelection().size() <= 0 )
+		if( c.selection.size() <= 0 )
 		return USE_FAILED;
 		
-		(new AScale()).perform(new AScaleContext(c));
+		AScaleContext ac = new AScaleContext(c);
+		ac.initialSelection = this.initialSelection;
+		
+		(new AScale()).perform(ac);
 		
 		return USE_SUCCESSFUL;
 	}

@@ -12,6 +12,7 @@ import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.layer.ObjectArray;
 
 public class Instance extends Placeable {
 
@@ -90,6 +91,12 @@ public class Instance extends Placeable {
 		return inst;
 	}
 	
+	@Override
+	public void delete() {
+		ObjectArray oa = (ObjectArray) this.layer.getObjectGrid().get(getCellX(), getCellY());
+		oa.remove(this);
+	}
+	
 	
 		// GETTERS/SETTERS
 	
@@ -151,6 +158,11 @@ public class Instance extends Placeable {
 		// Returns the height of the Instance
 	public double getHeight() {
 		return this.height;
+	}
+	
+		// Returns the rotation of the Instance (in degrees)
+	public double getRotation() {
+		return this.rotation;
 	}
 
 }

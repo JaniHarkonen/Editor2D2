@@ -11,16 +11,20 @@ public class ASelect extends Action {
 	
 	private ArrayList<Placeable> selection;
 	
+	private ArrayList<Placeable> initialSelection;
+	
 	private Controller controller;
 	
 
 	@Override
 	public void undo() {
 		this.controller.placeableSelectionManager.deselect();
+		this.controller.placeableSelectionManager.setSelection(this.initialSelection);
 	}
 
 	@Override
 	public void redo() {
+		this.controller.placeableSelectionManager.deselect();
 		this.controller.placeableSelectionManager.setSelection(this.selection);
 	}
 
@@ -30,6 +34,7 @@ public class ASelect extends Action {
 		ArrayList<Placeable> selection = ac.target.selectPlaceables(ac.startX, ac.startY, ac.endX, ac.endY);
 		
 		this.controller = ac.controller;
+		this.initialSelection = ac.initialSelection;
 		
 		if( selection == null || selection.size() <= 0 )
 		this.controller.placeableSelectionManager.deselect();
