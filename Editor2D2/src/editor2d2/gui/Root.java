@@ -11,10 +11,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import editor2d2.Application;
-import editor2d2.gui.body.PropertiesPane;
 import editor2d2.gui.body.Toolbar;
 import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
+import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.body.scene.ScenePane;
 import editor2d2.model.Handles;
 import editor2d2.model.app.Controller;
@@ -38,7 +38,7 @@ public class Root extends GUIComponent implements Subscriber {
 		this.currentTabIndex = -1;
 		
 		Controller vendor = (Controller) Application.controller.subscriptionService.get(Handles.ACTIVE_PROJECT, "Root", this);
-		Application.controller.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
+		//Application.controller.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;

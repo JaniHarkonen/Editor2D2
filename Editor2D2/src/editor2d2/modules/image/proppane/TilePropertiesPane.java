@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import editor2d2.gui.GUIUtilities;
-import editor2d2.gui.body.PropertiesPane;
+import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.components.CTextField;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;

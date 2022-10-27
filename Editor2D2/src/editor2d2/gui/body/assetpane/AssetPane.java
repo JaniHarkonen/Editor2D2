@@ -17,6 +17,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
@@ -267,6 +268,8 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	@SuppressWarnings("unchecked")
 	public void actionEdit() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
+		
+		DebugUtils.log(asset, this);
 		
 		if( asset == null )
 		return;
