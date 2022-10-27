@@ -3,6 +3,7 @@ package editor2d2.model.app.tool;
 import java.util.ArrayList;
 
 import editor2d2.Application;
+import editor2d2.model.Handles;
 import editor2d2.model.app.actions.select.ASelect;
 import editor2d2.model.app.actions.select.ASelectContext;
 import editor2d2.model.project.scene.placeable.Placeable;
@@ -73,6 +74,11 @@ public class TSelect extends Tool {
 		ac.endY = ey;
 		
 		(new ASelect()).perform(ac);
+		
+		ArrayList<Placeable> newSelection = ac.controller.placeableSelectionManager.getSelection();
+		
+		if( newSelection.size() == 1 )
+		Application.controller.subscriptionService.register(Handles.SELECTED_PLACEABLE, Application.controller);
 		
 		return USE_SUCCESSFUL;
 	}

@@ -14,14 +14,12 @@ import editor2d2.Application;
 import editor2d2.gui.body.Toolbar;
 import editor2d2.gui.body.assetpane.AssetPane;
 import editor2d2.gui.body.layermgrpane.LayerManagerPane;
-import editor2d2.gui.body.proppane.PropertiesPane;
+import editor2d2.gui.body.proppane.PropertiesPaneContainer;
 import editor2d2.gui.body.scene.ScenePane;
 import editor2d2.model.Handles;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -38,7 +36,6 @@ public class Root extends GUIComponent implements Subscriber {
 		this.currentTabIndex = -1;
 		
 		Controller vendor = (Controller) Application.controller.subscriptionService.get(Handles.ACTIVE_PROJECT, "Root", this);
-		//Application.controller.subscriptionService.subscribe(Handles.SELECTED_PLACEABLE, "Root", this);
 		
 		if( vendor == null )
 		this.targetProject = null;
@@ -62,15 +59,7 @@ public class Root extends GUIComponent implements Subscriber {
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
 			// Right pane
-		Placeable p = Application.controller.placeableSelectionManager.getSelectedItem();
-		
-		if( p != null )
-		{
-			PropertiesPane pp = FactoryService.getFactories(p.getAsset().getAssetClassName()).createPropertiesPane(p);
-			if( pp != null )
-			containerRightSide.add(pp.render());	// Placeable properties
-		}
-		
+		containerRightSide.add((new PropertiesPaneContainer()).render());	// Properties pane
 		containerRightSide.add((new LayerManagerPane()).render()); 		// Layer manager pane
 		
 			// Scene-asset split
@@ -157,9 +146,6 @@ public class Root extends GUIComponent implements Subscriber {
 		{
 			case Handles.ACTIVE_PROJECT:
 				this.targetProject = ((Controller) vendor).getActiveProject();
-				break;
-			
-			case Handles.SELECTED_PLACEABLE:
 				break;
 			
 			default: return;

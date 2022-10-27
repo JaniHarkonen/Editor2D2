@@ -1,5 +1,7 @@
 package editor2d2.modules.object.proppane;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -8,6 +10,7 @@ import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.components.CTextField;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.object.placeable.Instance;
 
 public class InstancePropertiesPane extends PropertiesPane {
 	
@@ -37,10 +40,32 @@ public class InstancePropertiesPane extends PropertiesPane {
 		this.txtRotation = new CTextField("Rotation: ");
 	}
 	
+	
+	@Override
+	public Asset getReferencedAsset() {
+		return this.source.getAsset();
+	}
+	
+	@Override
+	public void actionApply(ActionEvent ae) {
+		double	/*x = Double.parseDouble(this.txtX.getText()),
+				y = Double.parseDouble(this.txtY.getText()),*/
+				w = Double.parseDouble(this.txtWidth.getText()),
+				h = Double.parseDouble(this.txtHeight.getText()),
+				rot = Double.parseDouble(this.txtRotation.getText());
+		
+		Instance src = (Instance) this.source;
+		src.setDimensions(w, h);
+		src.setRotation(rot);
+		
+		update();
+	}
+	
 
 	@Override
 	protected JPanel draw() {
 		JPanel container = GUIUtilities.createDefaultPanel();
+		Instance src = (Instance) this.source;
 		
 			// Position controls
 		JPanel containerPosition = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
@@ -54,7 +79,10 @@ public class InstancePropertiesPane extends PropertiesPane {
 			// Dimension controls
 		JPanel containerDimensions = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
+			this.txtWidth.setText(""+src.getWidth());
 			containerDimensions.add(this.txtWidth.render());
+			
+			this.txtHeight.setText(""+src.getHeight());
 			containerDimensions.add(this.txtHeight.render());
 			
 		containerDimensions.setBorder(BorderFactory.createTitledBorder("Dimensions"));
@@ -63,17 +91,12 @@ public class InstancePropertiesPane extends PropertiesPane {
 			// Orientation controls
 		JPanel containerOrientation = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
+			this.txtRotation.setText(""+src.getRotation());
 			containerOrientation.add(this.txtRotation.render());
 			
 		containerOrientation.setBorder(BorderFactory.createTitledBorder("Orientation"));
 		container.add(containerOrientation);
 		
 		return this.createDefaultPropertiesPaneContainer("Instance properties", container);
-	}
-
-
-	@Override
-	public Asset getReferencedAsset() {
-		return this.source.getAsset();
 	}
 }

@@ -87,6 +87,9 @@ public class Instance extends Placeable {
 		inst.sprite = this.sprite;
 		inst.x = this.x;
 		inst.y = this.y;
+		inst.width = this.width;
+		inst.height = this.height;
+		inst.rotation = this.rotation;
 		
 		return inst;
 	}
