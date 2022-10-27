@@ -39,7 +39,7 @@ public class AScale extends Action {
 		double scaleIncrement = ac.scaleIncrement;
 		
 		this.initialSelection = ac.initialSelection;
-		this.finalSelection = ac.controller.placeableSelectionManager.getSelection();
+		this.finalSelection = ac.selection;
 		
 		for( Placeable p : this.finalSelection )
 		{

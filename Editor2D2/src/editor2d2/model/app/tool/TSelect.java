@@ -34,7 +34,7 @@ public class TSelect extends Tool {
 		{
 			this.startX = c.locationX;
 			this.startY = c.locationY;
-			this.initialSelection = Application.controller.placeableSelectionManager.getSelection();
+			this.initialSelection = c.selection;
 			
 			return USE_SUCCESSFUL;
 		}

@@ -43,7 +43,7 @@ public class TRotate extends Tool {
 	
 	@Override
 	public int stop(ToolContext c) {
-		if( c.controller.placeableSelectionManager.getSelection().size() <= 0 )
+		if( c.selection.size() <= 0 )
 		return USE_FAILED;
 		
 		ARotateContext ac = new ARotateContext(c);

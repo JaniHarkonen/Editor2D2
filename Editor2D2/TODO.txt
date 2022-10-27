@@ -6,8 +6,8 @@ OVERVIEW
 
 SPECIFICS
 
-- use ToolContext's selection instead of Controller's
-  selection inside Actions
+- selectPlaceables should not return an ArrayList
+  containing only a null object
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
