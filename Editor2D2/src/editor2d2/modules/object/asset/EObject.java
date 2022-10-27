@@ -139,4 +139,18 @@ public class EObject extends Asset {
 			break;
 		}
 	}
+	
+		// Removes a property given its index in the properties
+		// list
+	public void removeProperty(int index) {
+		if( index < 0 || index >= this.properties.size() )
+		return;
+		
+		this.properties.remove(index);
+	}
+	
+		// Removes all properties
+	public void removeAllProperties() {
+		this.properties = new ArrayList<ObjectProperty>();
+	}
 }

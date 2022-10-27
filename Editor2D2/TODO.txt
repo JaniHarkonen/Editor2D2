@@ -4,7 +4,11 @@ OVERVIEW
 - finalize properties of EObject and Instances
 
 SPECIFICS
-
+- add ability to add/modify/remove properties of
+  Instances in PropertiesPane
+- add ability to change the position of an Instance
+  in the PropertiesPane
+- add ability to save changes to an Asset
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the

@@ -17,6 +17,22 @@ import editor2d2.modules.object.asset.ObjectProperty;
 
 public class ObjectModal extends ModalView<EObject> {
 	
+	
+	private class PropertyField {
+		public JCheckBox cbIsSelected;
+		public CTextField txtPropName;
+		public CTextField txtPropValue;
+		public JCheckBox cbIsCompiled;
+		
+		public PropertyField() {
+			this.cbIsSelected = null;
+			this.txtPropName = null;
+			this.txtPropValue = null;
+			this.cbIsCompiled = null;
+		}
+	}
+	
+	
 		// Default width text field
 	private CTextField txtWidth;
 	
@@ -26,6 +42,10 @@ public class ObjectModal extends ModalView<EObject> {
 		// Default rotation text field
 	private CTextField txtRotation;
 	
+		// Reference to the checkboxes next to properties
+		// fields
+	private ArrayList<PropertyField> propertyFields;
+	
 	
 	public ObjectModal(ModalWindow host, boolean useFactorySettings) {
 		super(host, useFactorySettings);
@@ -33,6 +53,7 @@ public class ObjectModal extends ModalView<EObject> {
 		this.txtWidth = new CTextField("Width:");
 		this.txtHeight = new CTextField("Height:");
 		this.txtRotation = new CTextField("Rotation°:");
+		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	
 	public ObjectModal(ModalWindow host) {
@@ -71,10 +92,12 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		containerProperties.add(containerPropertiesTitles);
 		
+			// Create property fields
 		ArrayList<ObjectProperty> objProps = this.source.getProperties();
+		this.propertyFields = new ArrayList<PropertyField>();
 		
-		for( ObjectProperty op : objProps )
-		containerProperties.add(createPropertyField(op));
+		for( int i = 0; i < objProps.size(); i++ )
+		containerProperties.add(createPropertyField(objProps.get(i), i));
 		
 			// Property controls
 		containerProperties.add(new ClickableButton("+", (e) -> { actionAddProperty(); }));
@@ -90,7 +113,7 @@ public class ObjectModal extends ModalView<EObject> {
 	
 
 		// Creates a JPanel containing the settings for a property
-	private JPanel createPropertyField(ObjectProperty objectProperty) {
+	private JPanel createPropertyField(ObjectProperty objectProperty, int index) {
 		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
 			// Selection checkbox
@@ -112,6 +135,14 @@ public class ObjectModal extends ModalView<EObject> {
 		container.add(txtPropName.render());
 		container.add(txtPropValue.render());
 		container.add(cbIsCompiled);
+		
+		PropertyField pf = new PropertyField();
+		pf.cbIsSelected = cbIsSelected;
+		pf.txtPropName = txtPropName;
+		pf.txtPropValue = txtPropValue;
+		pf.cbIsCompiled = cbIsCompiled;
+		
+		this.propertyFields.add(pf);
 		
 		return container;
 	}
@@ -142,21 +173,43 @@ public class ObjectModal extends ModalView<EObject> {
 		this.source.setWidth(Double.parseDouble(w));
 		this.source.setHeight(Double.parseDouble(h));
 		this.source.setRotation(Double.parseDouble(rot));
+		
+			// Save changes to property fields
+		this.source.removeAllProperties();
+		
+		for( PropertyField pf : this.propertyFields )
+		{
+			String name = pf.txtPropName.getText();
+			String value = pf.txtPropValue.getText();
+			boolean isCompiled = pf.cbIsCompiled.isSelected();
+			
+			this.source.addProperty(new ObjectProperty(name, value, isCompiled));
+		}
 	}
 	
 		// Adds a new property panel to a given container upon
 		// clicking "+"
 	private void actionAddProperty( ) {
-		this.source.addProperty(new ObjectProperty("!x", "&x", true));
 		saveChanges(false);
+		this.source.addProperty(new ObjectProperty("", "", true));
 		update();
 	}
 	
 		// Removes the selected properties from the object upon
 		// clicking "-"
 	private void actionRemoveProperties() {
-		
 		saveChanges(false);
+		
+		for( int i = 0; i < this.propertyFields.size(); i++ )
+		{
+			if( !this.propertyFields.get(i).cbIsSelected.isSelected() )
+			continue;
+			
+			this.source.removeProperty(i);
+			this.propertyFields.remove(i);
+			i--;
+		}
+		
 		update();
 	}
 

@@ -182,9 +182,9 @@ public class SceneView extends GUIComponent implements Subscriber {
 			public void mousePressed(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkLeftClick(e) )
+				if( GUIUtilities.checkLeftClick(e) && !isSpaceDown )
 				toolUseOrder = Tool.PRIMARY_FUNCTION;
-				else if( GUIUtilities.checkRightClick(e) && !isSpaceDown )
+				else if( GUIUtilities.checkRightClick(e) )
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
 				
 				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), false, toolUseOrder);
@@ -194,7 +194,7 @@ public class SceneView extends GUIComponent implements Subscriber {
 			public void mouseReleased(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkRightClick(e) && isSpaceDown )
+				if( GUIUtilities.checkLeftClick(e) && isSpaceDown )
 				sceneDragger.stopDragging();
 				else if( GUIUtilities.checkLeftClick(e) )
 				toolUseOrder = Tool.PRIMARY_FUNCTION;
@@ -221,17 +221,15 @@ public class SceneView extends GUIComponent implements Subscriber {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				
-				if( SwingUtilities.isLeftMouseButton(e) )
+				if( SwingUtilities.isLeftMouseButton(e) && !isSpaceDown )
 				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, Tool.PRIMARY_FUNCTION);
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
 					// on the first click)
-				else if( SwingUtilities.isRightMouseButton(e) && isSpaceDown )
+				else if( SwingUtilities.isLeftMouseButton(e) && isSpaceDown )
 				{
 					if( !sceneDragger.checkDragging() )
-					{
-						sceneDragger.startDragging(e.getX(), e.getY(), 1);
-					}
+					sceneDragger.startDragging(e.getX(), e.getY(), 1);
 					else
 					{
 						DragBoxPoll dgpoll = sceneDragger.poll(e.getX(), e.getY(), 1);
