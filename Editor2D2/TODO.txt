@@ -6,8 +6,6 @@ OVERVIEW
 
 SPECIFICS
 - check and possibly fix undo and redo for ASelect
-- add undo and redo for ARotate
-- add undo and redo for AFill
 
 - use ToolContext's selection instead of Controller's
   selection inside Actions
