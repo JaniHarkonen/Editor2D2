@@ -1,8 +1,11 @@
 package editor2d2.model.app.tool;
 
+import java.util.ArrayList;
+
 import editor2d2.Application;
 import editor2d2.model.app.actions.select.ASelect;
 import editor2d2.model.app.actions.select.ASelectContext;
+import editor2d2.model.project.scene.placeable.Placeable;
 
 public class TSelect extends Tool {
 	
@@ -12,12 +15,16 @@ public class TSelect extends Tool {
 		// In-scene Y-coordinate of the start of the selection
 	private double startY;
 	
+		// List of initially selected Placeables
+	private ArrayList<Placeable> initialSelection;
+	
 	
 	public TSelect() {
 		super();
 		this.name = "Select";
 		this.shortcutKey = "S";
 		this.icon = Application.resources.getGraphic("icon-tool-select");
+		this.initialSelection = null;
 	}
 	
 	
@@ -27,6 +34,7 @@ public class TSelect extends Tool {
 		{
 			this.startX = c.locationX;
 			this.startY = c.locationY;
+			this.initialSelection = Application.controller.placeableSelectionManager.getSelection();
 			
 			return USE_SUCCESSFUL;
 		}
@@ -58,6 +66,7 @@ public class TSelect extends Tool {
 		
 			// Pass the selection area coordinates into the ActionContext
 		ASelectContext ac = new ASelectContext(c);
+		ac.initialSelection = this.initialSelection;
 		ac.startX = sx;
 		ac.startY = sy;
 		ac.endX = ex;

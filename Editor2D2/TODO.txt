@@ -5,7 +5,6 @@ OVERVIEW
   Actions
 
 SPECIFICS
-- check and possibly fix undo and redo for ASelect
 
 - use ToolContext's selection instead of Controller's
   selection inside Actions
