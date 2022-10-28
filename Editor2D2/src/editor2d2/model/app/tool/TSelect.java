@@ -74,10 +74,6 @@ public class TSelect extends Tool {
 		ac.endY = ey;
 		
 		(new ASelect()).perform(ac);
-		
-		ArrayList<Placeable> newSelection = ac.controller.placeableSelectionManager.getSelection();
-		
-		if( newSelection.size() == 1 )
 		Application.controller.subscriptionService.register(Handles.SELECTED_PLACEABLE, Application.controller);
 		
 		return USE_SUCCESSFUL;

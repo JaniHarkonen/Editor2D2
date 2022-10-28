@@ -61,13 +61,17 @@ public class InstancePropertiesPane extends PropertiesPane implements Subscriber
 	
 	@Override
 	public void actionApply(ActionEvent ae) {
-		double	/*x = Double.parseDouble(this.txtX.getText()),
-				y = Double.parseDouble(this.txtY.getText()),*/
+		double	x = Double.parseDouble(this.txtX.getText()),
+				y = Double.parseDouble(this.txtY.getText()),
 				w = Double.parseDouble(this.txtWidth.getText()),
 				h = Double.parseDouble(this.txtHeight.getText()),
 				rot = Double.parseDouble(this.txtRotation.getText());
 		
 		Instance src = (Instance) this.source;
+		
+		if( src.getLayer() != null )
+		src.setPosition(x, y);
+		
 		src.setDimensions(w, h);
 		src.setRotation(rot);
 		
@@ -95,13 +99,19 @@ public class InstancePropertiesPane extends PropertiesPane implements Subscriber
 		Instance src = (Instance) this.source;
 		
 			// Position controls
-		JPanel containerPosition = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-		
-			containerPosition.add(this.txtX.render());
-			containerPosition.add(this.txtY.render());
-		
-		containerPosition.setBorder(BorderFactory.createTitledBorder("Position"));
-		container.add(containerPosition);
+		if( src.getLayer() != null )
+		{
+			JPanel containerPosition = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+			
+				this.txtX.setText(""+src.getX());
+				containerPosition.add(this.txtX.render());
+				
+				this.txtY.setText(""+src.getY());
+				containerPosition.add(this.txtY.render());
+			
+			containerPosition.setBorder(BorderFactory.createTitledBorder("Position"));
+			container.add(containerPosition);
+		}
 		
 			// Dimension controls
 		JPanel containerDimensions = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);

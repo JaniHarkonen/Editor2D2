@@ -5,8 +5,6 @@ OVERVIEW
 
 SPECIFICS
 - add ability to select sprite for EObject
-- add ability to change the position of an Instance
-  in the PropertiesPane
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the

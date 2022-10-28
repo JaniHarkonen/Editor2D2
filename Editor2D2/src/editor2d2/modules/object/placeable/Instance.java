@@ -19,12 +19,6 @@ public class Instance extends Placeable {
 
 		// Reference to the Image that represents the instance
 	private Image sprite;
-
-		// X-coordinate of the instance in the scene
-	private double x;
-	
-		// Y-coordinate of the instance in the scene
-	private double y;
 	
 		// Rotation of the instance (in degrees)
 	private double rotation;
@@ -35,20 +29,16 @@ public class Instance extends Placeable {
 		// Height of the instance in pixels
 	private double height;
 	
-		// List of the properties of the Instance
-	//private ArrayList<ObjectProperty> properties;
-	
+		// Reference to the PropertyManager that wraps the
+		// property fields of the Instance
 	private PropertyManager propertyManager;
 	
 	
 	public Instance() {
 		this.sprite = null;
-		this.x = 0;
-		this.y = 0;
 		this.width = 32;
 		this.height = 32;
 		this.rotation = 0;
-		//this.properties = new ArrayList<ObjectProperty>();
 		this.propertyManager = new PropertyManager();
 	}
 	
@@ -93,14 +83,9 @@ public class Instance extends Placeable {
 		copyAttributes(this, inst);
 		
 		inst.sprite = this.sprite;
-		inst.x = this.x;
-		inst.y = this.y;
 		inst.width = this.width;
 		inst.height = this.height;
 		inst.rotation = this.rotation;
-		
-		/*for( ObjectProperty op : this.properties )
-		inst.addProperty(new ObjectProperty(op));*/
 		this.propertyManager.copyProperties(inst.getPropertyManager());
 			
 		return inst;
@@ -112,24 +97,28 @@ public class Instance extends Placeable {
 		oa.remove(this);
 	}
 	
-	/*public void addProperty(ObjectProperty op) {
-		this.properties.add(op);
-	}*/
-	
-	/*public void removeProperty(int index) {
-		if( index < 0 || index >= this.properties.size() )
-		return;
-		
-		this.properties.remove(index);
-	}*/
-	
 	
 		// GETTERS/SETTERS
 	
 		// Sets the X- and Y-coordinates of the instance
 	public void setPosition(double x, double y) {
-		this.x = x;
-		this.y = y;
+		if( x < 0 || y < 0 )
+		return;
+		
+		int cx = getCellX(),
+			cy = getCellY();
+		
+		int	ncx = this.layer.getCellX(cx),
+			ncy = this.layer.getCellY(cy);
+		
+			// No cell change required
+		if( cx == ncx && cy == ncy )
+		setOffsets(x, y);
+		else
+		{
+			delete();
+			this.layer.place(x, y, this);
+		}
 	}
 	
 		// Sets the scene Object the instance is based on
@@ -191,17 +180,8 @@ public class Instance extends Placeable {
 		return this.rotation;
 	}
 	
-		// Returns a reference to the list of Instance properties
-	/*public ArrayList<ObjectProperty> getProperties() {
-		return this.properties;
-	}*/
-	
-		// Returns a property with a given position in the property
-		// list
-	/*public ObjectProperty getProperty(int index) {
-		return this.properties.get(index);
-	}*/
-	
+		// Returns a reference to the PropertyManager that
+		// wraps the properties of the Instance
 	public PropertyManager getPropertyManager() {
 		return this.propertyManager;
 	}
