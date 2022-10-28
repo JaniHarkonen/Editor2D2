@@ -17,7 +17,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
@@ -269,14 +268,13 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	public void actionEdit() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
 		
-		DebugUtils.log(asset, this);
-		
 		if( asset == null )
 		return;
 		
 		ModalWindow mw = Application.window.getModalWindow();
 		ModalView<Asset> mv = (ModalView<Asset>) FactoryService.getFactories(asset.getAssetClassName()).createModal(mw, false);
 		mv.setAsset(asset);
+		mv.setEdited(true);
 		
 		Application.window.popup(mv);
 	}
