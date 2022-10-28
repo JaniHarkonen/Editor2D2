@@ -1,6 +1,7 @@
 package editor2d2.modules.object.proppane;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -10,6 +11,8 @@ import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.components.CTextField;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
+import editor2d2.modules.object.asset.ObjectProperty;
+import editor2d2.modules.object.modal.PropertyField;
 import editor2d2.modules.object.placeable.Instance;
 
 public class InstancePropertiesPane extends PropertiesPane {
@@ -29,6 +32,10 @@ public class InstancePropertiesPane extends PropertiesPane {
 		// Text field for the rotation of the instance
 	private CTextField txtRotation;
 	
+		// List of PropertyFields representing the properties
+		// of the Instance
+	private ArrayList<PropertyField> propertyFields;
+	
 	
 	public InstancePropertiesPane(Placeable source) {
 		super(source);
@@ -38,6 +45,7 @@ public class InstancePropertiesPane extends PropertiesPane {
 		this.txtWidth = new CTextField("Width: ");
 		this.txtHeight = new CTextField("Height: ");
 		this.txtRotation = new CTextField("Rotation: ");
+		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	
 	
@@ -57,6 +65,15 @@ public class InstancePropertiesPane extends PropertiesPane {
 		Instance src = (Instance) this.source;
 		src.setDimensions(w, h);
 		src.setRotation(rot);
+		
+		for( int i = 0; i < this.propertyFields.size(); i++ )
+		{
+			ObjectProperty op = src.getPropertyManager().getProperty(i);
+			PropertyField pf = this.propertyFields.get(i);
+			op.name = pf.getName();
+			op.value = pf.getValue();
+			op.isCompiled = pf.checkCompiled();
+		}
 		
 		update();
 	}
@@ -96,6 +113,20 @@ public class InstancePropertiesPane extends PropertiesPane {
 			
 		containerOrientation.setBorder(BorderFactory.createTitledBorder("Orientation"));
 		container.add(containerOrientation);
+		
+			// Properties
+		JPanel propertiesContainer = GUIUtilities.createDefaultPanel();
+		this.propertyFields = new ArrayList<PropertyField>();
+		
+			for( ObjectProperty op : ((Instance) this.source).getPropertyManager().getAllProperties() )
+			{
+				PropertyField pf = new PropertyField(op, false);
+				this.propertyFields.add(pf);
+				propertiesContainer.add(pf.render());
+			}
+		
+		propertiesContainer.setBorder(BorderFactory.createTitledBorder("Properties"));
+		container.add(propertiesContainer);
 		
 		return this.createDefaultPropertiesPaneContainer("Instance properties", container);
 	}

@@ -12,6 +12,7 @@ import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.asset.PropertyManager;
 import editor2d2.modules.object.layer.ObjectArray;
 
 public class Instance extends Placeable {
@@ -34,6 +35,11 @@ public class Instance extends Placeable {
 		// Height of the instance in pixels
 	private double height;
 	
+		// List of the properties of the Instance
+	//private ArrayList<ObjectProperty> properties;
+	
+	private PropertyManager propertyManager;
+	
 	
 	public Instance() {
 		this.sprite = null;
@@ -42,6 +48,8 @@ public class Instance extends Placeable {
 		this.width = 32;
 		this.height = 32;
 		this.rotation = 0;
+		//this.properties = new ArrayList<ObjectProperty>();
+		this.propertyManager = new PropertyManager();
 	}
 	
 	
@@ -91,6 +99,10 @@ public class Instance extends Placeable {
 		inst.height = this.height;
 		inst.rotation = this.rotation;
 		
+		/*for( ObjectProperty op : this.properties )
+		inst.addProperty(new ObjectProperty(op));*/
+		this.propertyManager.copyProperties(inst.getPropertyManager());
+			
 		return inst;
 	}
 	
@@ -99,6 +111,17 @@ public class Instance extends Placeable {
 		ObjectArray oa = (ObjectArray) this.layer.getObjectGrid().get(getCellX(), getCellY());
 		oa.remove(this);
 	}
+	
+	/*public void addProperty(ObjectProperty op) {
+		this.properties.add(op);
+	}*/
+	
+	/*public void removeProperty(int index) {
+		if( index < 0 || index >= this.properties.size() )
+		return;
+		
+		this.properties.remove(index);
+	}*/
 	
 	
 		// GETTERS/SETTERS
@@ -166,6 +189,21 @@ public class Instance extends Placeable {
 		// Returns the rotation of the Instance (in degrees)
 	public double getRotation() {
 		return this.rotation;
+	}
+	
+		// Returns a reference to the list of Instance properties
+	/*public ArrayList<ObjectProperty> getProperties() {
+		return this.properties;
+	}*/
+	
+		// Returns a property with a given position in the property
+		// list
+	/*public ObjectProperty getProperty(int index) {
+		return this.properties.get(index);
+	}*/
+	
+	public PropertyManager getPropertyManager() {
+		return this.propertyManager;
 	}
 
 }

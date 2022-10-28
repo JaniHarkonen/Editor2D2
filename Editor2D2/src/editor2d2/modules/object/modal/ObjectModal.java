@@ -2,7 +2,6 @@ package editor2d2.modules.object.modal;
 
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -16,22 +15,7 @@ import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.asset.ObjectProperty;
 
 public class ObjectModal extends ModalView<EObject> {
-	
-	
-	private class PropertyField {
-		public JCheckBox cbIsSelected;
-		public CTextField txtPropName;
-		public CTextField txtPropValue;
-		public JCheckBox cbIsCompiled;
-		
-		public PropertyField() {
-			this.cbIsSelected = null;
-			this.txtPropName = null;
-			this.txtPropValue = null;
-			this.cbIsCompiled = null;
-		}
-	}
-	
+
 	
 		// Default width text field
 	private CTextField txtWidth;
@@ -93,11 +77,13 @@ public class ObjectModal extends ModalView<EObject> {
 		containerProperties.add(containerPropertiesTitles);
 		
 			// Create property fields
-		ArrayList<ObjectProperty> objProps = this.source.getProperties();
 		this.propertyFields = new ArrayList<PropertyField>();
-		
-		for( int i = 0; i < objProps.size(); i++ )
-		containerProperties.add(createPropertyField(objProps.get(i), i));
+		for( ObjectProperty op : this.source.getPropertyManager().getAllProperties() )
+		{
+			PropertyField pf = new PropertyField(op);
+			containerProperties.add(pf.render());
+			this.propertyFields.add(pf);
+		}
 		
 			// Property controls
 		containerProperties.add(new ClickableButton("+", (e) -> { actionAddProperty(); }));
@@ -110,42 +96,6 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		return this.createDefaultModalView(modal);
 	}
-	
-
-		// Creates a JPanel containing the settings for a property
-	private JPanel createPropertyField(ObjectProperty objectProperty, int index) {
-		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-		
-			// Selection checkbox
-		JCheckBox cbIsSelected = new JCheckBox();
-		
-			// Property name field
-		CTextField txtPropName = new CTextField("");
-		txtPropName.setText(objectProperty.name);
-		
-			// Value field
-		CTextField txtPropValue = new CTextField("");
-		txtPropValue.setText(objectProperty.value);
-		
-			// Compilation checkbox
-		JCheckBox cbIsCompiled = new JCheckBox();
-		cbIsCompiled.setSelected(objectProperty.isCompiled);
-		
-		container.add(cbIsSelected);
-		container.add(txtPropName.render());
-		container.add(txtPropValue.render());
-		container.add(cbIsCompiled);
-		
-		PropertyField pf = new PropertyField();
-		pf.cbIsSelected = cbIsSelected;
-		pf.txtPropName = txtPropName;
-		pf.txtPropValue = txtPropValue;
-		pf.cbIsCompiled = cbIsCompiled;
-		
-		this.propertyFields.add(pf);
-		
-		return container;
-	}
 
 
 	@Override
@@ -155,6 +105,8 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		source.setIdentifier("OBJ" + currms);
 		source.setName("Object " + currms);
+		source.setWidth(32);
+		source.setHeight(32);
 		
 		this.source = source;
 	}
@@ -175,23 +127,17 @@ public class ObjectModal extends ModalView<EObject> {
 		this.source.setRotation(Double.parseDouble(rot));
 		
 			// Save changes to property fields
-		this.source.removeAllProperties();
+		this.source.getPropertyManager().removeAllProperties();
 		
 		for( PropertyField pf : this.propertyFields )
-		{
-			String name = pf.txtPropName.getText();
-			String value = pf.txtPropValue.getText();
-			boolean isCompiled = pf.cbIsCompiled.isSelected();
-			
-			this.source.addProperty(new ObjectProperty(name, value, isCompiled));
-		}
+		this.source.getPropertyManager().addProperty(new ObjectProperty(pf.getName(), pf.getValue(), pf.checkCompiled()));
 	}
 	
 		// Adds a new property panel to a given container upon
 		// clicking "+"
 	private void actionAddProperty( ) {
 		saveChanges(false);
-		this.source.addProperty(new ObjectProperty("", "", true));
+		this.source.getPropertyManager().addProperty(new ObjectProperty("", "", true));
 		update();
 	}
 	
@@ -202,10 +148,10 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		for( int i = 0; i < this.propertyFields.size(); i++ )
 		{
-			if( !this.propertyFields.get(i).cbIsSelected.isSelected() )
+			if( !this.propertyFields.get(i).getSelected() )
 			continue;
 			
-			this.source.removeProperty(i);
+			this.source.getPropertyManager().removeProperty(i);
 			this.propertyFields.remove(i);
 			i--;
 		}

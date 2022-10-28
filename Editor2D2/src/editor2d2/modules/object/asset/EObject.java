@@ -1,7 +1,5 @@
 package editor2d2.modules.object.asset;
 
-import java.util.ArrayList;
-
 import editor2d2.model.project.Asset;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.placeable.Instance;
@@ -22,7 +20,10 @@ public class EObject extends Asset {
 	private double rotation;
 	
 		// Properties of the object mapped with the name of the property fields
-	private ArrayList<ObjectProperty> properties;
+	//private ArrayList<ObjectProperty> properties;
+	
+		// A wrapper for the properties of the object
+	private PropertyManager propertyManager;
 	
 	
 	public EObject() {
@@ -32,7 +33,8 @@ public class EObject extends Asset {
 		this.width = 0;
 		this.height = 0;
 		this.rotation = 0;
-		this.properties = new ArrayList<ObjectProperty>();
+		//this.properties = new ArrayList<ObjectProperty>();
+		this.propertyManager = new PropertyManager();
 	}
 	
 	
@@ -43,6 +45,10 @@ public class EObject extends Asset {
 		inst.setSprite(this.sprite);
 		inst.setDimensions(this.width, this.height);
 		inst.setRotation(this.rotation);
+		
+		/*for( ObjectProperty op : this.properties )
+		inst.addProperty(new ObjectProperty(op));*/
+		this.propertyManager.copyProperties(inst.getPropertyManager());
 		
 		return inst;
 	}
@@ -69,12 +75,18 @@ public class EObject extends Asset {
 	}
 	
 		// Returns the list of object properties
-	public ArrayList<ObjectProperty> getProperties() {
+	/*public ArrayList<ObjectProperty> getProperties() {
 		return this.properties;
+	}*/
+	
+		// Returns a reference to the PropertyManager that wraps the
+		// object properties
+	public PropertyManager getPropertyManager() {
+		return this.propertyManager;
 	}
 	
 		// Returns the property of a given name
-	public ObjectProperty getProperty(String property) {
+	/*public ObjectProperty getProperty(String property) {
 		for( ObjectProperty op : this.properties )
 		{
 			if( op.name.equals(property) )
@@ -82,7 +94,7 @@ public class EObject extends Asset {
 		}
 		
 		return null;
-	}
+	}*/
 	
 		// Sets the default Image asset used by the scene object
 	public void setSprite(Image sprite) {
@@ -105,12 +117,12 @@ public class EObject extends Asset {
 	}
 	
 		// Sets the list of object properties
-	public void setProperties(ArrayList<ObjectProperty> properties) {
+	/*public void setProperties(ArrayList<ObjectProperty> properties) {
 		this.properties = properties;
-	}
+	}*/
 	
 		// Modifies a given property, or adds it if it doesn't exist
-	public void modifyProperty(String property, ObjectProperty newProperty) {
+	/*public void modifyProperty(String property, ObjectProperty newProperty) {
 		for( int i = 0; i < this.properties.size(); i++ )
 		{
 			if( !this.properties.get(i).name.equals(property) )
@@ -121,15 +133,15 @@ public class EObject extends Asset {
 		}
 		
 		this.properties.add(newProperty);
-	}
+	}*/
 	
 		// Adds a given property, or modifies it if it exists already
-	public void addProperty(ObjectProperty newProperty) {
+	/*public void addProperty(ObjectProperty newProperty) {
 		modifyProperty(newProperty.name, newProperty);
-	}
+	}*/
 	
 		// Removes a given property
-	public void removeProperty(String property) {
+	/*public void removeProperty(String property) {
 		for( int i = 0; i < this.properties.size(); i++ )
 		{
 			if( !this.properties.get(i).name.equals(property) )
@@ -138,19 +150,19 @@ public class EObject extends Asset {
 			this.properties.remove(i);
 			break;
 		}
-	}
+	}*/
 	
 		// Removes a property given its index in the properties
 		// list
-	public void removeProperty(int index) {
+	/*public void removeProperty(int index) {
 		if( index < 0 || index >= this.properties.size() )
 		return;
 		
 		this.properties.remove(index);
-	}
+	}*/
 	
 		// Removes all properties
-	public void removeAllProperties() {
+	/*public void removeAllProperties() {
 		this.properties = new ArrayList<ObjectProperty>();
-	}
+	}*/
 }
