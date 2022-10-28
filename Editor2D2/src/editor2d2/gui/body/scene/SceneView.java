@@ -22,6 +22,7 @@ import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
@@ -30,7 +31,7 @@ import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
-public class SceneView extends GUIComponent implements Subscriber {
+public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
 		// Reference to the Scene that this view will render
 	private final Scene scene;
@@ -54,6 +55,7 @@ public class SceneView extends GUIComponent implements Subscriber {
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 		
 		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
 	}
 	
 	
