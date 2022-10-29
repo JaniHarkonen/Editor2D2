@@ -40,7 +40,7 @@ public abstract class AssetItem extends GUIComponent {
 		this.container.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if( !GUIUtilities.checkLeftClick(e) )
 				return;
 				
