@@ -25,19 +25,22 @@ public class ObjectAssetItem extends AssetItem {
 		CImage icon = new CImage();
 		BufferedImage img = Application.resources.getGraphic("icon-asset-object-blank");
 		Image spr = ((EObject) this.source).getSprite();
+		BufferedImage sprimg = null;
 		
-		if( spr != null )
-		{
-			double	w = spr.getWidth(),
-					h = spr.getHeight();
-			double 	iconSize = 32;
+		if( spr == null )
+		sprimg = Application.resources.getGraphic("icon-null-object");
+		else
+		sprimg = spr.getImage();
 			
-			AffineTransform at = new AffineTransform();
-			at.translate(64 / 4 - 1, 64 / 4 + 4);
-			at.scale((iconSize + 1) / (double) w, iconSize / (double) h);
-			((Graphics2D) img.getGraphics()).drawImage(spr.getImage(), at, null);
-		}
+		double	w = sprimg.getWidth(),
+				h = sprimg.getHeight();
+		double 	iconSize = 32;
 		
+		AffineTransform at = new AffineTransform();
+		at.translate(64 / 4 - 1, 64 / 4 + 4);
+		at.scale((iconSize + 1) / (double) w, iconSize / (double) h);
+		((Graphics2D) img.getGraphics()).drawImage(sprimg, at, null);
+	
 		icon.setImage(img);
 		
 		return icon.render();

@@ -41,14 +41,16 @@ public abstract class AssetItem extends GUIComponent {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if( !GUIUtilities.checkLeftClick(e) )
-				return;
-				
-				if( e.getClickCount() == 1 )
-				actionSelect(e);
-				
-				if( e.getClickCount() == 2 )
-				actionPrimaryFunction(e);
+				if( GUIUtilities.checkLeftClick(e) )
+				{
+					if( e.getClickCount() == 1 )
+					actionSelect(e);
+					
+					if( e.getClickCount() == 2 )
+					actionPrimaryFunction(e);
+				}
+				else if( GUIUtilities.checkRightClick(e) )
+				host.openPopup(e);
 			}
 			
 			@Override
@@ -101,11 +103,8 @@ public abstract class AssetItem extends GUIComponent {
 		}
 		else
 		{
-			if( !isSelected )
-			{
-				host.selectAsset(src);
-				Application.controller.selectAsset(this.source);
-			}
+			host.selectAsset(src);
+			Application.controller.selectAsset(this.source);
 		}
 	}
 	

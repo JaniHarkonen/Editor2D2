@@ -28,8 +28,6 @@ LATER
 	-- pay attention to memory usage as well
 	   
 TASKS LEFT
-- PropertiesPane should open for already placed Placeables
-  too
 - write TMove (undo, redo)
 - add Meta Data modal
 - create abstractions for compiling
