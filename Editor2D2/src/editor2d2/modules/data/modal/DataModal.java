@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ColorPreviewPanel;
+import editor2d2.gui.components.requirements.RequireDoubleBetween;
+import editor2d2.gui.components.requirements.RequireStringNonEmpty;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
@@ -34,10 +36,10 @@ public class DataModal extends ModalView<Data> {
 	public DataModal(ModalWindow host, boolean useFactorySettings) {
 		super(host, useFactorySettings);
 		
-		this.txtDataValue = new CTextField("Data value:");
-		this.txtColorRed = new CTextField("R:");
-		this.txtColorGreen = new CTextField("G:");
-		this.txtColorBlue = new CTextField("B:");
+		this.txtDataValue = new CTextField("Data value:", new RequireStringNonEmpty());
+		this.txtColorRed = new CTextField("R:", new RequireDoubleBetween(0d, 255d));
+		this.txtColorGreen = new CTextField("G:", new RequireDoubleBetween(0d, 255d));
+		this.txtColorBlue = new CTextField("B:", new RequireDoubleBetween(0d, 255d));
 	}
 	
 	public DataModal(ModalWindow host) {

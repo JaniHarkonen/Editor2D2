@@ -14,6 +14,7 @@ import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.components.SpritePopupMenu;
+import editor2d2.gui.components.requirements.RequireDoubleBetween;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
@@ -44,9 +45,9 @@ public class ObjectModal extends ModalView<EObject> {
 		super(host, useFactorySettings);
 		
 		this.sprite = null;
-		this.txtWidth = new CTextField("Width:");
-		this.txtHeight = new CTextField("Height:");
-		this.txtRotation = new CTextField("Rotation°:");
+		this.txtWidth = new CTextField("Width:", new RequireDoubleBetween(1d, (double) Integer.MAX_VALUE));
+		this.txtHeight = new CTextField("Height:", new RequireDoubleBetween(1d, (double) Integer.MAX_VALUE));
+		this.txtRotation = new CTextField("Rotation°:", new RequireDoubleBetween(0d, 360d));
 		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	

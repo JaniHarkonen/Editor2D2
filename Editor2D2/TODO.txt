@@ -5,7 +5,6 @@ OVERVIEW
   and removed
 
 SPECIFICS
-- make sure that each Asset has a unique identifier
 - make sure that configurations set in ModalViews
   are legal
 - ? should JOptionsPane be placed under Window
