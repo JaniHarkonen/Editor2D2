@@ -4,7 +4,6 @@ OVERVIEW
 
 
 SPECIFICS
-- add ability to select sprite for EObject
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the

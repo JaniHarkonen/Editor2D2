@@ -1,21 +1,27 @@
 package editor2d2.modules.object.modal;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import editor2d2.Application;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
+import editor2d2.gui.components.SpritePopupMenu;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
+import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.asset.ObjectProperty;
 
 public class ObjectModal extends ModalView<EObject> {
-
 	
 		// Default width text field
 	private CTextField txtWidth;
@@ -26,6 +32,9 @@ public class ObjectModal extends ModalView<EObject> {
 		// Default rotation text field
 	private CTextField txtRotation;
 	
+		// Reference to the selected sprite
+	private Image sprite;
+	
 		// Reference to the checkboxes next to properties
 		// fields
 	private ArrayList<PropertyField> propertyFields;
@@ -34,6 +43,7 @@ public class ObjectModal extends ModalView<EObject> {
 	public ObjectModal(ModalWindow host, boolean useFactorySettings) {
 		super(host, useFactorySettings);
 		
+		this.sprite = null;
 		this.txtWidth = new CTextField("Width:");
 		this.txtHeight = new CTextField("Height:");
 		this.txtRotation = new CTextField("Rotation°:");
@@ -50,13 +60,25 @@ public class ObjectModal extends ModalView<EObject> {
 		JPanel modal = GUIUtilities.createDefaultPanel();
 		
 			// Sprite field
-		CTextField txtSprite = new CTextField("Sprite:");
+		JPanel containerSprite = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+		containerSprite.add(new JLabel("Sprite"));
+		containerSprite.add(new ClickableButton("...", (e) -> { actionSelectSprite(e); }));
+		
+		this.sprite = this.source.getSprite();
+		
+		if( this.sprite != null )
+		{
+			CImage preview = new CImage();
+			preview.setImage(this.sprite);
+			containerSprite.add(preview.render());
+			modal.add(containerSprite);
+		}
 		
 			// Dimensions
 		JPanel containerDimensions = GUIUtilities.createTitledPanel("Dimensions", GUIUtilities.BOX_LINE_AXIS);
 		
 				// Default width field
-			this.txtWidth.setText(""+source.getWidth());
+			this.txtWidth.setText(""+this.source.getWidth());
 			
 				// Default height field
 			this.txtHeight.setText(""+this.source.getHeight());
@@ -89,7 +111,7 @@ public class ObjectModal extends ModalView<EObject> {
 		containerProperties.add(new ClickableButton("+", (e) -> { actionAddProperty(); }));
 		containerProperties.add(new ClickableButton("-", (e) -> { actionRemoveProperties(); }));
 		
-		modal.add(txtSprite.render());
+		modal.add(containerSprite);
 		modal.add(containerDimensions);
 		modal.add(this.txtRotation.render());
 		modal.add(containerProperties);
@@ -121,6 +143,9 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		if( doChecks && (w.equals("") || h.equals("") || rot.equals("")) )
 		return;
+		
+		if( this.sprite != null )
+		this.source.setSprite(this.sprite);
 		
 		this.source.setWidth(Double.parseDouble(w));
 		this.source.setHeight(Double.parseDouble(h));
@@ -158,7 +183,29 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		update();
 	}
+	
+		// Opens a popup menu for selecting the sprite
+	private void actionSelectSprite(ActionEvent e) {
+		SpritePopupMenu pmSprite = new SpritePopupMenu(Application.controller.getActiveProject().getRootFolder());
+		
+		pmSprite.addSelectionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionSpriteSelected(pmSprite);
+			}
+		});
+		
+		pmSprite.show((Component) e.getSource(), 0, 0);
+	}
 
+		// Called upon selecting a sprite
+	private void actionSpriteSelected(SpritePopupMenu pmSprite) {
+		this.sprite = (Image) pmSprite.getSelection();
+		saveChanges(false);
+		update();
+	}
+	
 	
 	@Override
 	public Asset getReferencedAsset() {

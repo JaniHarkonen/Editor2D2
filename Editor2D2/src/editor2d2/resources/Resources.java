@@ -42,6 +42,7 @@ public final class Resources {
 				// Asset icons
 			loadGraphic("icon-asset-folder", path + "assets\\icon_folder.png");
 			loadGraphic("icon-asset-object", path + "assets\\icon_object.png");
+			loadGraphic("icon-asset-object-blank", path + "assets\\icon_object_blank.png");
 			
 				// Tool icons
 			loadGraphic("icon-tool-select", path + "assets\\icon_tool_select.png");
