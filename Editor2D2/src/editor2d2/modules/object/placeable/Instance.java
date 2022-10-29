@@ -12,18 +12,13 @@ import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.asset.PropertyManager;
 import editor2d2.modules.object.layer.ObjectArray;
 
 public class Instance extends Placeable {
 
 		// Reference to the Image that represents the instance
 	private Image sprite;
-
-		// X-coordinate of the instance in the scene
-	private double x;
-	
-		// Y-coordinate of the instance in the scene
-	private double y;
 	
 		// Rotation of the instance (in degrees)
 	private double rotation;
@@ -34,14 +29,17 @@ public class Instance extends Placeable {
 		// Height of the instance in pixels
 	private double height;
 	
+		// Reference to the PropertyManager that wraps the
+		// property fields of the Instance
+	private PropertyManager propertyManager;
+	
 	
 	public Instance() {
 		this.sprite = null;
-		this.x = 0;
-		this.y = 0;
 		this.width = 32;
 		this.height = 32;
 		this.rotation = 0;
+		this.propertyManager = new PropertyManager();
 	}
 	
 	
@@ -85,9 +83,11 @@ public class Instance extends Placeable {
 		copyAttributes(this, inst);
 		
 		inst.sprite = this.sprite;
-		inst.x = this.x;
-		inst.y = this.y;
-		
+		inst.width = this.width;
+		inst.height = this.height;
+		inst.rotation = this.rotation;
+		this.propertyManager.copyProperties(inst.getPropertyManager());
+			
 		return inst;
 	}
 	
@@ -102,8 +102,23 @@ public class Instance extends Placeable {
 	
 		// Sets the X- and Y-coordinates of the instance
 	public void setPosition(double x, double y) {
-		this.x = x;
-		this.y = y;
+		if( x < 0 || y < 0 )
+		return;
+		
+		int cx = getCellX(),
+			cy = getCellY();
+		
+		int	ncx = this.layer.getCellX(cx),
+			ncy = this.layer.getCellY(cy);
+		
+			// No cell change required
+		if( cx == ncx && cy == ncy )
+		setOffsets(x, y);
+		else
+		{
+			delete();
+			this.layer.place(x, y, this);
+		}
 	}
 	
 		// Sets the scene Object the instance is based on
@@ -163,6 +178,12 @@ public class Instance extends Placeable {
 		// Returns the rotation of the Instance (in degrees)
 	public double getRotation() {
 		return this.rotation;
+	}
+	
+		// Returns a reference to the PropertyManager that
+		// wraps the properties of the Instance
+	public PropertyManager getPropertyManager() {
+		return this.propertyManager;
 	}
 
 }

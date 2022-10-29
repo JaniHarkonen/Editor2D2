@@ -22,6 +22,7 @@ import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
@@ -30,7 +31,7 @@ import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
-public class SceneView extends GUIComponent implements Subscriber {
+public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
 		// Reference to the Scene that this view will render
 	private final Scene scene;
@@ -54,6 +55,7 @@ public class SceneView extends GUIComponent implements Subscriber {
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 		
 		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
 	}
 	
 	
@@ -182,9 +184,9 @@ public class SceneView extends GUIComponent implements Subscriber {
 			public void mousePressed(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkLeftClick(e) )
+				if( GUIUtilities.checkLeftClick(e) && !isSpaceDown )
 				toolUseOrder = Tool.PRIMARY_FUNCTION;
-				else if( GUIUtilities.checkRightClick(e) && !isSpaceDown )
+				else if( GUIUtilities.checkRightClick(e) )
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
 				
 				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), false, toolUseOrder);
@@ -194,7 +196,7 @@ public class SceneView extends GUIComponent implements Subscriber {
 			public void mouseReleased(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkRightClick(e) && isSpaceDown )
+				if( GUIUtilities.checkLeftClick(e) && isSpaceDown )
 				sceneDragger.stopDragging();
 				else if( GUIUtilities.checkLeftClick(e) )
 				toolUseOrder = Tool.PRIMARY_FUNCTION;
@@ -221,17 +223,15 @@ public class SceneView extends GUIComponent implements Subscriber {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				
-				if( SwingUtilities.isLeftMouseButton(e) )
+				if( SwingUtilities.isLeftMouseButton(e) && !isSpaceDown )
 				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, Tool.PRIMARY_FUNCTION);
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
 					// on the first click)
-				else if( SwingUtilities.isRightMouseButton(e) && isSpaceDown )
+				else if( SwingUtilities.isLeftMouseButton(e) && isSpaceDown )
 				{
 					if( !sceneDragger.checkDragging() )
-					{
-						sceneDragger.startDragging(e.getX(), e.getY(), 1);
-					}
+					sceneDragger.startDragging(e.getX(), e.getY(), 1);
 					else
 					{
 						DragBoxPoll dgpoll = sceneDragger.poll(e.getX(), e.getY(), 1);

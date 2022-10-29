@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import editor2d2.model.app.actions.Action;
 
 public class ActionHistory {
+	
+	/**
+	 * Default maximum number of <b>Actions</b> that will be stored
+	 * in the action history. Once the action history this size it
+	 * will begin to override the earliest <b>Actions</b>.
+	 */
+	public static final int DEFAULT_MAX_SIZE = 50;
+	
 
 		// List of Action that make up the action history
 	private ArrayList<Action> actionHistory;
@@ -12,10 +20,19 @@ public class ActionHistory {
 		// Index inside the action history list
 	private int cursor;
 	
+		// Maximum number of Actions that will be stored in the
+		// ActionHistory
+	private int size;
 	
-	public ActionHistory() {
+	
+	public ActionHistory(int size) {
 		this.actionHistory = new ArrayList<Action>();
 		this.cursor = -1;
+		this.size = size;
+	}
+	
+	public ActionHistory() {
+		this(DEFAULT_MAX_SIZE);
 	}
 	
 	
@@ -32,6 +49,14 @@ public class ActionHistory {
 		
 		this.actionHistory.add(action);
 		this.cursor++;
+		
+			// Override earliest Actions if the history exceeds the maximum
+			// allowed size
+		while( this.actionHistory.size() > size )
+		{
+			this.actionHistory.remove(0);
+			this.cursor--;
+		}
 	}
 	
 		// Undoes the latest action in the action history and backtracks the

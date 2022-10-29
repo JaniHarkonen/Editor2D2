@@ -14,6 +14,7 @@ public final class Handles {
 
 	public static final String ASSET_PANE = "asset-pane";
 	public static final String MODAL = "modal";
+	public static final String SCENE_VIEW = "scene-view";
 	
 		// Do not instantiate
 	private Handles() { }

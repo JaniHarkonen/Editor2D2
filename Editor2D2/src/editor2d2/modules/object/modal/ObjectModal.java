@@ -1,17 +1,23 @@
 package editor2d2.modules.object.modal;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import editor2d2.Application;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
+import editor2d2.gui.components.SpritePopupMenu;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
+import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.asset.ObjectProperty;
 
@@ -26,13 +32,22 @@ public class ObjectModal extends ModalView<EObject> {
 		// Default rotation text field
 	private CTextField txtRotation;
 	
+		// Reference to the selected sprite
+	private Image sprite;
+	
+		// Reference to the checkboxes next to properties
+		// fields
+	private ArrayList<PropertyField> propertyFields;
+	
 	
 	public ObjectModal(ModalWindow host, boolean useFactorySettings) {
 		super(host, useFactorySettings);
 		
+		this.sprite = null;
 		this.txtWidth = new CTextField("Width:");
 		this.txtHeight = new CTextField("Height:");
 		this.txtRotation = new CTextField("Rotation°:");
+		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	
 	public ObjectModal(ModalWindow host) {
@@ -45,13 +60,25 @@ public class ObjectModal extends ModalView<EObject> {
 		JPanel modal = GUIUtilities.createDefaultPanel();
 		
 			// Sprite field
-		CTextField txtSprite = new CTextField("Sprite:");
+		JPanel containerSprite = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+		containerSprite.add(new JLabel("Sprite"));
+		containerSprite.add(new ClickableButton("...", (e) -> { actionSelectSprite(e); }));
+		
+		this.sprite = this.source.getSprite();
+		
+		if( this.sprite != null )
+		{
+			CImage preview = new CImage();
+			preview.setImage(this.sprite);
+			containerSprite.add(preview.render());
+			modal.add(containerSprite);
+		}
 		
 			// Dimensions
 		JPanel containerDimensions = GUIUtilities.createTitledPanel("Dimensions", GUIUtilities.BOX_LINE_AXIS);
 		
 				// Default width field
-			this.txtWidth.setText(""+source.getWidth());
+			this.txtWidth.setText(""+this.source.getWidth());
 			
 				// Default height field
 			this.txtHeight.setText(""+this.source.getHeight());
@@ -71,49 +98,25 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		containerProperties.add(containerPropertiesTitles);
 		
-		ArrayList<ObjectProperty> objProps = this.source.getProperties();
-		
-		for( ObjectProperty op : objProps )
-		containerProperties.add(createPropertyField(op));
+			// Create property fields
+		this.propertyFields = new ArrayList<PropertyField>();
+		for( ObjectProperty op : this.source.getPropertyManager().getAllProperties() )
+		{
+			PropertyField pf = new PropertyField(op);
+			containerProperties.add(pf.render());
+			this.propertyFields.add(pf);
+		}
 		
 			// Property controls
 		containerProperties.add(new ClickableButton("+", (e) -> { actionAddProperty(); }));
 		containerProperties.add(new ClickableButton("-", (e) -> { actionRemoveProperties(); }));
 		
-		modal.add(txtSprite.render());
+		modal.add(containerSprite);
 		modal.add(containerDimensions);
 		modal.add(this.txtRotation.render());
 		modal.add(containerProperties);
 		
 		return this.createDefaultModalView(modal);
-	}
-	
-
-		// Creates a JPanel containing the settings for a property
-	private JPanel createPropertyField(ObjectProperty objectProperty) {
-		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-		
-			// Selection checkbox
-		JCheckBox cbIsSelected = new JCheckBox();
-		
-			// Property name field
-		CTextField txtPropName = new CTextField("");
-		txtPropName.setText(objectProperty.name);
-		
-			// Value field
-		CTextField txtPropValue = new CTextField("");
-		txtPropValue.setText(objectProperty.value);
-		
-			// Compilation checkbox
-		JCheckBox cbIsCompiled = new JCheckBox();
-		cbIsCompiled.setSelected(objectProperty.isCompiled);
-		
-		container.add(cbIsSelected);
-		container.add(txtPropName.render());
-		container.add(txtPropValue.render());
-		container.add(cbIsCompiled);
-		
-		return container;
 	}
 
 
@@ -124,6 +127,8 @@ public class ObjectModal extends ModalView<EObject> {
 		
 		source.setIdentifier("OBJ" + currms);
 		source.setName("Object " + currms);
+		source.setWidth(32);
+		source.setHeight(32);
 		
 		this.source = source;
 	}
@@ -139,27 +144,68 @@ public class ObjectModal extends ModalView<EObject> {
 		if( doChecks && (w.equals("") || h.equals("") || rot.equals("")) )
 		return;
 		
+		if( this.sprite != null )
+		this.source.setSprite(this.sprite);
+		
 		this.source.setWidth(Double.parseDouble(w));
 		this.source.setHeight(Double.parseDouble(h));
 		this.source.setRotation(Double.parseDouble(rot));
+		
+			// Save changes to property fields
+		this.source.getPropertyManager().removeAllProperties();
+		
+		for( PropertyField pf : this.propertyFields )
+		this.source.getPropertyManager().addProperty(new ObjectProperty(pf.getName(), pf.getValue(), pf.checkCompiled()));
 	}
 	
 		// Adds a new property panel to a given container upon
 		// clicking "+"
 	private void actionAddProperty( ) {
-		this.source.addProperty(new ObjectProperty("!x", "&x", true));
 		saveChanges(false);
+		this.source.getPropertyManager().addProperty(new ObjectProperty("", "", true));
 		update();
 	}
 	
 		// Removes the selected properties from the object upon
 		// clicking "-"
 	private void actionRemoveProperties() {
+		saveChanges(false);
 		
+		for( int i = 0; i < this.propertyFields.size(); i++ )
+		{
+			if( !this.propertyFields.get(i).getSelected() )
+			continue;
+			
+			this.source.getPropertyManager().removeProperty(i);
+			this.propertyFields.remove(i);
+			i--;
+		}
+		
+		update();
+	}
+	
+		// Opens a popup menu for selecting the sprite
+	private void actionSelectSprite(ActionEvent e) {
+		SpritePopupMenu pmSprite = new SpritePopupMenu(Application.controller.getActiveProject().getRootFolder());
+		
+		pmSprite.addSelectionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionSpriteSelected(pmSprite);
+			}
+		});
+		
+		pmSprite.show((Component) e.getSource(), 0, 0);
+	}
+
+		// Called upon selecting a sprite
+	private void actionSpriteSelected(SpritePopupMenu pmSprite) {
+		this.sprite = (Image) pmSprite.getSelection();
 		saveChanges(false);
 		update();
 	}
-
+	
 	
 	@Override
 	public Asset getReferencedAsset() {

@@ -24,6 +24,9 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		// Text field containing the identifier of the Asset
 	protected CTextField txtIdentifier;
 	
+		// Whether an Asset is being edited
+	protected boolean isEdited;
+	
 	
 	public ModalView(ModalWindow host, boolean useFactorySettings) {
 		if( useFactorySettings == true )
@@ -32,6 +35,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		this.host = host;
 		this.txtName = new CTextField("Name:");
 		this.txtIdentifier = new CTextField("Identifier:");
+		this.isEdited = false;
 	}
 	
 	public ModalView(ModalWindow host) {
@@ -52,7 +56,12 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		
 			// Control area (create, save, cancel)
 		JPanel containerControls = new JPanel();
+		
+		if( this.isEdited )
+		containerControls.add(new ClickableButton("Save", (e) -> { actionSave(); }));
+		else
 		containerControls.add(new ClickableButton("Create", (e) -> { actionCreate(); }));
+		
 		containerControls.add(new ClickableButton("Cancel", (e) -> { actionCancel(); }));
 		
 		container.add(this.txtName.render());
@@ -91,6 +100,14 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		this.host.closeModalWindow();
 	}
 	
+		// Called upon clicking "Save"
+		// CAN BE OVERRIDDEN
+	protected void actionSave() {
+		saveChanges(true);
+		
+		this.host.closeModalWindow();
+	}
+	
 		// Called upon clicking "Cancel"
 		// CAN BE OVERRIDDEN
 	protected void actionCancel() {
@@ -112,5 +129,10 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		// Sets the asset being operated on
 	public void setAsset(A source) {
 		this.source = source;
+	}
+	
+		// Sets whether the Asset is being edited
+	public void setEdited(boolean isEdited) {
+		this.isEdited = isEdited;
 	}
 }

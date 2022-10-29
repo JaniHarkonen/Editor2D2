@@ -1,4 +1,4 @@
-package editor2d2.gui.body;
+package editor2d2.gui.body.proppane;
 
 import java.awt.event.ActionEvent;
 

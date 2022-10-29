@@ -17,4 +17,18 @@ public class ObjectProperty {
 		this.value = value;
 		this.isCompiled = isCompiled;
 	}
+	
+		// Copy constructor
+	public ObjectProperty(ObjectProperty op) {
+		this.name = op.name;
+		this.value = op.value;
+		this.isCompiled = op.isCompiled;
+	}
+	
+	
+	public void set(ObjectProperty op) {
+		this.name = op.name;
+		this.value = op.value;
+		this.isCompiled = op.isCompiled;
+	}
 }

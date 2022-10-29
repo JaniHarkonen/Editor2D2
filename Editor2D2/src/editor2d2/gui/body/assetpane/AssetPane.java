@@ -48,9 +48,13 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		// Current JScrollPane position
 	private int scrollPanePosition;
 	
+		// Reference to the Asset popup menu
+	private JPopupMenu pmAssets;
+	
 	
 	public AssetPane() {
 		this.assetSelectionManager = new SelectionManager<Asset>();
+		this.pmAssets = null;
 		
 			// Register this AssetPane
 		Application.window.subscriptionService.register(Handles.ASSET_PANE, this);
@@ -110,6 +114,12 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		this.scrollPanePosition = this.scrollPane.getVerticalScrollBar().getValue() - 4;
 		update();
 	}
+	
+		// Opens the Asset popup menu at a location provided
+		// by a MouseEvent
+	public void openPopup(MouseEvent e) {
+		this.pmAssets.show(e.getComponent(), e.getX(), e.getY());
+	}
 
 
 	@SuppressWarnings("serial")
@@ -139,7 +149,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		}
 			
 			// Create right-click context menu
-		JPopupMenu pmAssets = new JPopupMenu();
+		this.pmAssets = new JPopupMenu();
 		
 				// Context menu - Create
 			JMenu menuCreate = new JMenu("Create");
@@ -166,7 +176,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 					menuCreate.add(createAssetMenuItem(title, mv));
 				}
 			
-			pmAssets.add(menuCreate);
+			this.pmAssets.add(menuCreate);
 			
 				// Context menu - Edit
 			JMenuItem itemEdit = new JMenuItem(new AbstractAction("Edit") {
@@ -177,7 +187,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				}
 			});
 			
-			pmAssets.add(itemEdit);
+			this.pmAssets.add(itemEdit);
 			
 				// Context menu - Rename
 			JMenuItem itemRename = new JMenuItem(new AbstractAction("Rename") {
@@ -188,7 +198,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				}
 			});
 			
-			pmAssets.add(itemRename);
+			this.pmAssets.add(itemRename);
 			
 				// Context menu - Delete
 			JMenuItem itemDelete = new JMenuItem(new AbstractAction("Delete") {
@@ -199,7 +209,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 				}
 			});
 			
-			pmAssets.add(itemDelete);
+			this.pmAssets.add(itemDelete);
 		
 			// Listen for right-click
 		container.addMouseListener(new MouseAdapter() {
@@ -207,7 +217,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if( GUIUtilities.checkRightClick(e) )
-				pmAssets.show(e.getComponent(), e.getX(), e.getY());
+				openPopup(e);
 				
 				final int MB_BACK = 4;
 				
@@ -274,6 +284,7 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		ModalWindow mw = Application.window.getModalWindow();
 		ModalView<Asset> mv = (ModalView<Asset>) FactoryService.getFactories(asset.getAssetClassName()).createModal(mw, false);
 		mv.setAsset(asset);
+		mv.setEdited(true);
 		
 		Application.window.popup(mv);
 	}
