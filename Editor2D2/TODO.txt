@@ -1,9 +1,15 @@
-TODO - ...
+TODO - AssetFinalizations
 
 OVERVIEW
-
+- make sure that Assets can be safely created, modified
+  and removed
 
 SPECIFICS
+- make sure that each Asset has a unique identifier
+- make sure that configurations set in ModalViews
+  are legal
+- ? should JOptionsPane be placed under Window
+
 	
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
@@ -21,7 +27,6 @@ LATER
 	   selected without the Controller's SelectionManager
 - ? should SelectionManagers be declared in the AppState
 - de-messify Root
-- ? should JOptionsPane be placed under Window
 - speedup Tile rendering performance by getting the subimage
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
@@ -34,9 +39,6 @@ TASKS LEFT
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
 	   need to be written
-- make sure that Asset deletion affects the Placeables
-  derived from them
-- make sure that each Asset has a unique identifier
 - make sure that all the functionalities work with minor
   bugs
 - hotkeys

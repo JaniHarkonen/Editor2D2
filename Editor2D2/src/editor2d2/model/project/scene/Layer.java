@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
 import editor2d2.model.project.scene.placeable.Placeable;
 
@@ -100,6 +101,25 @@ public abstract class Layer implements HasAsset {
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		this.objectGrid.put(cx, cy, null);
+	}
+	
+		// Removes all Placeables derived from a given Asset
+		// CAN BE OVERRIDDEN FOR LAYERS THAT DONT STORE PLACEABLES
+		// DIRECTLY
+	public void deleteByAsset(Asset asset) {
+		int cw = getObjecGridRowLength(),
+			ch = getObjectGridColumnLength();
+	
+		for( int cx = 0; cx < cw; cx++ )
+		for( int cy = 0; cy < ch; cy++ )
+		{
+			Placeable p = (Placeable) this.objectGrid.getFast(cx, cy);
+			
+			if( p == null || p.getAsset() != asset )
+			continue;
+			
+			p.delete();
+		}
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
