@@ -216,13 +216,21 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				if( GUIUtilities.checkRightClick(e) )
 				openPopup(e);
-				
-				final int MB_BACK = 4;
-				
-				if( e.getButton() == MB_BACK )
-				Application.controller.openFolder(openFolder.getParentFolder());
+				else if( GUIUtilities.checkLeftClick(e) )
+				{
+					assetSelectionManager.deselect();
+					updateWithState();
+				}
+				else
+				{
+					final int MB_BACK = 4;
+					
+					if( e.getButton() == MB_BACK )
+					Application.controller.openFolder(openFolder.getParentFolder());
+				}
 			}
 		});
 		

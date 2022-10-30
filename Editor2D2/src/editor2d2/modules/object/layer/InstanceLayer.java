@@ -64,6 +64,34 @@ public class InstanceLayer extends Layer {
 	}
 	
 	@Override
+	public void deleteByAsset(Asset asset) {
+		int cw = getObjecGridRowLength(),
+			ch = getObjectGridColumnLength();
+	
+		for( int cx = 0; cx < cw; cx++ )
+		for( int cy = 0; cy < ch; cy++ )
+		{
+			ObjectArray oa = (ObjectArray) this.objectGrid.getFast(cx, cy);
+			
+			if( oa == null )
+			continue;
+			
+			ArrayList<Instance> instances = oa.getAllInstances();
+			
+			for( int i = 0; i < instances.size(); i++ )
+			{
+				Instance inst = instances.get(i);
+				if( inst.getAsset() != asset )
+				continue;
+				
+				inst.delete();
+				i--;
+			}
+			
+		}
+	}
+	
+	@Override
 	public ArrayList<Placeable> selectPlaceables(int cx1, int cy1, int cx2, int cy2) {
 		ArrayList<Placeable> selection = new ArrayList<Placeable>();
 		

@@ -12,6 +12,8 @@ import editor2d2.gui.Handles;
 import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.body.scene.SceneView;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.requirements.Require;
+import editor2d2.gui.components.requirements.RequireDoubleBetween;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.object.asset.ObjectProperty;
@@ -45,11 +47,11 @@ public class InstancePropertiesPane extends PropertiesPane implements Subscriber
 	public InstancePropertiesPane(Placeable source) {
 		super(source);
 		
-		this.txtX = new CTextField("X: ");
-		this.txtY = new CTextField("Y: ");
-		this.txtWidth = new CTextField("Width: ");
-		this.txtHeight = new CTextField("Height: ");
-		this.txtRotation = new CTextField("Rotation: ");
+		this.txtX = new CTextField("X: ", new RequireDoubleBetween(Require.MIN_ONLY, 0d));
+		this.txtY = new CTextField("Y: ", new RequireDoubleBetween(Require.MIN_ONLY, 0d));
+		this.txtWidth = new CTextField("Width: ", new RequireDoubleBetween(Require.MIN_ONLY, 1d));
+		this.txtHeight = new CTextField("Height: ", new RequireDoubleBetween(Require.MIN_ONLY, 1d));
+		this.txtRotation = new CTextField("Rotation: ", new RequireDoubleBetween(0d, 360d));
 		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	
@@ -61,11 +63,34 @@ public class InstancePropertiesPane extends PropertiesPane implements Subscriber
 	
 	@Override
 	public void actionApply(ActionEvent ae) {
-		double	x = Double.parseDouble(this.txtX.getText()),
-				y = Double.parseDouble(this.txtY.getText()),
-				w = Double.parseDouble(this.txtWidth.getText()),
-				h = Double.parseDouble(this.txtHeight.getText()),
-				rot = Double.parseDouble(this.txtRotation.getText());
+		
+			// Validate inputs
+		if(
+			this.txtX.getRequirementFilter().checkValid() &&
+			this.txtY.getRequirementFilter().checkValid() &&
+			this.txtWidth.getRequirementFilter().checkValid() &&
+			this.txtHeight.getRequirementFilter().checkValid() &&
+			this.txtRotation.getRequirementFilter().checkValid()
+		)
+		{
+				// Validate property field inputs
+			for( PropertyField pf : this.propertyFields )
+			{
+				if(
+					!pf.getNameField().getRequirementFilter().checkValid() ||
+					!pf.getValueField().getRequirementFilter().checkValid()
+				)
+				return;
+			}
+		}
+		else
+		return;
+		
+		double	x = (double) this.txtX.getRequirementFilter().getValue(),
+				y = (double) this.txtY.getRequirementFilter().getValue(),
+				w = (double) this.txtWidth.getRequirementFilter().getValue(),
+				h = (double) this.txtHeight.getRequirementFilter().getValue(),
+				rot = (double) this.txtRotation.getRequirementFilter().getValue();
 		
 		Instance src = (Instance) this.source;
 		

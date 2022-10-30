@@ -134,7 +134,6 @@ public class Root extends GUIComponent implements Subscriber {
 		
 			// Creates a new Scene and adds it to the target project
 		Application.controller.createNewScene(name);
-		
 		update();
 	}
 

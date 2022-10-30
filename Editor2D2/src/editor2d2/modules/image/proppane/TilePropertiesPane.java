@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.proppane.PropertiesPane;
 import editor2d2.gui.components.CTextField;
+import editor2d2.gui.components.requirements.Require;
+import editor2d2.gui.components.requirements.RequireIntegerBetween;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.image.asset.Image;
@@ -59,20 +61,28 @@ public class TilePropertiesPane extends PropertiesPane {
 		this.selectionWidth = img.getWidth();
 		this.selectionHeight = img.getHeight();
 		
-		this.txtSelectionCellX = new CTextField("X: ");
-		this.txtSelectionCellY = new CTextField("Y: ");
-		this.txtSelectionWidth = new CTextField("Width: ");
-		this.txtSelectionHeight = new CTextField("Height: ");
+		this.txtSelectionCellX = new CTextField("X: ", new RequireIntegerBetween(Require.MIN_ONLY, 0));
+		this.txtSelectionCellY = new CTextField("Y: ", new RequireIntegerBetween(Require.MIN_ONLY, 0));
+		this.txtSelectionWidth = new CTextField("Width: ", new RequireIntegerBetween(1, img.getWidth()));
+		this.txtSelectionHeight = new CTextField("Height: ", new RequireIntegerBetween(1, img.getHeight()));
 	}
 	
 	
 		// Applies changes as set in the properties pane
 	@Override
 	public void actionApply(ActionEvent ae) {
-		int cx = Integer.parseInt(this.txtSelectionCellX.getText());
-		int cy = Integer.parseInt(this.txtSelectionCellY.getText());
-		int w  = Integer.parseInt(this.txtSelectionWidth.getText());
-		int h  = Integer.parseInt(this.txtSelectionHeight.getText());
+		if(
+			!this.txtSelectionCellX.getRequirementFilter().checkValid() ||
+			!this.txtSelectionCellY.getRequirementFilter().checkValid() ||
+			!this.txtSelectionWidth.getRequirementFilter().checkValid() ||
+			!this.txtSelectionHeight.getRequirementFilter().checkValid()
+		)
+		return;
+		
+		int cx = (int) this.txtSelectionCellX.getRequirementFilter().getValue();
+		int cy = (int) this.txtSelectionCellY.getRequirementFilter().getValue();
+		int w  = (int) this.txtSelectionWidth.getRequirementFilter().getValue();
+		int h  = (int) this.txtSelectionHeight.getRequirementFilter().getValue();
 		
 		this.selectionCellX = clampSelectionCellX(cx);
 		this.selectionCellY = clampSelectionCellY(cy);
@@ -80,7 +90,6 @@ public class TilePropertiesPane extends PropertiesPane {
 		this.selectionHeight = h;
 		
 		((Tile) source).setDrawArea(cx * w, cy * h, w, h);
-		
 		update();
 	}
 	
@@ -124,10 +133,10 @@ public class TilePropertiesPane extends PropertiesPane {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if( e.getButton() == 1 )
+				if( GUIUtilities.checkLeftClick(e) )
 				{
-					selectionCellX = clampSelectionCellX(e.getX() / selectionWidth);
-					selectionCellY = clampSelectionCellY(e.getY() / selectionHeight);
+					txtSelectionCellX.setText(""+ clampSelectionCellX(e.getX() / selectionWidth));
+					txtSelectionCellY.setText(""+ clampSelectionCellY(e.getY() / selectionHeight));
 					
 						// Auto-apply changes
 					actionApply(null);
@@ -157,16 +166,16 @@ public class TilePropertiesPane extends PropertiesPane {
 	
 		// Clamps the cellular X-coordinate of the selection
 	private int clampSelectionCellX(int cx) {
-		Image src = ((Tile) source).getImage();
+		Image src = ((Tile) this.source).getImage();
 		
-		return Math.min(src.getWidth(selectionWidth) - 1, Math.max(0, cx));
+		return Math.min(src.getWidth(this.selectionWidth) - 1, Math.max(0, cx));
 	}
 	
 		// Clamps the cellular Y-coordinate of the selection
 	private int clampSelectionCellY(int cy) {
-		Image src = ((Tile) source).getImage();
+		Image src = ((Tile) this.source).getImage();
 		
-		return Math.min(src.getHeight(selectionHeight) - 1, Math.max(0, cy));
+		return Math.min(src.getHeight(this.selectionHeight) - 1, Math.max(0, cy));
 	}
 
 

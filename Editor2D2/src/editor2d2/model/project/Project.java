@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import editor2d2.DebugUtils;
+import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 
 public class Project {
@@ -55,18 +55,39 @@ public class Project {
 		}
 	}
 	
+		// Removes a given non-Folder Asset from the Project
+	private void removeNonFolderAsset(Asset asset) {
+			
+			// Remove from the quick-access map
+		this.assetMap.remove(asset.getIdentifier());
+		
+			// Remove from the list of Assets
+		for( int i = 0; i < this.assets.size(); i++ )
+		{
+			if( this.assets.get(i) != asset )
+			continue;
+			
+			this.assets.remove(i);
+			break;
+		}
+		
+			// Remove Placeables derived from the Asset
+		for( Scene s : this.scenes )
+		for( Layer l : s.getLayers() )
+		l.deleteByAsset(asset);
+	}
+	
 		// Removes a given asset from the Project
 	public void removeAsset(Asset asset, Folder folder) {
 		if( folder == null )
-		{
-			DebugUtils.log("null folderino detecterido", this);
-			return;
-		}
+		return;
 		
 		boolean isFolder = asset instanceof Folder;
 		
 		if( isFolder )
 		{
+				// When removing a Folder, its contents must
+				// also be removed
 			Folder f = (Folder) asset;
 			ArrayList<Asset> folderAssets = f.getAllAssets();
 			
@@ -77,49 +98,9 @@ public class Project {
 		}
 		else
 		{
-			this.assetMap.remove(asset.getIdentifier());
-			
-			for( int i = 0; i < this.assets.size(); i++ )
-			{
-				if( this.assets.get(i) != asset )
-				continue;
-				
-				this.assets.remove(i);
-				break;
-			}
-			
+			removeNonFolderAsset(asset);
 			folder.removeAsset(asset);
 		}
-		
-			// Remove from the list
-		/*for( int i = 0; i < this.assets.size(); i++ )
-		{
-			if( this.assets.get(i) != asset )
-			continue;
-			
-			this.assets.remove(i);
-			break;
-		}
-		
-		if( !isFolder )
-		{
-				// Remove from the identifier map
-			this.assetMap.remove(asset.getIdentifier());
-			
-				// Find the parent Folder and remove
-			int s = getRootFolder().getAllAssets().size();
-			for( int i = 0; i < s; i++ )
-			
-		}
-		else
-		{
-				// Remove from the parent folder
-			Folder target = (Folder) asset;
-			target.getParentFolder().removeAsset(target);
-			
-				// Remove the contents of the Folder
-			for(  )
-		}*/
 	}
 	
 		// Determines the Folder that a given Asset is

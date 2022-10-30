@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import editor2d2.common.grid.Grid;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.modules.FactoryService;
 
 public class ProjectWriter {
@@ -55,8 +55,13 @@ public class ProjectWriter {
 					writeLine(bw, writer.writeLayer(l));
 					
 						// Write Placeables
-					for( Placeable p : l.getPlaceables() )
-					writeLine(bw, writer.writePlaceable(p));
+					Grid objGrid = l.getObjectGrid();
+					int w = l.getObjecGridRowLength(),
+						h = l.getObjectGridColumnLength();
+					
+					for( int x = 0; x < w; x++ )
+					for( int y = 0; y < h; y++ )
+					writeLine(bw, writer.writePlaceable(objGrid.getFast(x, y)));
 					
 					writeLine(bw, "/layer");
 				}

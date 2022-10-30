@@ -14,6 +14,7 @@ import editor2d2.gui.components.CImage;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.components.SpritePopupMenu;
+import editor2d2.gui.components.requirements.RequireDoubleBetween;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.project.Asset;
@@ -44,9 +45,9 @@ public class ObjectModal extends ModalView<EObject> {
 		super(host, useFactorySettings);
 		
 		this.sprite = null;
-		this.txtWidth = new CTextField("Width:");
-		this.txtHeight = new CTextField("Height:");
-		this.txtRotation = new CTextField("Rotation°:");
+		this.txtWidth = new CTextField("Width:", new RequireDoubleBetween(1d, (double) Integer.MAX_VALUE));
+		this.txtHeight = new CTextField("Height:", new RequireDoubleBetween(1d, (double) Integer.MAX_VALUE));
+		this.txtRotation = new CTextField("Rotation°:", new RequireDoubleBetween(0d, 360d));
 		this.propertyFields = new ArrayList<PropertyField>();
 	}
 	
@@ -134,28 +135,55 @@ public class ObjectModal extends ModalView<EObject> {
 	}
 	
 	@Override
-	public void saveChanges(boolean doChecks) {
-		super.saveChanges(doChecks);
+	public int validateInputs() {
+		int issues = super.validateInputs();
 		
-		String w = this.txtWidth.getText();
-		String h = this.txtHeight.getText();
-		String rot = this.txtRotation.getText();
+			// Validate inputs specific to the ObjectModal
+		int offset = 3;
+		int s = this.propertyFields.size() * 2;
+		boolean[] checks = new boolean[s + offset];
 		
-		if( doChecks && (w.equals("") || h.equals("") || rot.equals("")) )
-		return;
+		checks[0] = this.txtWidth.getRequirementFilter().checkValid();
+		checks[1] = this.txtHeight.getRequirementFilter().checkValid();
+		checks[2] = this.txtRotation.getRequirementFilter().checkValid();
+		
+			// Validate property field inputs as well
+		for( int i = 0; i < s ; i += 2 )
+		{
+			int i_p = i / 2;
+			checks[i + offset] = this.propertyFields.get(i_p).getNameField().getRequirementFilter().checkValid();
+			checks[i + offset + 1] = this.propertyFields.get(i_p).getValueField().getRequirementFilter().checkValid();
+		}
+		
+		issues = GUIUtilities.checkMultiple(checks);
+		return issues;
+	}
+	
+	@Override
+	public boolean saveChanges(boolean doChecks) {
+		boolean successful = super.saveChanges(doChecks);
+		
+		if( !successful )
+		return false;
+		
+		double w = (double) this.txtWidth.getRequirementFilter().getValue();
+		double h = (double) this.txtHeight.getRequirementFilter().getValue();
+		double rot = (double) this.txtRotation.getRequirementFilter().getValue();
 		
 		if( this.sprite != null )
 		this.source.setSprite(this.sprite);
 		
-		this.source.setWidth(Double.parseDouble(w));
-		this.source.setHeight(Double.parseDouble(h));
-		this.source.setRotation(Double.parseDouble(rot));
+		this.source.setWidth(w);
+		this.source.setHeight(h);
+		this.source.setRotation(rot);
 		
 			// Save changes to property fields
 		this.source.getPropertyManager().removeAllProperties();
 		
 		for( PropertyField pf : this.propertyFields )
 		this.source.getPropertyManager().addProperty(new ObjectProperty(pf.getName(), pf.getValue(), pf.checkCompiled()));
+		
+		return true;
 	}
 	
 		// Adds a new property panel to a given container upon

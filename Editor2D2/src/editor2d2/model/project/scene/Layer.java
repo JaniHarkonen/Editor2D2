@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
+import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
 import editor2d2.model.project.scene.placeable.Placeable;
 
@@ -100,6 +101,25 @@ public abstract class Layer implements HasAsset {
 		// Removes a Gridable object from a given cell replacing it with NULL
 	public void delete(int cx, int cy) {
 		this.objectGrid.put(cx, cy, null);
+	}
+	
+		// Removes all Placeables derived from a given Asset
+		// CAN BE OVERRIDDEN FOR LAYERS THAT DONT STORE PLACEABLES
+		// DIRECTLY
+	public void deleteByAsset(Asset asset) {
+		int cw = getObjecGridRowLength(),
+			ch = getObjectGridColumnLength();
+	
+		for( int cx = 0; cx < cw; cx++ )
+		for( int cy = 0; cy < ch; cy++ )
+		{
+			Placeable p = (Placeable) this.objectGrid.getFast(cx, cy);
+			
+			if( p == null || p.getAsset() != asset )
+			continue;
+			
+			p.delete();
+		}
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
@@ -202,20 +222,6 @@ public abstract class Layer implements HasAsset {
 		// Returns the placement of the layer in the Scene's layer list
 	public int getIndex() {
 		return this.index;
-	}
-	
-		// Returns a list of all Placeables on the Layer
-	public ArrayList<Placeable> getPlaceables() {
-		Grid ogrid = this.objectGrid;
-		int rowLength = ogrid.getRowLength();
-		int columnLength = ogrid.getColumnLength();
-		ArrayList<Placeable> placeables = new ArrayList<Placeable>();
-		
-		for( int y = 0; y < columnLength; y++ )
-		for( int x = 0; x < rowLength; x++ )
-		placeables.add((Placeable) ogrid.getFast(x, y));
-		
-		return placeables;
 	}
 	
 	
