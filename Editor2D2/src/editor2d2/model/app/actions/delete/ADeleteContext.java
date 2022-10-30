@@ -16,5 +16,4 @@ public class ADeleteContext extends ActionContext {
 		this.locationX = tc.locationX;
 		this.locationY = tc.locationY;
 	}
-
 }

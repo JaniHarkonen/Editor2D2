@@ -25,10 +25,15 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
 import editor2d2.model.app.HotkeyListener;
+import editor2d2.model.app.SelectionManager;
+import editor2d2.model.app.actions.deletemany.ADeleteMany;
+import editor2d2.model.app.actions.deletemany.ADeleteManyContext;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Camera;
+import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
+import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -91,6 +96,17 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			this.useOrder = 4;
 			else
 			this.useOrder = Tool.PRIMARY_FUNCTION;
+			
+				// Delete Placebles upon pressing Delete key
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_DELETE) )
+			{
+				SelectionManager<Placeable> mngr = Application.controller.placeableSelectionManager;
+				Layer l = Application.controller.getActiveLayer();
+				ADeleteManyContext ac = new ADeleteManyContext(Application.controller, l);
+				(new ADeleteMany()).perform(ac);
+				
+				mngr.deselect();
+			}
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )

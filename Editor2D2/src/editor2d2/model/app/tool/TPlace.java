@@ -28,17 +28,14 @@ public class TPlace extends Tool {
 		if( l == null || selectedPlaceable == null )
 		return USE_FAILED;
 		
-		if( /*selectedPlaceable instanceof Tile || selectedPlaceable instanceof DataCell*/true )
+		ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX, c.locationY);
+		String selectedIdentifier = selectedPlaceable.getAsset().getIdentifier();
+		
+		if( placeablesAt.size() > 0 )
 		{
-			ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX, c.locationY);
-			String selectedIdentifier = selectedPlaceable.getAsset().getIdentifier();
-			
-			if( placeablesAt.size() > 0 )
-			{
-				Placeable otherPlaceable = placeablesAt.get(0);
-				if( otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
-				return USE_FAILED;
-			}
+			Placeable otherPlaceable = placeablesAt.get(0);
+			if( otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )
+			return USE_FAILED;
 		}
 		
 		(new APlace()).perform(new APlaceContext(c));
