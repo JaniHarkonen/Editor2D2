@@ -2,12 +2,12 @@ package editor2d2.gui.components.requirements;
 
 import editor2d2.gui.components.RequirementFilter;
 
-public class RequireDoubleBetween extends RequirementFilter<Double> {
+public class RequireIntegerBetween extends RequirementFilter<Integer> {
 	
-	private double minimum;
-	private double maximum;
+	private int minimum;
+	private int maximum;
 	
-	public RequireDoubleBetween(Require flag, double val1, double val2) {
+	public RequireIntegerBetween(Require flag, int val1, int val2) {
 		this.minimum = Integer.MIN_VALUE;
 		this.maximum = Integer.MAX_VALUE;
 		
@@ -28,11 +28,11 @@ public class RequireDoubleBetween extends RequirementFilter<Double> {
 		this.defaultValue = val1;
 	}
 	
-	public RequireDoubleBetween(double min, double max) {
+	public RequireIntegerBetween(int min, int max) {
 		this(Require.MIN_MAX, min, max);
 	}
 	
-	public RequireDoubleBetween(Require flag, double minOrMax) {
+	public RequireIntegerBetween(Require flag, int minOrMax) {
 		this(flag, minOrMax, 0);
 	}
 
@@ -42,11 +42,11 @@ public class RequireDoubleBetween extends RequirementFilter<Double> {
 		if( this.input == null || this.input.equals("") )
 		return false;
 		
-		double n = 0;
+		int n = 0;
 		
 		try
 		{
-			n = Double.parseDouble(this.input);
+			n = Integer.parseInt(this.input);
 		}
 		catch (NumberFormatException e)
 		{

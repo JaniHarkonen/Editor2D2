@@ -1,13 +1,9 @@
-TODO - AssetFinalizations
+TODO - ...
 
 OVERVIEW
-- make sure that Assets can be safely created, modified
-  and removed
+
 
 SPECIFICS
-- make sure that configurations set in ModalViews
-  are legal
-- ? should JOptionsPane be placed under Window
 
 	
 REMEMBER: 	Instance layer selection bug is due to

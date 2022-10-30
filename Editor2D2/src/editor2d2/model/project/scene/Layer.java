@@ -224,20 +224,6 @@ public abstract class Layer implements HasAsset {
 		return this.index;
 	}
 	
-		// Returns a list of all Placeables on the Layer
-	public ArrayList<Placeable> getPlaceables() {
-		Grid ogrid = this.objectGrid;
-		int rowLength = ogrid.getRowLength();
-		int columnLength = ogrid.getColumnLength();
-		ArrayList<Placeable> placeables = new ArrayList<Placeable>();
-		
-		for( int y = 0; y < columnLength; y++ )
-		for( int x = 0; x < rowLength; x++ )
-		placeables.add((Placeable) ogrid.getFast(x, y));
-		
-		return placeables;
-	}
-	
 	
 		// Sets the Scene the layer belongs to
 	public void setScene(Scene scene) {

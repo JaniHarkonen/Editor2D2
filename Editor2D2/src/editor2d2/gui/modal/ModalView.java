@@ -79,24 +79,43 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		// TO BE OVERRIDDEN
 	public abstract void setFactorySettings();
 	
+	public int validateInputs() {
+		return GUIUtilities.checkMultiple(
+				this.txtName.getRequirementFilter().checkValid(),
+				this.txtIdentifier.getRequirementFilter().checkValid()
+		);
+	}
+	
 		// Configures the source Asset to correspond to the values input
 		// in the Modal View
 		// CAN BE OVERRIDDEN
-	public void saveChanges(boolean doChecks) {
-		String name = this.txtName.getText();
-		String id = this.txtIdentifier.getText();
+	public boolean saveChanges(boolean doChecks) {
+		if( doChecks )
+		{
+			int issues = validateInputs();
+			
+			if( issues > 0 )
+			{
+				GUIUtilities.showErrorIfInvalid("Invalid input!", issues);
+				return false;
+			}
+		}
 		
-		if( doChecks && (name.equals("") || id.equals("")) )
-		return;
+		String name = (String) this.txtName.getRequirementFilter().getValue();
+		String id = (String) this.txtIdentifier.getRequirementFilter().getValue();
 		
 		this.source.setName(name);
 		this.source.setIdentifier(id);
+		
+		return true;
 	}
 	
 		// Called upon clicking "Create"
 		// CAN BE OVERRIDDEN
 	protected void actionCreate() {
-		saveChanges(true);
+		if( !saveChanges(true) )
+		return;
+		
 		finalizeCreation();
 		
 		this.host.closeModalWindow();
@@ -105,7 +124,8 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		// Called upon clicking "Save"
 		// CAN BE OVERRIDDEN
 	protected void actionSave() {
-		saveChanges(true);
+		if( !saveChanges(true) )
+		return;
 		
 		this.host.closeModalWindow();
 	}

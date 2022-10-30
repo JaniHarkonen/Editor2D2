@@ -10,6 +10,8 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.modules.object.asset.ObjectProperty;
+import editor2d2.modules.object.modal.requirements.RequirePropertyValueOrReference;
+import editor2d2.modules.object.modal.requirements.RequireValidPropertyName;
 
 public class PropertyField extends GUIComponent {
 	
@@ -30,8 +32,8 @@ public class PropertyField extends GUIComponent {
 		this.source = source;
 		this.isSelected = false;
 		this.allowSelection = allowSelection;
-		this.txtPropName = new CTextField();
-		this.txtPropValue = new CTextField();
+		this.txtPropName = new CTextField("", new RequireValidPropertyName());
+		this.txtPropValue = new CTextField("", new RequirePropertyValueOrReference());
 		this.cbIsCompiled = new JCheckBox();
 	}
 	
@@ -90,8 +92,16 @@ public class PropertyField extends GUIComponent {
 		return this.txtPropName.getText();
 	}
 	
+	public CTextField getNameField() {
+		return this.txtPropName;
+	}
+	
 	public String getValue() {
 		return this.txtPropValue.getText();
+	}
+	
+	public CTextField getValueField() {
+		return this.txtPropValue;
 	}
 	
 	public boolean checkCompiled() {

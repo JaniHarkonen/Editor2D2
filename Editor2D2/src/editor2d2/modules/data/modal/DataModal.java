@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ColorPreviewPanel;
-import editor2d2.gui.components.requirements.RequireDoubleBetween;
+import editor2d2.gui.components.requirements.RequireIntegerBetween;
 import editor2d2.gui.components.requirements.RequireStringNonEmpty;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
@@ -37,9 +37,9 @@ public class DataModal extends ModalView<Data> {
 		super(host, useFactorySettings);
 		
 		this.txtDataValue = new CTextField("Data value:", new RequireStringNonEmpty());
-		this.txtColorRed = new CTextField("R:", new RequireDoubleBetween(0d, 255d));
-		this.txtColorGreen = new CTextField("G:", new RequireDoubleBetween(0d, 255d));
-		this.txtColorBlue = new CTextField("B:", new RequireDoubleBetween(0d, 255d));
+		this.txtColorRed = new CTextField("R:", new RequireIntegerBetween(0, 255));
+		this.txtColorGreen = new CTextField("G:", new RequireIntegerBetween(0, 255));
+		this.txtColorBlue = new CTextField("B:", new RequireIntegerBetween(0, 255));
 	}
 	
 	public DataModal(ModalWindow host) {
@@ -101,19 +101,34 @@ public class DataModal extends ModalView<Data> {
 	}
 	
 	@Override
-	public void saveChanges(boolean doChecks) {
-		super.saveChanges(doChecks);
+	public int validateInputs() {
+		int issues = super.validateInputs();
+		issues += GUIUtilities.checkMultiple(
+				this.txtDataValue.getRequirementFilter().checkValid(),
+				this.txtColorRed.getRequirementFilter().checkValid(),
+				this.txtColorGreen.getRequirementFilter().checkValid(),
+				this.txtColorBlue.getRequirementFilter().checkValid()
+		);
 		
-		String val = this.txtDataValue.getText();
-		String colr = this.txtColorRed.getText();
-		String colg = this.txtColorGreen.getText();
-		String colb = this.txtColorBlue.getText();
+		return issues;
+	}
+	
+	@Override
+	public boolean saveChanges(boolean doChecks) {
+		boolean successful = super.saveChanges(doChecks);
 		
-		if( doChecks && (val.equals("") || colr.equals("") || colg.equals("") || colb.equals("")) )
-		return;
+		if( !successful )
+		return false;
+		
+		String val = (String) this.txtDataValue.getRequirementFilter().getValue();
+		int colr = (Integer) this.txtColorRed.getRequirementFilter().getValue();
+		int colg = (Integer) this.txtColorGreen.getRequirementFilter().getValue();
+		int colb = (Integer) this.txtColorBlue.getRequirementFilter().getValue();
 		
 		this.source.setValue(val);
-		this.source.setColor(new Color(Integer.parseInt(colr), Integer.parseInt(colg), Integer.parseInt(colb)));
+		this.source.setColor(new Color(colr, colg, colb));
+		
+		return true;
 	}
 	
 	private void actionColorPicker() {

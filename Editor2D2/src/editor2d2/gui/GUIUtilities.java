@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GUIUtilities {
@@ -79,5 +80,32 @@ public class GUIUtilities {
 		// Returns whether a given MouseEvent was fired upon right-click
 	public static boolean checkRightClick(MouseEvent e) {
 		return (e.getButton() == 3);
+	}
+	
+		// Checks if a given array of booleans representing input checks
+		// is valid and displays an error message if not
+	public static int showErrorIfInvalid(String title, int issues) {
+		if( issues > 0 )
+		{
+			String message = "Error: " + issues + " invalid input" + (issues == 1 ? "" : "s") + " found!";
+			int option = JOptionPane.DEFAULT_OPTION;
+			int type = JOptionPane.ERROR_MESSAGE;
+			
+			JOptionPane.showConfirmDialog(null, message, title, option, type);
+		}
+		
+		return issues;
+	}
+	
+		// Takes an array of boolean values representing the input checks
+		// and returns the number of checks failed
+	public static int checkMultiple(boolean... checks) {
+		int issues = 0;
+		
+		for( boolean check : checks )
+		if( !check )
+		issues++;
+		
+		return issues;
 	}
 }

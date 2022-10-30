@@ -2,6 +2,7 @@ package editor2d2.modules.image.modal;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +28,7 @@ public class ImageModal extends ModalView<Image> {
 	public ImageModal(ModalWindow host, boolean useFactorySettings) {
 		super(host, useFactorySettings);
 		
-		this.txtFileSource = new CTextField("File source:");
+		this.txtFileSource = new CTextField("File source:", new RequireValidFile(ImageExtensions.withAllImageExtensions()));
 	}
 	
 	public ImageModal(ModalWindow host) {
@@ -110,15 +111,27 @@ public class ImageModal extends ModalView<Image> {
 	}
 	
 	@Override
-	public void saveChanges(boolean doChecks) {
-		super.saveChanges(doChecks);
+	public int validateInputs() {
+		int issues = super.validateInputs();
 		
-		String fsource = this.txtFileSource.getText();
+		issues += GUIUtilities.checkMultiple(
+				this.txtFileSource.getRequirementFilter().checkValid()
+		);
 		
-		if( doChecks && fsource.equals("") )
-		return;
+		return issues;
+	}
+	
+	@Override
+	public boolean saveChanges(boolean doChecks) {
+		boolean successful = super.saveChanges(doChecks);
+		
+		if( !successful )
+		return false;
+		
+		String fsource = ((File) this.txtFileSource.getRequirementFilter().getValue()).getPath();
 		
 		this.source.setFilePath(fsource);
+		return true;
 	}
 
 	

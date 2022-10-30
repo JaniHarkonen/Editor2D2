@@ -23,13 +23,16 @@ public class RequireUnusedIdentifier extends RequirementFilter<String> {
 
 	@Override
 	protected boolean validateInput() {
-		if( this.input == null || this.input.equals("") )
+		if( this.input == null || this.input.equals("") || this.input.contains(" ") )
 		return false;
 		
 		Asset found = this.source.getAsset(this.input);
 		
 		if( found == null || found == asset )
-		return true;
+		{
+			this.value = this.input;
+			return true;
+		}
 		
 		return false;
 	}
