@@ -21,10 +21,10 @@ import editor2d2.subservice.Vendor;
 public class ModalWindow extends GUIComponent implements Subscriber {
 	
 		// Default width of the Modal Window
-	public static final int DEFAULT_MODAL_WIDTH = 320;
+	public static final int DEFAULT_MODAL_WIDTH = 480;
 	
 		// Default height of the Modal Window
-	public static final int DEFAULT_MODAL_HEIGHT = 240;
+	public static final int DEFAULT_MODAL_HEIGHT = 360;
 	
 		// List of views currently open in the Modal Window
 	private ArrayList<ModalView<? extends Asset>> views;

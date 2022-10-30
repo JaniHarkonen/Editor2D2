@@ -1,6 +1,8 @@
 package editor2d2.gui.modal;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
@@ -71,7 +73,16 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		container.add(wrappedElement);
 		container.add(containerControls);
 		
-		return container;
+		JPanel containerContainer = GUIUtilities.createDefaultPanel();
+		JScrollPane scroller = new JScrollPane(container);
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		JScrollBar verticalScrollBar = scroller.getVerticalScrollBar();
+		verticalScrollBar.setUnitIncrement(16);
+		
+		containerContainer.add(scroller);
+		return containerContainer;
 	}
 	
 		// Creates a default Asset with default settings and sets it as
