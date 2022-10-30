@@ -2,6 +2,7 @@ package editor2d2.gui;
 
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenu;
@@ -9,10 +10,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
+import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
@@ -28,6 +31,8 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 
 	public WindowToolbar() {
 		generate();
+		
+		Application.controller.getHotkeyListener().subscribe("WindowToolbar", this);
 	}
 	
 		// Regenerates the toolbar by removing its contents and calling "generate"
@@ -43,6 +48,17 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	public void onNotification(String handle, Vendor vendor) {
 		if( handle == Handles.MODAL )
 		regenerate();
+		else if( HotkeyListener.didKeyUpdate(handle) )
+		{
+			HotkeyListener hl = Application.controller.getHotkeyListener();
+			
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'S') )
+			actionOnSaveProject();
+			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'O') )
+			actionOnLoadProject();
+			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'N') )
+			actionOnNewProject();
+		}
 	}
 	
 		// Generates the toolbar
@@ -130,6 +146,8 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
 		
+		DebugUtils.log("LOADIG", this);
+		
 		if( !res.isApproved )
 		return;
 		
@@ -140,6 +158,14 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		// Saves the currently open Project into the file it was last
 		// saved in
 	private void actionOnSaveProject() {
-		(new ProjectWriter()).writeProject("C:\\Users\\User\\Desktop\\SHASHASHA.txt", Application.controller.getActiveProject());
+		FileSystemDialogSettings settings = new FileSystemDialogSettings();
+		FileSystemDialogResponse res = Application.window.showSaveDialog(settings);
+		
+		DebugUtils.log("SAVIG", this);
+		
+		if( !res.isApproved )
+		return;
+		
+		(new ProjectWriter()).writeProject(res.filepaths[0], Application.controller.getActiveProject());
 	}
 }

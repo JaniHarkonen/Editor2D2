@@ -8,8 +8,6 @@ SPECIFICS
 - create secondary and tertiary functionalities for Tools
   accessible via hotkeys
 - add saving and save as hotkeys
-- add loading hotkeys
-- add new new project hotkey
 - add delete Placeable & Asset hotkeys
 - add Asset creation hotkeys
 - add tab switch hotkeys
@@ -19,6 +17,11 @@ SPECIFICS
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
 			selectPlaceables(int,int,int,int).
+			
+REMEMBER2:
+			HotkeyListener becomes messed up when the
+			window looses focus or a popup is displayed
+			while keys are being held.
 
 LATER
 - make sure that GUIComponent.update is called only upon
