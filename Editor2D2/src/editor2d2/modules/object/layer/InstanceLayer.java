@@ -64,6 +64,34 @@ public class InstanceLayer extends Layer {
 	}
 	
 	@Override
+	public Instance delete(int cx, int cy) {
+		return null;
+	}
+	
+	@Override
+	public Instance delete(double x, double y) {
+		Gridable g = this.objectGrid.get(x, y);
+		
+		if( g == null || g instanceof NullCell )
+		return null;
+		
+		ObjectArray oa = (ObjectArray) g;
+		
+		for( Instance inst : oa.getAllInstances() )
+		{
+			Bounds instBounds = inst.getBounds();
+			
+			if( x < instBounds.left || y < instBounds.top || x > instBounds.right || y > instBounds.bottom )
+			continue;
+			
+			inst.delete();
+			return inst;
+		}
+		
+		return null;
+	}
+	
+	@Override
 	public void deleteByAsset(Asset asset) {
 		int cw = getObjecGridRowLength(),
 			ch = getObjectGridColumnLength();
@@ -97,9 +125,16 @@ public class InstanceLayer extends Layer {
 		
 		for( int x = cx1; x < cx2; x++ )
 		for( int y = cy1; y < cy2; y++ )
-		for( Placeable p : ((ObjectArray) this.objectGrid.get(x, y)).objects )
-		if( p != null )
-		selection.add(p);
+		{
+			ObjectArray oa = (ObjectArray) this.objectGrid.get(x, y);
+			
+			if( oa == null )
+			continue;
+				
+			for( Placeable p : oa.objects )
+			if( p != null )
+			selection.add(p);
+		}
 		
 		return selection;
 	}

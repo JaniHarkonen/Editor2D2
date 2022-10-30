@@ -52,4 +52,9 @@ public class Bounds {
 	public Bounds() {
 		this(0, 0, 0, 0);
 	}
+	
+	@Override
+	public String toString() {
+        return "Bounds(" + this.left + ", " + this.top + ", " + this.right + ", " + this.bottom + ")";
+    }
 }

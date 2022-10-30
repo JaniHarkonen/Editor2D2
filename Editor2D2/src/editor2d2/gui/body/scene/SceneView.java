@@ -20,6 +20,7 @@ import editor2d2.Application;
 import editor2d2.common.Bounds;
 import editor2d2.common.dragbox.DragBox;
 import editor2d2.common.dragbox.DragBoxPoll;
+import editor2d2.common.grid.Grid;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
@@ -45,11 +46,28 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		// Whether space bar is down
 	private boolean isSpaceDown;
 	
+		// Whether the tertiary functionalities of the Tools should be used
+	private int useOrder;
+	
+	private int cursorCellX;
+	
+	private int cursorCellY;
+	
+	private int cursorCellWidth;
+	
+	private int cursorCellHeight;
+	
 	
 	public SceneView(Scene scene) {
 		this.scene = scene;
 		this.view = createView();
 		this.isSpaceDown = false;
+		this.useOrder = Tool.PRIMARY_FUNCTION;
+		
+		this.cursorCellX = 0;
+		this.cursorCellY = 0;
+		this.cursorCellWidth = 16;
+		this.cursorCellHeight = 16;
 		
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
@@ -65,6 +83,14 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		{
 			boolean skipUpdate = false;
 			HotkeyListener hl = Application.controller.getHotkeyListener();
+			
+				// Determine the order of Tool functionality
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
+			this.useOrder = Tool.TERTIARY_FUNCTION;
+			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_ALT) )
+			this.useOrder = 4;
+			else
+			this.useOrder = Tool.PRIMARY_FUNCTION;
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
@@ -113,7 +139,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	}
 	
 	private void useTool(double x, double y, boolean isContinuation, int order) {
-		useTool(x, y, isContinuation, order, false);
+		useTool(Grid.snapToGridX(x, this.cursorCellWidth), Grid.snapToGridY(y, this.cursorCellHeight), isContinuation, order, false);
 	}
 	
 		// Creates the JPanel that will render the Scene by creating an
@@ -184,8 +210,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			public void mousePressed(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkLeftClick(e) && !isSpaceDown )
-				toolUseOrder = Tool.PRIMARY_FUNCTION;
+				if( GUIUtilities.checkLeftClick(e) /*&& !isSpaceDown*/ )
+				toolUseOrder = useOrder;
 				else if( GUIUtilities.checkRightClick(e) )
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
 				
@@ -199,7 +225,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				if( GUIUtilities.checkLeftClick(e) && isSpaceDown )
 				sceneDragger.stopDragging();
 				else if( GUIUtilities.checkLeftClick(e) )
-				toolUseOrder = Tool.PRIMARY_FUNCTION;
+				toolUseOrder = useOrder;
 				else if( GUIUtilities.checkRightClick(e) )
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
 				
@@ -223,8 +249,15 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				
+				int toolUseOrder = -1;
+				
 				if( SwingUtilities.isLeftMouseButton(e) && !isSpaceDown )
-				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, Tool.PRIMARY_FUNCTION);
+				toolUseOrder = useOrder;
+				else if( SwingUtilities.isRightMouseButton(e) )
+				toolUseOrder = Tool.SECONDARY_FUNCTION;
+				
+				if( toolUseOrder > 0 )
+				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, toolUseOrder);
 				
 					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
 					// on the first click)

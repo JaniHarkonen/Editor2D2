@@ -28,6 +28,16 @@ public class TSelect extends Tool {
 		this.initialSelection = null;
 	}
 	
+	@Override
+	public int use(ToolContext c) {
+		int outcome = super.use(c);
+		
+		if( outcome == USE_UNSPECIFIED )
+		return usePrimary(c);
+		
+		return USE_FAILED;
+	}
+	
 	
 	@Override
 	protected int usePrimary(ToolContext c) {
@@ -44,9 +54,21 @@ public class TSelect extends Tool {
 	}
 	
 	@Override
+	protected int useTertiary(ToolContext c) {
+		return usePrimary(c);
+	}
+	
+	@Override
 	public int stop(ToolContext c) {
-		if( c.order != Tool.PRIMARY_FUNCTION || c.targetLayer == null )
+		if( c.order == Tool.SECONDARY_FUNCTION || c.targetLayer == null )
 		return USE_FAILED;
+		
+		int type = ASelect.TYPE_NORMAL;
+		
+		if( c.order == Tool.TERTIARY_FUNCTION )
+		type = ASelect.TYPE_ADD;
+		else if( c.order == 4 )
+		type = ASelect.TYPE_SUBTRACT;
 		
 		double 	sx = this.startX,
 				sy = this.startY,
@@ -68,6 +90,7 @@ public class TSelect extends Tool {
 			// Pass the selection area coordinates into the ActionContext
 		ASelectContext ac = new ASelectContext(c);
 		ac.initialSelection = this.initialSelection;
+		ac.type = type;
 		ac.startX = sx;
 		ac.startY = sy;
 		ac.endX = ex;

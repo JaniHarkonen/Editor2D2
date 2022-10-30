@@ -3,12 +3,12 @@ package editor2d2.model.app.tool;
 import java.util.ArrayList;
 
 import editor2d2.Application;
+import editor2d2.model.app.actions.delete.ADelete;
+import editor2d2.model.app.actions.delete.ADeleteContext;
 import editor2d2.model.app.actions.place.APlace;
 import editor2d2.model.app.actions.place.APlaceContext;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.placeable.Placeable;
-import editor2d2.modules.data.placeable.DataCell;
-import editor2d2.modules.image.placeable.Tile;
 
 public class TPlace extends Tool {
 
@@ -28,11 +28,10 @@ public class TPlace extends Tool {
 		if( l == null || selectedPlaceable == null )
 		return USE_FAILED;
 		
-		if( selectedPlaceable instanceof Tile || selectedPlaceable instanceof DataCell )
+		if( /*selectedPlaceable instanceof Tile || selectedPlaceable instanceof DataCell*/true )
 		{
 			ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX, c.locationY);
 			String selectedIdentifier = selectedPlaceable.getAsset().getIdentifier();
-			
 			
 			if( placeablesAt.size() > 0 )
 			{
@@ -45,5 +44,28 @@ public class TPlace extends Tool {
 		(new APlace()).perform(new APlaceContext(c));
 		
 		return USE_SUCCESSFUL;
+	}
+	
+	@Override
+	protected int useTertiary(ToolContext c) {
+		if( c.isContinuation )
+		return USE_FAILED;
+		
+		return usePrimary(c);
+	}
+	
+	@Override
+	protected int useSecondary(ToolContext c) {
+		if( c.targetLayer == null )
+		return USE_FAILED;
+		
+		ArrayList<Placeable> placeablesAt = c.targetLayer.selectPlaceables(c.locationX, c.locationY);
+		if( placeablesAt.size() > 0 )
+		{
+			(new ADelete()).perform(new ADeleteContext(c));
+			return USE_SUCCESSFUL;
+		}
+		
+		return USE_FAILED;
 	}
 }

@@ -157,7 +157,7 @@ public class Instance extends Placeable {
 		double	x = getX(),
 				y = getY();
 		
-		return new Bounds(x, y, x + this.width, this.height);
+		return new Bounds(x, y, x + this.width, y + this.height);
 	}
 	
 		// Returns the Image that represents the instance
