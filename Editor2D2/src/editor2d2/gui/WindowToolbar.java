@@ -10,7 +10,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.modal.ModalView;
@@ -90,11 +89,19 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 		
+		JMenuItem itemSaveProjectAs = new JMenuItem(new AbstractAction("Save project as...") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionOnSaveProjectAs();
+			}
+		});
+		
 		JMenu menuProject = new JMenu("Project");
 		menuProject.add(itemNewProject);
 		menuProject.add(itemOpenProject);
 		menuProject.add(itemSaveProject);
-		menuProject.add(new JMenuItem("Save project as..."));
+		menuProject.add(itemSaveProjectAs);
 		menuProject.add(new JMenuItem("Compile map"));
 		
 			// Asset menu
@@ -146,8 +153,6 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
 		
-		DebugUtils.log("LOADIG", this);
-		
 		if( !res.isApproved )
 		return;
 		
@@ -158,14 +163,23 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		// Saves the currently open Project into the file it was last
 		// saved in
 	private void actionOnSaveProject() {
+		Project activeProject = Application.controller.getActiveProject();
+		String path = activeProject.getFilepath();
+		
+		if( path != null )
+		(new ProjectWriter()).writeProject(path, Application.controller.getActiveProject());
+		else
+		actionOnSaveProjectAs();
+	}
+	
+	private void actionOnSaveProjectAs() {
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		FileSystemDialogResponse res = Application.window.showSaveDialog(settings);
-		
-		DebugUtils.log("SAVIG", this);
 		
 		if( !res.isApproved )
 		return;
 		
-		(new ProjectWriter()).writeProject(res.filepaths[0], Application.controller.getActiveProject());
+		Application.controller.getActiveProject().setFilepath(res.filepaths[0].getPath());
+		actionOnSaveProject();
 	}
 }

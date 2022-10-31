@@ -12,6 +12,9 @@ public class Project {
 		// Name of the map project
 	private String name;
 	
+		// Filepath of the map project
+	private String filepath;
+	
 		// Scenes the project consists of
 	private final ArrayList<Scene> scenes;
 	
@@ -30,6 +33,7 @@ public class Project {
 		this.assets = new ArrayList<Asset>();
 		this.assetMap = new HashMap<String, Asset>();
 		this.rootFolder = new Folder();
+		this.filepath = null;
 	}
 	
 	
@@ -161,6 +165,11 @@ public class Project {
 		return this.rootFolder;
 	}
 	
+		// Returns the filepath of the Project
+	public String getFilepath() {
+		return this.filepath;
+	}
+	
 		// Sets the name of the project
 	public void setName(String name) {
 		this.name = name;
@@ -169,5 +178,10 @@ public class Project {
 		// Sets the root Folder in which all the Assets are contained
 	public void setRootFolder(Folder folder) {
 		this.rootFolder = folder;
+	}
+	
+		// Sets the filepath of the Project
+	public void setFilepath(String path) {
+		this.filepath = path;
 	}
 }
