@@ -9,7 +9,6 @@ SPECIFICS
   accessible via hotkeys
 - add saving and save as hotkeys
 - add Asset creation hotkeys
-- add tab switch hotkeys
 - add Layer creation hotkeys
 
 	

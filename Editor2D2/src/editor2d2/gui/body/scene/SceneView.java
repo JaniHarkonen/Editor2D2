@@ -87,7 +87,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
 			boolean skipUpdate = false;
-			HotkeyListener hl = Application.controller.getHotkeyListener();
+			HotkeyListener hl = (HotkeyListener) vendor;
 			
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
