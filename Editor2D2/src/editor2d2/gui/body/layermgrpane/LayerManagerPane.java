@@ -1,17 +1,22 @@
 package editor2d2.gui.body.layermgrpane;
 
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.JPanel;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
+import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.modules.object.layer.InstanceLayer;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
-public class LayerManagerPane extends GUIComponent {
+public class LayerManagerPane extends GUIComponent implements Subscriber {
 	
 		// Whether a layer is being edited
 	private Layer editedLayer;
@@ -19,12 +24,25 @@ public class LayerManagerPane extends GUIComponent {
 	
 	public LayerManagerPane() {
 		this.editedLayer = null;
+		
+		Application.controller.getHotkeyListener().subscribe("LayerManagerPane", this);
 	}
 	
 	
 		// Called by one of the child LayerPanes upon being clicked
 	public void onLayerPaneClick() {
 		update();
+	}
+	
+	@Override
+	public void onNotification(String handle, Vendor vendor) {
+		if( HotkeyListener.didKeyUpdate(handle) )
+		{
+			HotkeyListener hl = (HotkeyListener) vendor;
+			
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, 'N') )
+			onAddLayer();
+		}
 	}
 	
 
