@@ -69,4 +69,9 @@ public class Factories extends AbstractFactories<EObject> {
 	public ObjectAssetItem createAssetItem(AssetPane host, Asset source) {
 		return new ObjectAssetItem(host, source);
 	}
+
+	@Override
+	public char getAssetCreationShortcut() {
+		return 'O';
+	}
 }

@@ -38,7 +38,7 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		return;
 		
 		HotkeyListener hl = (HotkeyListener) vendor;
-		boolean skipUpdate = false;
+		boolean skipUpdate = true;
 		int sceneCount = Application.controller.getActiveProject().getAllScenes().size();
 		
 		for( int i = 1; i < 10; i++ )
@@ -46,6 +46,7 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		{
 			this.currentTabIndex = i;
 			this.tpScenes.setSelectedIndex(this.currentTabIndex);
+			skipUpdate = false;
 			break;
 		}
 		

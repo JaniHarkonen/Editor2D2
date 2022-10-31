@@ -69,4 +69,9 @@ public class Factories extends AbstractFactories<Image> {
 	public ImageAssetItem createAssetItem(AssetPane host, Asset source) {
 		return new ImageAssetItem(host, source);
 	}
+
+	@Override
+	public char getAssetCreationShortcut() {
+		return 'I';
+	}
 }

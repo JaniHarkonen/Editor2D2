@@ -32,4 +32,6 @@ public abstract class AbstractFactories<A extends Asset> {
 	public abstract AbstractWriter createWriter();
 	
 	public abstract AssetItem createAssetItem(AssetPane host, Asset source);
+	
+	public abstract char getAssetCreationShortcut();
 }
