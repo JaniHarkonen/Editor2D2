@@ -9,6 +9,7 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.ClickableButton;
+import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
@@ -26,6 +27,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		this.editedLayer = null;
 		
 		Application.controller.getHotkeyListener().subscribe("LayerManagerPane", this);
+		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_SCENE, "LayerManagerPane", this);
 	}
 	
 	
@@ -43,6 +45,8 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, 'N') )
 			onAddLayer();
 		}
+		else if( handle.equals(Handles.ACTIVE_SCENE) )
+		update();
 	}
 	
 
@@ -61,9 +65,11 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			container.add(containerControls);
 			
 				// Layer panes
-			if( Application.controller.getActiveProject().getAllScenes().size() > 0 )
+			Scene activeScene = Application.controller.getActiveScene();
+			
+			if( activeScene != null )
 			{
-				for( Layer layer : Application.controller.getActiveProject().getScene(0).getLayers() )
+				for( Layer layer : activeScene.getLayers() )
 				container.add((new LayerPane(this, layer)).render());
 			}
 		}
@@ -78,7 +84,6 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			container.add((new LayerPropertiesPane(this.editedLayer)).render());
 		}
 		
-		
 		return container;
 	}
 	
@@ -91,7 +96,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	
 		// Called upon adding a new layer (+)
 	private void onAddLayer() {
-		Scene scene = Application.controller.getActiveProject().getScene("small scene");
+		Scene scene = Application.controller.getActiveScene();
 		InstanceLayer newLayer = new InstanceLayer(scene);
 		newLayer.setName("Object layer " + System.currentTimeMillis());
 		scene.addLayer(newLayer);
@@ -106,7 +111,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		if( target == null )
 		return;
 		
-		Application.controller.getActiveProject().getScene("small scene").removeLayer(target);
+		Application.controller.getActiveScene().removeLayer(target);
 		
 		update();
 	}

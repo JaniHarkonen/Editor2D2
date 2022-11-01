@@ -15,6 +15,9 @@ public final class Handles {
 	public static final String ASSET_PANE = "asset-pane";
 	public static final String MODAL = "modal";
 	public static final String SCENE_VIEW = "scene-view";
+	public static final String CURSOR_GRID_SETTINGS_CHANGED = "cursor-grid-settings-changed";
+	public static final String CURSOR_GRID_TOGGLED = "cursor-grid-toggled";
+	public static final String LAYER_GRID_TOGGLED = "layer-grid-toggled";
 	
 		// Do not instantiate
 	private Handles() { }

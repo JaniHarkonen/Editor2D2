@@ -24,6 +24,7 @@ import editor2d2.common.grid.Grid;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
+import editor2d2.gui.body.scenectrl.SceneControlsPane;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.SelectionManager;
 import editor2d2.model.app.actions.deletemany.ADeleteMany;
@@ -58,12 +59,18 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
 	private int cursorCellHeight;
 	
+	private boolean drawCursorGrid;
 	
-	public SceneView(Scene scene) {
-		this.scene = scene;
+	private boolean drawLayerGrid;
+	
+	
+	public SceneView() {
+		this.scene = Application.controller.getActiveScene();
 		this.view = createView();
 		this.isSpaceDown = false;
 		this.useOrder = Tool.PRIMARY_FUNCTION;
+		this.drawCursorGrid = true;
+		this.drawLayerGrid = false;
 		
 		this.cursorCellWidth = 32;
 		this.cursorCellHeight = 32;
@@ -72,6 +79,10 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 		
 		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
+		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
+		Application.window.subscriptionService.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
+		
 		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
 	}
 	
@@ -115,6 +126,32 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			if( !skipUpdate )
 			update();
+		}
+		else
+		{
+			switch( handle )
+			{
+					// Changes were made to the cursor grid settings
+				case Handles.CURSOR_GRID_SETTINGS_CHANGED:
+					SceneControlsPane controls = (SceneControlsPane) vendor;
+					this.cursorCellWidth = controls.getCursorCellWidth();
+					this.cursorCellHeight = controls.getCursorCellHeight();
+					update();
+					
+					break;
+					
+					// Cursor grid visibility was toggled
+				case Handles.CURSOR_GRID_TOGGLED:
+					this.drawCursorGrid = !this.drawCursorGrid;
+					update();
+					break;
+					
+					// Layer grid visibility was toggled
+				case Handles.LAYER_GRID_TOGGLED:
+					this.drawLayerGrid = !this.drawLayerGrid;
+					update();
+					break;
+			}
 		}
 	}
 	
@@ -176,8 +213,11 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				
 				double cam_z = cam.getZ();
 				
+				double onScreenOriginX = cam.getOnScreenX(0);
+				double onScreenOriginY = cam.getOnScreenY(0);
+				
 				Rectangle2D.Double bounds_scene = new Rectangle2D.Double(
-					cam.getOnScreenX(0), cam.getOnScreenY(0),
+					onScreenOriginX, onScreenOriginY,
 					scene.getWidth() * cam_z, scene.getHeight() * cam_z
 				);
 				
@@ -194,18 +234,33 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					
 				gg.draw(bounds_cam);
 				
-					// Render the placement grid of the layer that is currently active
-				/*dash[0] = 1.0f;
-				dash[1] = 1.0f;
-				
-				gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 0.0f));
-				
-				for( int i = 0; i < scene.getWidth(); i += scene.getLayers().get(0).getObjectGrid().getCellWidth() )
-				gg.drawLine(i, 0, i, scene.getHeight());
-				
-				for( int i = 0; i < scene.getHeight(); i += scene.getLayers().get(0).getObjectGrid().getCellHeight() )
-				gg.drawLine(0, i,  scene.getWidth(), i);
-				*/
+					// Render the cursor grid
+				if( drawCursorGrid )
+				{
+					dash[0] = 1.0f;
+					dash[1] = 1.0f;
+					
+					gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 2.0f));
+					gg.setColor(Color.BLACK);
+					
+					int ox = (int) onScreenOriginX;
+					int oy = (int) onScreenOriginY;
+					
+					double cw = cursorCellWidth * cam.getZ();
+					double ch = cursorCellHeight * cam.getZ();
+					
+					double right = Math.min(scene.getWidth(), cbounds.right);
+					double bottom = Math.min(scene.getHeight(), cbounds.bottom);
+					
+					if( cw > 1 && ch > 1 )
+					{
+						for( int i = 0; i < right; i += cw )
+						gg.drawLine(ox + i, oy, ox + i, (int) cam.getOnScreenY(bottom));
+						
+						for( int i = 0; i < bottom; i += ch )
+						gg.drawLine(ox, oy + i, (int) cam.getOnScreenX(right), oy + i);
+					}
+				}
 			}
 		};
 		
@@ -222,6 +277,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
 				
 				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), false, toolUseOrder);
+				Application.window.unfocusAllComponents();
 			}
 			
 			@Override
@@ -281,6 +337,18 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			}
 		});
 		
+		container.setFocusable(true);
 		return container;
+	}
+	
+	
+		// Returns the width of a cursor cell
+	public int getCursorCellWidth() {
+		return this.cursorCellWidth;
+	}
+	
+		// Returns the height of a cursor cell
+	public int getCursorCellHeight() {
+		return this.cursorCellHeight;
 	}
 }

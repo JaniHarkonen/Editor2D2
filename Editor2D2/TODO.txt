@@ -1,10 +1,33 @@
-TODO - RemainingHotkeys
+TODO - ScenesAndLayers
 
 OVERVIEW
-- write the functionalities for the remaining hotkey
-  combinations
+- finish LayerManagerPane, LayerPane and LayerPropertiesPane
+  functionalities
+- finish Scene management functionalities
+- finish meta data modal
 
 SPECIFICS
+- Layer panes
+	-- changes in opacity should immediately update the
+	   SceneView
+	-- add ability to switch Layer type
+	-- creating a new Layer should take you immediately
+	   to the LayerPropertiesPane and only add the Layer
+	   to the Scene once the changes are applied
+	-- ? add ability to toggle layer visibility in LayerPane
+- add Scene deletion
+- add Meta Data modal
+- return to LayerManagerPane after TOOLS
+	-- also check other classes inside "layermgrpane"
+- Placeables should not reference the Controller
+	-> fix references to the Controller upon drawing and
+	   figure out a way to determine if a Placeable is
+	   selected without the Controller's SelectionManager
+- create a Scene controls pane
+	-- add ability to resize the Scene
+	-- add ability to toggle cursor grid
+	-- add ability to modify cursor grid
+	-- add ability to toggle layer grid
 
 	
 REMEMBER: 	Instance layer selection bug is due to
@@ -22,12 +45,6 @@ LATER
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
-- return to LayerManagerPane after TOOLS
-	-- also check other classes inside "layermgrpane"
-- Placeables should not reference the Controller
-	-> fix references to the Controller upon drawing and
-	   figure out a way to determine if a Placeable is
-	   selected without the Controller's SelectionManager
 - ? should SelectionManagers be declared in the AppState
 - de-messify Root
 - speedup Tile rendering performance by getting the subimage
@@ -38,15 +55,13 @@ LATER
 TASKS LEFT
 - write TMove (undo, redo)
 	-- add copy and paste (cut?)
-- add Scene deletion, switching
-- add Meta Data modal
+- hotkeys (for TMove)
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
 	   need to be written
 - make sure that all the functionalities work with minor
   bugs
-- hotkeys
 - finalize graphics
 - remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils

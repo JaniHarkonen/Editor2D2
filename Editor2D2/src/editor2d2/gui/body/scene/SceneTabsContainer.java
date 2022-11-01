@@ -12,6 +12,8 @@ import javax.swing.event.ChangeListener;
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.body.scenectrl.SceneControlsPane;
+import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.Subscriber;
@@ -29,26 +31,33 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		this.tpScenes = null;
 		
 		Application.controller.getHotkeyListener().subscribe("SceneTabsContainer", this);
+		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_SCENE, "SceneTabsContainer", this);
 	}
 	
 	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
-		if( !HotkeyListener.didKeyUpdate(handle) )
-		return;
-		
-		HotkeyListener hl = (HotkeyListener) vendor;
 		boolean skipUpdate = true;
 		int sceneCount = Application.controller.getActiveProject().getAllScenes().size();
 		
-		for( int i = 1; i < 10; i++ )
-		if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 49 + i - 1) && i - 1 < sceneCount )
+		if( HotkeyListener.didKeyUpdate(handle) )
 		{
-			this.currentTabIndex = i;
-			this.tpScenes.setSelectedIndex(this.currentTabIndex);
-			skipUpdate = false;
-			break;
+			HotkeyListener hl = (HotkeyListener) vendor;
+			
+			for( int i = 1; i < 10; i++ )
+			{
+				if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 49 + i - 1) && i - 1 < sceneCount )
+				{
+					this.currentTabIndex = i;
+					this.tpScenes.setSelectedIndex(this.currentTabIndex);
+					Application.controller.openScene(i - 1);
+					return;
+				}
+			}
 		}
+		
+		if( handle.equals(Handles.ACTIVE_SCENE) )
+		skipUpdate = false;
 		
 		if( !skipUpdate )
 		update();
@@ -88,6 +97,7 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		});
 		
 		container.add(tpScenes);
+		container.add((new SceneControlsPane()).render());
 		
 		return container;
 	}
@@ -100,11 +110,13 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		{
 			source.setSelectedIndex(this.currentTabIndex);
 			actionCreateScene();
+			Application.controller.openScene(this.currentTabIndex - 1);
+			
 			return;
 		}
 		
 		this.currentTabIndex = source.getSelectedIndex();
-		update();
+		Application.controller.openScene(source.getSelectedIndex() - 1);
 	}
 	
 		// Creates a new scene upon clicking +
@@ -116,6 +128,5 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		
 			// Creates a new Scene and adds it to the target project
 		Application.controller.createNewScene(name);
-		update();
 	}
 }

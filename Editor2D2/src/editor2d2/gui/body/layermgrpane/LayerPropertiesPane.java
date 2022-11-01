@@ -9,7 +9,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
@@ -85,7 +84,6 @@ public class LayerPropertiesPane extends GUIComponent {
 					
 					if( !source.getValueIsAdjusting() )
 					{
-						DebugUtils.log(source.getValue(), this);
 						otherSource.setOpacity(source.getValue() / 100d);
 						update();
 					}

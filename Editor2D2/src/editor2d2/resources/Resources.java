@@ -52,6 +52,11 @@ public final class Resources {
 			loadGraphic("icon-tool-rotate", path + "assets\\icon_tool_rotate.png");
 			//loadGraphic("icon-tool-scale", path + "assets\\icon_tool_scale.png");
 			
+				// Scene controls pane icons
+			loadGraphic("icon-resize-scene", path + "assets\\icon_resize_scene.png");
+			loadGraphic("icon-toggle-cursor-grid", path + "assets\\icon_toggle_cursor_grid.png");
+			loadGraphic("icon-toggle-layer-grid", path + "assets\\icon_toggle_layer_grid.png");
+			
 				// Null icons
 			loadGraphic("icon-null-texture", path + "assets\\icon_null_texture.png");
 			loadGraphic("icon-null-object", path + "assets\\icon_null_object.png");

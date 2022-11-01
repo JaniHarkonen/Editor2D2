@@ -70,7 +70,7 @@ public class Toolbar extends GUIComponent implements Subscriber {
 				// Tool icon
 			BufferedImage icon = t.getIcon();
 			AffineTransform at = new AffineTransform();
-			at.translate((DEFAULT_TOOLBAR_ITEM_WIDTH - icon.getWidth()) / 4 + 1, (DEFAULT_TOOLBAR_ITEM_HEIGHT - icon.getHeight()) / 4);
+			at.translate((DEFAULT_TOOLBAR_ITEM_WIDTH - icon.getWidth()) / 4, (DEFAULT_TOOLBAR_ITEM_HEIGHT - icon.getHeight()) / 4);
 			
 			CImage toolIcon = new CImage(at);
 			toolIcon.setImage(icon);

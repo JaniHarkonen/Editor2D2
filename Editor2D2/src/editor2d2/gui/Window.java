@@ -180,4 +180,8 @@ public class Window implements Vendor {
 	public ModalWindow getModalWindow() {
 		return this.modal;
 	}
+	
+	public void unfocusAllComponents() {
+		this.window.requestFocusInWindow();
+	}
 }

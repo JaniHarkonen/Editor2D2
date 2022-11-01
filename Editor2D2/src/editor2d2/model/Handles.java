@@ -5,6 +5,7 @@ public final class Handles {
 	public static final String SELECTED_PLACEABLE = "selected-placeable";
 	public static final String ACTIVE_PROJECT = "active-project";
 	public static final String OPEN_FOLDER = "open-folder";
+	public static final String ACTIVE_SCENE = "active-scene";
 	
 	
 		// Do not instantiate
