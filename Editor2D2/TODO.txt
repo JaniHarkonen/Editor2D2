@@ -8,8 +8,6 @@ OVERVIEW
 
 SPECIFICS
 - Layer panes
-	-- changes in opacity should immediately update the
-	   SceneView
 	-- add ability to switch Layer type
 	-- creating a new Layer should take you immediately
 	   to the LayerPropertiesPane and only add the Layer

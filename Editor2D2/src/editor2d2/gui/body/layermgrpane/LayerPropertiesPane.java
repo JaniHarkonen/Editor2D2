@@ -9,14 +9,19 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.Handles;
+import editor2d2.gui.body.scene.SceneView;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.modules.FactoryService;
+import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.Vendor;
 
-public class LayerPropertiesPane extends GUIComponent {
+public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 	
 		// Reference to the source layer that the pane is representing
 	private Layer source;
@@ -40,6 +45,10 @@ public class LayerPropertiesPane extends GUIComponent {
 	public LayerPropertiesPane() {
 		this(null);
 	}
+	
+	
+	@Override
+	public void onNotification(String handle, Vendor vendor) { }
 	
 
 	@Override
@@ -73,6 +82,7 @@ public class LayerPropertiesPane extends GUIComponent {
 		JPanel containerOpacity = GUIUtilities.createDefaultPanel();
 		
 		final Layer otherSource = this.source;
+		final LayerPropertiesPane self = this;
 		
 				// Opacity slider
 			JSlider sldOpacity = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (100 * opacity));
@@ -82,9 +92,16 @@ public class LayerPropertiesPane extends GUIComponent {
 				public void stateChanged(ChangeEvent e) {
 					JSlider source = (JSlider) e.getSource();
 					
+					Vendor v = Application.window.subscriptionService.get(Handles.SCENE_VIEW, "LayerPropertiesPane", self);
+					SceneView sv = (SceneView) v;
+					sv.update();
+					
+					double sldValue = source.getValue();
+					otherSource.setOpacity(sldValue / 100d);
+					
 					if( !source.getValueIsAdjusting() )
 					{
-						otherSource.setOpacity(source.getValue() / 100d);
+						txtOpacity.setText("" + Layer.opacityPercentageTo255(sldValue));
 						update();
 					}
 				}
