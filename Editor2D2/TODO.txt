@@ -37,6 +37,8 @@ LATER
 	   
 TASKS LEFT
 - write TMove (undo, redo)
+	-- add copy and paste (cut?)
+- add Scene deletion, switching
 - add Meta Data modal
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
