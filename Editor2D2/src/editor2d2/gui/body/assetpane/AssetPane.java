@@ -70,6 +70,9 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		
 			// Subscribe for keyboard input
 		Application.controller.getHotkeyListener().subscribe("AssetPane", this);
+		
+			// Subscribe for ModalWindow
+		Application.window.subscriptionService.subscribe(Handles.MODAL, "AssetPane", this);
 	}
 	
 	
@@ -100,6 +103,10 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	public void onNotification(String handle, Vendor vendor) {
 		switch( handle )
 		{
+			case Handles.MODAL:
+				update();
+				break;
+		
 			case editor2d2.model.Handles.OPEN_FOLDER:
 				this.openFolder = ((Controller) vendor).getOpenFolder();
 				updateWithState();

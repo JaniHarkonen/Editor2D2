@@ -35,12 +35,8 @@ public class Grid {
 	}
 	
 	
-	public static int snapToGridX(double x, int cw) {
-		return ((int) (x / cw)) * cw;
-	}
-	
-	public static int snapToGridY(double y, int ch) {
-		return ((int) (y / ch)) * ch;
+	public static double snapToGrid(double value, int gridSize) {
+		return ((int) (value / gridSize)) * gridSize;
 	}
 	
 	

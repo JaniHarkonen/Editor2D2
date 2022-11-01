@@ -22,13 +22,21 @@ public class TPlace extends Tool {
 	
 	@Override
 	protected int usePrimary(ToolContext c) {
+		if( c.isContinuation )
+		return USE_FAILED;
+		
+		return useTertiary(c);
+	}
+	
+	@Override
+	protected int useTertiary(ToolContext c) {
 		Placeable selectedPlaceable = c.selection.get(0);
 		Layer l = c.targetLayer;
 		
 		if( l == null || selectedPlaceable == null )
 		return USE_FAILED;
 		
-		ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX, c.locationY);
+		ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX + 1, c.locationY + 1);
 		String selectedIdentifier = selectedPlaceable.getAsset().getIdentifier();
 		
 		if( placeablesAt.size() > 0 )
@@ -41,14 +49,6 @@ public class TPlace extends Tool {
 		(new APlace()).perform(new APlaceContext(c));
 		
 		return USE_SUCCESSFUL;
-	}
-	
-	@Override
-	protected int useTertiary(ToolContext c) {
-		if( c.isContinuation )
-		return USE_FAILED;
-		
-		return usePrimary(c);
 	}
 	
 	@Override

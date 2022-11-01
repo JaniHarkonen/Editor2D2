@@ -5,8 +5,6 @@ OVERVIEW
   combinations
 
 SPECIFICS
-- create secondary and tertiary functionalities for Tools
-  accessible via hotkeys
 
 	
 REMEMBER: 	Instance layer selection bug is due to

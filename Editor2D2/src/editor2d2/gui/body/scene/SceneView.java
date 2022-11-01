@@ -54,10 +54,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		// Whether the tertiary functionalities of the Tools should be used
 	private int useOrder;
 	
-	private int cursorCellX;
-	
-	private int cursorCellY;
-	
 	private int cursorCellWidth;
 	
 	private int cursorCellHeight;
@@ -69,10 +65,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		this.isSpaceDown = false;
 		this.useOrder = Tool.PRIMARY_FUNCTION;
 		
-		this.cursorCellX = 0;
-		this.cursorCellY = 0;
-		this.cursorCellWidth = 16;
-		this.cursorCellHeight = 16;
+		this.cursorCellWidth = 32;
+		this.cursorCellHeight = 32;
 		
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
@@ -144,8 +138,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	private void useTool(double x, double y, boolean isContinuation, int order, boolean stop) {
 		ToolContext tc = new ToolContext();
 		tc.isContinuation = isContinuation;
-		tc.locationX = x;
-		tc.locationY = y;
+		tc.locationX = Grid.snapToGrid(x, this.cursorCellWidth);
+		tc.locationY = Grid.snapToGrid(y, this.cursorCellHeight);
 		tc.order = order;
 		
 		int outcome = Application.controller.useTool(tc, stop);
@@ -155,7 +149,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	}
 	
 	private void useTool(double x, double y, boolean isContinuation, int order) {
-		useTool(Grid.snapToGridX(x, this.cursorCellWidth), Grid.snapToGridY(y, this.cursorCellHeight), isContinuation, order, false);
+		useTool(x, y, isContinuation, order, false);
 	}
 	
 		// Creates the JPanel that will render the Scene by creating an
@@ -174,10 +168,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				
 					// Render the Scene
 				cam.render(gg);
-				
-					// Render the highlighted placement grid cell
-				/*g.setColor(new Color(255, 0, 0, 50));
-				g.fillRect(selectionArea.x, selectionArea.y, selectionArea.width, selectionArea.height);*/
 				
 					// Render the Scene bounds
 				float[] dash = { 6.0f, 6.0f };
@@ -226,7 +216,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			public void mousePressed(MouseEvent e) {
 				int toolUseOrder = -1;
 				
-				if( GUIUtilities.checkLeftClick(e) /*&& !isSpaceDown*/ )
+				if( GUIUtilities.checkLeftClick(e) )
 				toolUseOrder = useOrder;
 				else if( GUIUtilities.checkRightClick(e) )
 				toolUseOrder = Tool.SECONDARY_FUNCTION;
