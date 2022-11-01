@@ -1,8 +1,8 @@
 package editor2d2.subservice;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Subscription {
 
@@ -19,7 +19,7 @@ public class Subscription {
 	public Subscription(String handle) {
 		this.handle = handle;
 		this.vendor = null;
-		this.subscribers = new HashMap<String, Subscriber>();
+		this.subscribers = new ConcurrentHashMap<String, Subscriber>();
 	}
 	
 	

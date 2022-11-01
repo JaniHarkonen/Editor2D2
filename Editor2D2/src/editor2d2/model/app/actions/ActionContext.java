@@ -15,4 +15,9 @@ public class ActionContext {
 		this.controller = tc.controller;
 		this.selection = tc.selection;
 	}
+	
+	protected ActionContext() {
+		this.controller = null;
+		this.selection = null;
+	}
 }

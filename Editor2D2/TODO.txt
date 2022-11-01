@@ -1,7 +1,8 @@
-TODO - ...
+TODO - RemainingHotkeys
 
 OVERVIEW
-
+- write the functionalities for the remaining hotkey
+  combinations
 
 SPECIFICS
 
@@ -9,8 +10,15 @@ SPECIFICS
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
 			selectPlaceables(int,int,int,int).
+			
+REMEMBER2:
+			HotkeyListener becomes messed up when the
+			window looses focus or a popup is displayed
+			while keys are being held.
 
 LATER
+- make sure that GUIComponents dont update on HotkeyListner
+  if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
@@ -29,6 +37,8 @@ LATER
 	   
 TASKS LEFT
 - write TMove (undo, redo)
+	-- add copy and paste (cut?)
+- add Scene deletion, switching
 - add Meta Data modal
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project

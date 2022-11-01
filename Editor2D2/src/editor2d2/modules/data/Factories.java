@@ -73,4 +73,9 @@ public class Factories extends AbstractFactories<Data> {
 	public AssetItem createAssetItem(AssetPane host, Asset source) {
 		return new DataAssetItem(host, source);
 	}
+	
+	@Override
+	public char getAssetCreationShortcut() {
+		return 'D';
+	}
 }

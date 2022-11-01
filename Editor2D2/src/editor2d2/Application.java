@@ -1,5 +1,7 @@
 package editor2d2;
 
+import javax.swing.UIManager;
+
 import editor2d2.gui.Window;
 import editor2d2.model.app.AppState;
 import editor2d2.model.app.Controller;
@@ -24,6 +26,11 @@ public class Application {
 	
 	
 	public static void main(String[] args) {
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch( Exception e ) { }
+		
 		FactoryService.initialize();
 		resources = Resources.instantiate();
 		appState = new AppState();

@@ -77,6 +77,7 @@ public class ProjectWriter {
 			return WRITE_FAILED;
 		}
 		
+		project.setFilepath(file.getPath());
 		return WRITE_SUCCESSFUL;
 	}
 	

@@ -15,11 +15,13 @@ public class ASelectContext extends ActionContext {
 	public double startY;
 	public double endX;
 	public double endY;
+	public int type;
 
 	public ASelectContext(ToolContext tc) {
 		super(tc);
 
 		this.target = tc.targetLayer;
+		this.type = ASelect.TYPE_NORMAL;
 	}
 
 }

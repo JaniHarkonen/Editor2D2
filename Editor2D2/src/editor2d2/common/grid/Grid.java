@@ -35,6 +35,11 @@ public class Grid {
 	}
 	
 	
+	public static double snapToGrid(double value, int gridSize) {
+		return ((int) (value / gridSize)) * gridSize;
+	}
+	
+	
 		// Returns the element stored in a given cell with no
 		// additional checks for slightly faster performance
 	public Gridable getFast(int cx, int cy) {
@@ -69,6 +74,15 @@ public class Grid {
 		// Puts an element in a cell given its coordinate
 	public void put(double x, double y, Gridable element) {
 		put((int) x / this.cellWidth, (int) y / this.cellHeight, element);
+	}
+	
+	public void remove(int cx, int cy) {
+		put(cx, cy, null);
+	}
+	
+		// Removes an element in a cell by setting it to null
+	public void remove(double x, double y) {
+		put(x, y, null);
 	}
 	
 		// Clamps a cellular X-coordinate to fit this Grid

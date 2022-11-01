@@ -2,6 +2,7 @@ package editor2d2.gui.body.assetpane;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
+import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -68,6 +70,9 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		
 			// Subscribe for keyboard input
 		Application.controller.getHotkeyListener().subscribe("AssetPane", this);
+		
+			// Subscribe for ModalWindow
+		Application.window.subscriptionService.subscribe(Handles.MODAL, "AssetPane", this);
 	}
 	
 	
@@ -98,12 +103,27 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	public void onNotification(String handle, Vendor vendor) {
 		switch( handle )
 		{
+			case Handles.MODAL:
+				update();
+				break;
+		
 			case editor2d2.model.Handles.OPEN_FOLDER:
 				this.openFolder = ((Controller) vendor).getOpenFolder();
 				updateWithState();
 				break;
 			
 			case HotkeyListener.KEY_UPDATED_HANDLE:
+				HotkeyListener hl = (HotkeyListener) vendor;
+				ModalWindow mw = Application.window.getModalWindow();
+				
+				for( String assetClass : FactoryService.getClassTypes() )
+				{
+					AbstractFactories<? extends Asset> factories = FactoryService.getFactories(assetClass);
+					char shortcut = factories.getAssetCreationShortcut();
+					if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, shortcut) )
+					Application.window.popup(factories.createModal(mw, true));
+				}
+				
 				break;
 		}
 	}

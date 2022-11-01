@@ -105,6 +105,7 @@ public class ProjectLoader {
 			return null;
 		}
 		
+		this.targetProject.setFilepath(file.getPath());
 		return this.targetProject;
 	}
 	
