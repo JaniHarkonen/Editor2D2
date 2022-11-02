@@ -16,6 +16,7 @@ import editor2d2.gui.components.CIcon;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.requirements.Require;
 import editor2d2.gui.components.requirements.RequireIntegerBetween;
+import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -124,7 +125,6 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 				public void keyPressed(KeyEvent e) {
 					if( e.getKeyCode() == KeyEvent.VK_ENTER )
 					Application.window.unfocusAllComponents();
-					//((JTextField) e.getSource()).setFocusable(false);
 				}
 			});
 			this.txtCursorGridHeight.setText(""+this.cursorCellHeight);
@@ -141,13 +141,17 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 	
 	private void actionResizeScene() {
 		JPanel container = GUIUtilities.createDefaultPanel();
+		Scene scene = Application.controller.getActiveScene();
+		
+		if( scene == null )
+		return;
 		
 		CTextField txtNewWidth = new CTextField("New width: ", new RequireIntegerBetween(Require.MIN_ONLY, 1));
 		txtNewWidth.orientation = GUIUtilities.BOX_PAGE_AXIS;
-		//txtNewWidth.setText(t);
+		txtNewWidth.setText(""+scene.getWidth());
 		CTextField txtNewHeight = new CTextField("New height: ", new RequireIntegerBetween(Require.MIN_ONLY, 1));
 		txtNewHeight.orientation = GUIUtilities.BOX_PAGE_AXIS;
-		//txtNewHeight.setText(t);
+		txtNewHeight.setText(""+scene.getHeight());
 		
 		container.add(txtNewWidth.render());
 		addEmptySpace(container);

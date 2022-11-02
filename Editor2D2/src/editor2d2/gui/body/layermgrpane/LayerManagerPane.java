@@ -18,13 +18,12 @@ import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
 public class LayerManagerPane extends GUIComponent implements Subscriber {
-	
-		// Whether a layer is being edited
-	private Layer editedLayer;
+
+	private LayerPropertiesPane editedLayerPropertiesPane;
 	
 	
 	public LayerManagerPane() {
-		this.editedLayer = null;
+		this.editedLayerPropertiesPane = null;
 		
 		Application.controller.getHotkeyListener().subscribe("LayerManagerPane", this);
 		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_SCENE, "LayerManagerPane", this);
@@ -54,7 +53,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	protected JPanel draw() {
 		JPanel container = GUIUtilities.createTitledPanel("Layers", GUIUtilities.BOX_PAGE_AXIS);
 		
-		if( this.editedLayer == null )
+		if( this.editedLayerPropertiesPane == null )
 		{
 		
 				// Controls area
@@ -81,7 +80,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			container.add(containerControls);
 			
 				// Layer properties pane
-			container.add((new LayerPropertiesPane(this.editedLayer)).render());
+			container.add(this.editedLayerPropertiesPane.render());
 		}
 		
 		return container;
@@ -90,7 +89,8 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	
 		// Called upon editing a layer (...)
 	private void onEditLayer() {
-		this.editedLayer = Application.controller.getActiveLayer();
+		Layer layer = Application.controller.getActiveLayer();
+		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, layer, false);
 		update();
 	}
 	
@@ -99,8 +99,8 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		Scene scene = Application.controller.getActiveScene();
 		InstanceLayer newLayer = new InstanceLayer(scene);
 		newLayer.setName("Object layer " + System.currentTimeMillis());
-		scene.addLayer(newLayer);
 		
+		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, newLayer, true);
 		update();
 	}
 	
@@ -112,13 +112,19 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		return;
 		
 		Application.controller.getActiveScene().removeLayer(target);
-		
 		update();
 	}
 	
 		// Called upon clicking < in the layer properties view
 	private void onBackToLayerManager() {
-		this.editedLayer = null;
+		this.editedLayerPropertiesPane = null;
+		update();
+	}
+	
+	
+		// Closes the LayerPropertiesPane
+	public void closeProperties() {
+		this.editedLayerPropertiesPane = null;
 		update();
 	}
 }

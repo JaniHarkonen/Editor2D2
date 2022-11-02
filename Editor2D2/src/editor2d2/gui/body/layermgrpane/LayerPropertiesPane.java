@@ -32,18 +32,26 @@ public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 		// Layer opacity text field
 	private CTextField txtOpacity;
 	
+		// Whether a new Layer is being created
+	private boolean isNew;
 	
-	public LayerPropertiesPane(Layer source) {
+		// Hosting LayerPropertiesPane
+	private LayerManagerPane host;
+	
+	
+	public LayerPropertiesPane(LayerManagerPane host, Layer source, boolean isNew) {
 		this.source = source;
+		this.host = host;
 		
 		this.txtName = new CTextField("Name: ");
 		this.txtName.orientation = BoxLayout.PAGE_AXIS;
 		
 		this.txtOpacity = new CTextField();
+		this.isNew = isNew;
 	}
 	
 	public LayerPropertiesPane() {
-		this(null);
+		this(null, null, true);
 	}
 	
 	
@@ -144,5 +152,10 @@ public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 		
 		this.source.setName(name);
 		this.source.setOpacity(opacity);
+		
+		if( this.isNew )
+		this.source.getScene().addLayer(this.source);
+		
+		this.host.closeProperties();
 	}
 }
