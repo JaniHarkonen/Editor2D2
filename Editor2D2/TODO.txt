@@ -8,7 +8,6 @@ OVERVIEW
 
 SPECIFICS
 - Layer panes
-	-- add ability to switch Layer type
 	-- ? add ability to toggle layer visibility in LayerPane
 - add Scene deletion
 - add Meta Data modal

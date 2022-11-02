@@ -98,7 +98,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	private void onAddLayer() {
 		Scene scene = Application.controller.getActiveScene();
 		InstanceLayer newLayer = new InstanceLayer(scene);
-		newLayer.setName("Object layer " + System.currentTimeMillis());
+		newLayer.setName("Layer " + System.currentTimeMillis());
 		
 		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, newLayer, true);
 		update();

@@ -1,5 +1,8 @@
 package editor2d2.gui.body.layermgrpane;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -17,6 +20,7 @@ import editor2d2.gui.body.scene.SceneView;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
 import editor2d2.model.project.scene.Layer;
+import editor2d2.model.project.scene.Scene;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -70,7 +74,6 @@ public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 		JPanel containerType = GUIUtilities.createDefaultPanel();
 		
 			JLabel labTypeTitle = new JLabel("Type:");
-			
 			String[] typeChoices = FactoryService.getClassTypes();
 			
 			for( int i = 0; i < typeChoices.length; i++ )
@@ -81,6 +84,19 @@ public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 			JComboBox<String> dmType = new JComboBox<String>(typeChoices);
 			String selectedLayerType = FactoryService.getPlaceableClass(this.source.getReferencedAsset().getAssetClassName());
 			dmType.setSelectedItem(GUIUtilities.getFirstLetterUppercase(selectedLayerType));
+			
+			if( this.isNew )
+			{
+				dmType.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						onLayerChange(e);
+					}
+				});
+			}
+			else
+			dmType.setEnabled(false);
 			
 		containerType.add(labTypeTitle);
 		containerType.add(dmType);
@@ -157,5 +173,15 @@ public class LayerPropertiesPane extends GUIComponent implements Subscriber {
 		this.source.getScene().addLayer(this.source);
 		
 		this.host.closeProperties();
+	}
+	
+		// Changes the type of the Layer
+	@SuppressWarnings("unchecked")
+	private void onLayerChange(ActionEvent e) {
+		int selectionIndex = ((JComboBox<String>) e.getSource()).getSelectedIndex();
+		String assetClass = FactoryService.getClassTypes()[selectionIndex];
+		
+		Scene scene = this.source.getScene();
+		this.source = FactoryService.getFactories(assetClass).createLayer(scene, 32, 32);
 	}
 }
