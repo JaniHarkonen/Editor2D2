@@ -234,8 +234,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					
 				gg.draw(bounds_cam);
 				
-					// Render the cursor grid
-				if( drawCursorGrid )
+					// Render grids
+				if( drawCursorGrid || drawLayerGrid )
 				{
 					dash[0] = 1.0f;
 					dash[1] = 1.0f;
@@ -252,13 +252,26 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					double right = Math.min(scene.getWidth(), cbounds.right);
 					double bottom = Math.min(scene.getHeight(), cbounds.bottom);
 					
-					if( cw > 1 && ch > 1 )
+						// Render cursor grid
+					if( drawCursorGrid )
+					drawGrid(gg, ox, oy, (int) cam.getOnScreenX(right), (int) cam.getOnScreenY(bottom), (int) cw, (int) ch);
+					
+						// Render Layer grid
+					if( drawLayerGrid )
 					{
-						for( int i = 0; i < right; i += cw )
-						gg.drawLine(ox + i, oy, ox + i, (int) cam.getOnScreenY(bottom));
+						Layer activeLayer = Application.controller.getActiveLayer();
 						
-						for( int i = 0; i < bottom; i += ch )
-						gg.drawLine(ox, oy + i, (int) cam.getOnScreenX(right), oy + i);
+						if( activeLayer != null )
+						{
+							cw = activeLayer.getObjectGrid().getCellWidth() * cam.getZ();
+							ch = activeLayer.getObjectGrid().getCellHeight() * cam.getZ();
+							
+							gg.setColor(Color.RED);
+							dash[0] = 5.0f;
+							dash[1] = 5.0f;
+							gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 2.0f));
+							drawGrid(gg, ox, oy, (int) cam.getOnScreenX(right), (int) cam.getOnScreenY(bottom), (int) cw, (int) ch);
+						}
 					}
 				}
 			}
@@ -339,6 +352,19 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		
 		container.setFocusable(true);
 		return container;
+	}
+	
+		// Draws a grid in a given context with given bounds and
+		// cell dimensions
+	private void drawGrid(Graphics2D g, int x1, int y1, int x2, int y2, int cw, int ch) {
+		if( cw > 1 && ch > 1 )
+		{
+			for( int i = x1; i < x2; i += cw )
+			g.drawLine(i, y1, i, y2);
+			
+			for( int i = y1; i < y2; i += ch )
+			g.drawLine(x1, i, x2, i);
+		}
 	}
 	
 	

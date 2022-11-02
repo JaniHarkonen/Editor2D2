@@ -17,11 +17,6 @@ SPECIFICS
 	-> fix references to the Controller upon drawing and
 	   figure out a way to determine if a Placeable is
 	   selected without the Controller's SelectionManager
-- create a Scene controls pane
-	VV add ability to resize the Scene
-	VV add ability to toggle cursor grid
-	VV add ability to modify cursor grid
-	-- add ability to toggle layer grid
 
 	
 REMEMBER: 	Instance layer selection bug is due to
