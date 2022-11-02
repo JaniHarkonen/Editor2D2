@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
@@ -18,6 +19,7 @@ import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
+import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.writer.ProjectWriter;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
@@ -118,11 +120,34 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
 		}
 		
+			// Scene settings
+		JMenu settingsScene = new JMenu("Scene");
+		
+			JMenuItem itemRenameScene = new JMenuItem(new AbstractAction("Rename scene") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionOnRenameScene();
+				}
+			});
+			
+			JMenuItem itemDeleteScene = new JMenuItem(new AbstractAction("Delete scene") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionOnDeleteScene();
+				}
+			});
+			
+		settingsScene.add(itemRenameScene);
+		settingsScene.add(itemDeleteScene);
+		
 			// Meta data settings
 		JMenu settingsMetaData = new JMenu("Meta data");
 		
 		add(menuProject);
 		add(menuAsset);
+		add(settingsScene);
 		add(settingsMetaData);
 	}
 	
@@ -181,5 +206,19 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		
 		Application.controller.getActiveProject().setFilepath(res.filepaths[0].getPath());
 		actionOnSaveProject();
+	}
+	
+	private void actionOnRenameScene() {
+		Scene scene = Application.controller.getActiveScene();
+		String newName = JOptionPane.showInputDialog(null, "Enter scene name", scene.getName());
+		
+		if( newName == null || newName.equals("") )
+		return;
+		
+		Application.controller.renameActiveScene(newName);
+	}
+	
+	private void actionOnDeleteScene() {
+		Application.controller.deleteActiveScene();
 	}
 }

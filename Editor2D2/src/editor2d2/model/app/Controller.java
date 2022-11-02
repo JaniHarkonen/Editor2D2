@@ -120,6 +120,20 @@ public class Controller implements Vendor {
 		subscriptionService.register(Handles.ACTIVE_SCENE, this);
 	}
 	
+		// Renames the active Scene
+	public void renameActiveScene(String newName) {
+		getActiveScene().setName(newName);
+		
+		subscriptionService.register(Handles.ACTIVE_SCENE, this);
+	}
+	
+		// Deletes the active Scene
+	public void deleteActiveScene() {
+		getActiveProject().removeScene(getActiveScene());
+		
+		subscriptionService.register(Handles.ACTIVE_SCENE, this);
+	}
+	
 	/******************* SELECTION *********************/
 	
 		// Selects an Asset that is to be placed
