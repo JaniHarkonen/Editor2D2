@@ -146,6 +146,7 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 		if( scene == null )
 		return;
 		
+			// Add Scene dimensions input fields
 		CTextField txtNewWidth = new CTextField("New width: ", new RequireIntegerBetween(Require.MIN_ONLY, 1));
 		txtNewWidth.orientation = GUIUtilities.BOX_PAGE_AXIS;
 		txtNewWidth.setText(""+scene.getWidth());
@@ -157,6 +158,7 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 		addEmptySpace(container);
 		container.add(txtNewHeight.render());
 
+			// Display the input dialog
 		int result = JOptionPane.showConfirmDialog(
 			null,
 			container, 
@@ -164,16 +166,35 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 			JOptionPane.OK_CANCEL_OPTION
 		);
 		
-		if( result == JOptionPane.OK_OPTION )
+		if( result != JOptionPane.OK_OPTION )
+		return;
+		
+			// Validate inputs and resize the Scene
+		RequireIntegerBetween rfWidth = (RequireIntegerBetween) txtNewWidth.getRequirementFilter();
+		RequireIntegerBetween rfHeight = (RequireIntegerBetween) txtNewHeight.getRequirementFilter();
+		
+		if( !rfWidth.checkValid() || !rfHeight.checkValid() )
+		return;
+		
+		int newWidth = rfWidth.getValue(),
+			newHeight = rfHeight.getValue();
+		
+			// Confirm the resize when the action may result in the deletion
+			// of Placeables left outside of the new bounds of the Scene
+		if( newWidth < scene.getWidth() || newHeight < scene.getHeight() )
 		{
-			RequireIntegerBetween rfWidth = (RequireIntegerBetween) txtNewWidth.getRequirementFilter();
-			RequireIntegerBetween rfHeight = (RequireIntegerBetween) txtNewHeight.getRequirementFilter();
+			result = JOptionPane.showConfirmDialog(null,
+					  "Making the scene smaller causes objects left out of "
+					+ "bounds to be removed! \n"
+					+ "Are you sure you want to continue?",
+					"Resize confirmation",
+					JOptionPane.YES_NO_OPTION);
 			
-			if( !rfWidth.checkValid() || !rfHeight.checkValid() )
+			if( result != JOptionPane.YES_OPTION )
 			return;
-			
-			
 		}
+		
+		scene.setDimensions(newWidth, newHeight);
 	}
 	
 	private void actionToggleLayerGrid() {

@@ -15,7 +15,7 @@ public abstract class Layer implements HasAsset {
 	protected Scene scene;
 
 		// Objects placed on the layer
-	protected final Grid objectGrid;
+	protected Grid objectGrid;
 	
 		// Name of the layer
 	protected String name;
@@ -133,6 +133,62 @@ public abstract class Layer implements HasAsset {
 		}
 	}
 	
+		// Resizes the object grid to fit the Scene this Layer
+		// is a part of
+	@SuppressWarnings("unchecked")
+	public void resizeObjectGrid() {
+		Grid grid = this.objectGrid;
+		
+			// Old cell dimensions
+		double 	cw = grid.getCellWidth(),
+				ch = grid.getCellHeight();
+		
+			// Old cellular dimensions
+		int oldCols = grid.getRowLength(),
+			oldRows = grid.getColumnLength();
+		
+			// New scene dimensions
+		int sceneWidth = this.scene.getWidth(),
+			sceneHeight = this.scene.getHeight();
+		
+			// New cellullar Scene dimensions
+		int cols = (int) (this.scene.getWidth() / cw),
+			rows = (int) (this.scene.getHeight() / ch);
+		
+		Grid resizedGrid = new Grid(cols, rows, (int) cw, (int) ch);
+		
+		for( int x = 0; x < oldCols; x++ )
+		for( int y = 0; y < oldRows; y++ )
+		{
+			Gridable g = grid.getFast(x, y);
+			
+			if( g == null )
+			continue;
+			
+			ArrayList<Placeable> collection = new ArrayList<Placeable>();
+			
+				// Handle Placeables and arrays of Placeables
+			if( g instanceof Placeable )
+			collection.add((Placeable) g);
+			else
+			collection = (ArrayList<Placeable>) g.getCollection();
+			
+			for( Placeable p : collection )
+			{
+				if( p == null )
+				continue;
+				
+				if( p.getX() > sceneWidth || p.getY() > sceneHeight )
+				continue;
+				
+				p.setCellPosition(x, y);
+				resizedGrid.put(x, y, p);
+			}
+		}
+		
+		this.objectGrid = resizedGrid;
+	}
+	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {
 		ArrayList<Placeable> selection = new ArrayList<Placeable>();
 	
@@ -194,6 +250,9 @@ public abstract class Layer implements HasAsset {
 		// TO BE OVERRIDDEN
 	protected abstract boolean filterCheck(Gridable p);
 	
+	
+	
+	/************************** GETTERS / SETTERS ***************************/
 	
 		// Returns a reference to the Scene the layer belongs to
 	public Scene getScene() {

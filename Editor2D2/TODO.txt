@@ -18,9 +18,9 @@ SPECIFICS
 	   figure out a way to determine if a Placeable is
 	   selected without the Controller's SelectionManager
 - create a Scene controls pane
-	-- add ability to resize the Scene
-	-- add ability to toggle cursor grid
-	-- add ability to modify cursor grid
+	VV add ability to resize the Scene
+	VV add ability to toggle cursor grid
+	VV add ability to modify cursor grid
 	-- add ability to toggle layer grid
 
 	
