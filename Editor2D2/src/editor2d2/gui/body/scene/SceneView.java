@@ -192,6 +192,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		// Creates the JPanel that will render the Scene by creating an
 		// anonymous class extending JPanel
 	private JPanel createView() {
+		/*if( this.scene == null )
+		return new JPanel();*/
+		
 		Camera cam = this.scene.getCamera();
 		
 		@SuppressWarnings("serial")

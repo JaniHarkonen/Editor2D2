@@ -45,15 +45,12 @@ public class Project {
 		this.scenes.add(scene);
 	}
 	
-		// Removes a given Scen from the Project
-	public void removeScene(Scene scene) {
-		for( int i = 0; i < this.scenes.size(); i++ )
-		{
-			if( this.scenes.get(i) != scene )
-			continue;
-			
-			this.scenes.remove(i);
-		}
+		// Removes a Scene with a given index from the Project
+	public void removeScene(int index) {
+		if( index < 0 || index >= this.scenes.size() )
+		return;
+		
+		this.scenes.remove(index);
 	}
 	
 		// Adds an asset into the project

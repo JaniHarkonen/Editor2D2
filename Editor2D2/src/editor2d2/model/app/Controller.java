@@ -105,7 +105,7 @@ public class Controller implements Vendor {
 	public void openScene(int index) {
 		ArrayList<Scene> scenes = getActiveProject().getAllScenes();
 		
-		if( index < 0 || index >= scenes.size() )
+		if( index >= scenes.size() )
 		return;
 		
 		this.appState.activeScene = index;
@@ -129,9 +129,14 @@ public class Controller implements Vendor {
 	
 		// Deletes the active Scene
 	public void deleteActiveScene() {
-		getActiveProject().removeScene(getActiveScene());
+		int index = getActiveSceneIndex();
+		Project activeProject = getActiveProject();
 		
-		subscriptionService.register(Handles.ACTIVE_SCENE, this);
+		activeProject.removeScene(index);
+		
+		int sceneCount = activeProject.getAllScenes().size() - 1;
+		int newIndex = Math.min(sceneCount, index);
+		openScene(newIndex);
 	}
 	
 	/******************* SELECTION *********************/
@@ -235,5 +240,11 @@ public class Controller implements Vendor {
 		return null;
 		
 		return getActiveProject().getScene(index);
+	}
+	
+		// Returns the index of the active Scene in the
+		// Project's Scene list
+	public int getActiveSceneIndex() {
+		return this.appState.activeScene;
 	}
 }

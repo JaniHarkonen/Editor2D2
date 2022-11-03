@@ -55,9 +55,15 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 				}
 			}
 		}
-		
-		if( handle.equals(Handles.ACTIVE_SCENE) )
-		skipUpdate = false;
+		else if( handle.equals(Handles.ACTIVE_SCENE) )
+		{
+			this.currentTabIndex = Application.controller.getActiveSceneIndex() + 1;
+			
+			if( this.currentTabIndex <= 0 )
+			this.currentTabIndex = -1;
+			
+			skipUpdate = false;
+		}
 		
 		if( !skipUpdate )
 		update();
@@ -70,6 +76,7 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		
 		this.tpScenes = new JTabbedPane();
 		this.tpScenes.add("+", new JPanel());
+		container.add(tpScenes);
 		
 			// Creates Scene tabs for all the Scenes in the target project
 			// Only renders the Scene for the currently open tab
@@ -96,7 +103,6 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 			}
 		});
 		
-		container.add(tpScenes);
 		container.add((new SceneControlsPane()).render());
 		
 		return container;

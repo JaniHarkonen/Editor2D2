@@ -10,8 +10,6 @@ SPECIFICS
 - Layer panes
 	-- ? add ability to toggle layer visibility in LayerPane
 - add Meta Data modal
-- return to LayerManagerPane after TOOLS
-	-- also check other classes inside "layermgrpane"
 - Placeables should not reference the Controller
 	-> fix references to the Controller upon drawing and
 	   figure out a way to determine if a Placeable is
@@ -28,6 +26,7 @@ REMEMBER2:
 			while keys are being held.
 
 LATER
+- Layer writer should write whether the Layer is visible
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
