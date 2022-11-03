@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
+import editor2d2.gui.metadata.MetaDataModal;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.app.HotkeyListener;
@@ -123,6 +124,16 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			// Scene settings
 		JMenu settingsScene = new JMenu("Scene");
 		
+				// Scene - Meta data
+			JMenuItem itemSceneMetaData = new JMenuItem(new AbstractAction("Meta data") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionMetaData();
+				}
+			});
+		
+				// Scene - Rename scene
 			JMenuItem itemRenameScene = new JMenuItem(new AbstractAction("Rename scene") {
 				
 				@Override
@@ -131,6 +142,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 				}
 			});
 			
+				// Scene - Delete scene
 			JMenuItem itemDeleteScene = new JMenuItem(new AbstractAction("Delete scene") {
 				
 				@Override
@@ -139,16 +151,13 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 				}
 			});
 			
+		settingsScene.add(itemSceneMetaData);
 		settingsScene.add(itemRenameScene);
 		settingsScene.add(itemDeleteScene);
-		
-			// Meta data settings
-		JMenu settingsMetaData = new JMenu("Meta data");
 		
 		add(menuProject);
 		add(menuAsset);
 		add(settingsScene);
-		add(settingsMetaData);
 	}
 	
 	
@@ -220,5 +229,13 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	
 	private void actionOnDeleteScene() {
 		Application.controller.deleteActiveScene();
+	}
+	
+	private void actionMetaData() {
+		if( Application.controller.getActiveScene() == null )
+		return;
+		
+		Window window = Application.window;
+		window.popup("Scene meta data", new MetaDataModal(window.getModalWindow()));
 	}
 }

@@ -19,11 +19,16 @@ public class Scene {
 		// Camera that is used to render the Scene view at its location
 	private Camera camera;
 	
+		// Compilation statement that will be written in to the
+		// compiled map file
+	private String compilationStatement;
+	
 	
 	public Scene() {
 		this.name = null;
 		this.layers = new ArrayList<Layer>();
 		this.camera = null;
+		this.compilationStatement = null;
 	}
 	
 	public Scene(String name) {
@@ -105,6 +110,11 @@ public class Scene {
 		return null;
 	}
 	
+		// Returns the compilation statement of the Scene
+	public String getCompilationStatement() {
+		return this.compilationStatement;
+	}
+	
 		// Sets the name of the Scene
 	public void setName(String name) {
 		if( name == null )
@@ -126,5 +136,10 @@ public class Scene {
 	public void setCamera(Camera camera) {
 		camera.setScene(this);
 		this.camera = camera;
+	}
+	
+		// Sets the compilation statement of the Scene
+	public void setCompilationStatement(String compilationStatement) {
+		this.compilationStatement = compilationStatement;
 	}
 }

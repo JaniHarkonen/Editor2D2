@@ -27,6 +27,9 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Reference to the layer the placeable is placed in
 	protected Layer layer;
 	
+		// Whether the Placeable has been selected
+	protected boolean isSelected;
+	
 	
 	protected Placeable() {
 		this.asset = null;
@@ -35,6 +38,7 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		this.cellX = -1;
 		this.cellY = -1;
 		this.layer = null;
+		this.isSelected = false;
 	}
 	
 	
@@ -140,6 +144,11 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return this.asset;
 	}
 	
+		// Returns whether the Placeable has been selected
+	public boolean getSelected() {
+		return this.isSelected;
+	}
+	
 		// Sets the coordinate offsets
 	public void setOffsets(double xoff, double yoff) {
 		this.xOffset = xoff;
@@ -158,5 +167,10 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return;
 		
 		this.asset = asset;
+	}
+	
+		// Sets the Placeable as selected
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 }
