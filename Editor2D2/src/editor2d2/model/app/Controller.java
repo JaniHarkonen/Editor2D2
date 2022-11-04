@@ -13,7 +13,6 @@ import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Camera;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
@@ -24,7 +23,7 @@ public class Controller implements Vendor {
 	
 		// Reference to the SelectionManager that handles Placeable
 		// selections
-	public final SelectionManager<Placeable> placeableSelectionManager;
+	public final PlaceableSelectionManager placeableSelectionManager;
 	
 		// Reference to the SubscriptionService that the Controller uses
 		// to notify the GUI when the AppState changes
@@ -38,7 +37,7 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
-		this.placeableSelectionManager = new SelectionManager<Placeable>();
+		this.placeableSelectionManager = new PlaceableSelectionManager();//new SelectionManager<Placeable>();
 		DebugUtils.controllerDebugSetup(this);
 	}
 	

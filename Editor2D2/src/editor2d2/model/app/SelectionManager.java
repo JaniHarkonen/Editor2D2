@@ -7,10 +7,10 @@ import java.util.Map;
 public class SelectionManager<T> {
 
 		// List of currently selected items
-	private Map<T, Boolean> selection;
+	protected Map<T, Boolean> selection;
 	
 		// Reference to the item that was first selected
-	private T firstSelection;
+	protected T firstSelection;
 	
 	
 	public SelectionManager() {

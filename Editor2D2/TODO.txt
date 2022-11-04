@@ -9,10 +9,6 @@ OVERVIEW
 SPECIFICS
 - Layer panes
 	-- ? add ability to toggle layer visibility in LayerPane
-- Placeables should not reference the Controller
-	-> fix references to the Controller upon drawing and
-	   figure out a way to determine if a Placeable is
-	   selected without the Controller's SelectionManager
 
 	
 REMEMBER: 	Instance layer selection bug is due to
