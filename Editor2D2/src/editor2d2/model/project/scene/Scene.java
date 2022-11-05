@@ -19,11 +19,16 @@ public class Scene {
 		// Camera that is used to render the Scene view at its location
 	private Camera camera;
 	
+		// Compilation statement that will be written in to the
+		// compiled map file
+	private String compilationStatement;
+	
 	
 	public Scene() {
 		this.name = null;
 		this.layers = new ArrayList<Layer>();
 		this.camera = null;
+		this.compilationStatement = null;
 	}
 	
 	public Scene(String name) {
@@ -32,7 +37,44 @@ public class Scene {
 		this.name = name;
 	}
 	
-		// GETTERS/SETTERS
+	
+		// Adds a layer to the list of layers
+	public void addLayer(Layer layer) {
+		this.layers.add(layer);
+	}
+	
+		// Removes a layer of a given name from the list of layers
+		// and returns true if the removal was successful, false if not
+	public boolean removeLayer(String name) {
+		for( int i = 0; i < this.layers.size(); i++ )
+		{
+			if( this.layers.get(i).getName() == name )
+			{
+				this.layers.remove(i);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+		// Removes a given layer from the list of layers and returns
+		// true if the removal was successful, false if not
+	public boolean removeLayer(Layer layer) {
+		for( int i = 0; i < this.layers.size(); i++ )
+		{
+			if( this.layers.get(i) == layer )
+			{
+				this.layers.remove(i);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+		/************************** GETTERS / SETTERS **************************/
 	
 		// Returns the name of the Scene
 	public String getName() {
@@ -68,6 +110,11 @@ public class Scene {
 		return null;
 	}
 	
+		// Returns the compilation statement of the Scene
+	public String getCompilationStatement() {
+		return this.compilationStatement;
+	}
+	
 		// Sets the name of the Scene
 	public void setName(String name) {
 		if( name == null )
@@ -80,6 +127,9 @@ public class Scene {
 	public void setDimensions(int width, int height) {
 		this.width = width;
 		this.height = height;
+		
+		for( Layer l : this.layers )
+		l.resizeObjectGrid();
 	}
 	
 		// Sets the camera instance viewing the Scene
@@ -88,38 +138,8 @@ public class Scene {
 		this.camera = camera;
 	}
 	
-		// Adds a layer to the list of layers
-	public void addLayer(Layer layer) {
-		this.layers.add(layer);
-	}
-	
-		// Removes a layer of a given name from the list of layers
-		// and returns true if the removal was successful, false if not
-	public boolean removeLayer(String name) {
-		for( int i = 0; i < this.layers.size(); i++ )
-		{
-			if( this.layers.get(i).getName() == name )
-			{
-				this.layers.remove(i);
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-		// Removes a given layer from the list of layers and returns
-		// true if the removal was successful, false if not
-	public boolean removeLayer(Layer layer) {
-		for( int i = 0; i < this.layers.size(); i++ )
-		{
-			if( this.layers.get(i) == layer )
-			{
-				this.layers.remove(i);
-				return true;
-			}
-		}
-		
-		return false;
+		// Sets the compilation statement of the Scene
+	public void setCompilationStatement(String compilationStatement) {
+		this.compilationStatement = compilationStatement;
 	}
 }

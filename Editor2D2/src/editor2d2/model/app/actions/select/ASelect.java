@@ -48,7 +48,7 @@ public class ASelect extends Action {
 			
 			case TYPE_SUBTRACT:
 				mngr.removeSelection(this.selection);
-				break;
+				return;
 		}
 	}
 

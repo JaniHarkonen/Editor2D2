@@ -128,14 +128,18 @@ public class Grid {
 	public void setCellDimensions(int rowLength, int columnLength) {
 		Map<Integer, Gridable> newMap = new HashMap<Integer, Gridable>();
 		
-		for( int x = 0; x < this.rowLength; x++ )
+		int x2 = Math.min(rowLength, this.rowLength),
+			y2 = Math.min(columnLength, this.columnLength);
+		
+		for( int x = 0; x < x2; x++ )
 		{
-			for( int y = 0; y < this.columnLength; y++ )
-			newMap.put(y * rowLength + x, get(x, y));
+			for( int y = 0; y < y2; y++ )
+			newMap.put(y * rowLength + x, getFast(x, y));
 		}
 		
 		this.rowLength = rowLength;
 		this.columnLength = columnLength;
+		this.grid = newMap;
 	}
 	
 	

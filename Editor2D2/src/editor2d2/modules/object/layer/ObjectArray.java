@@ -58,4 +58,9 @@ public class ObjectArray implements Gridable, Drawable  {
 	public ArrayList<Instance> getAllInstances() {
 		return this.objects;
 	}
+	
+	@Override
+	public ArrayList<? extends Object> getCollection() {
+		return this.objects;
+	}
 }

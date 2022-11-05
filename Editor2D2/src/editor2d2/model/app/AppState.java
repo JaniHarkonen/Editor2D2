@@ -16,6 +16,9 @@ public class AppState {
 		// Reference to the selected Tool
 	public Tool selectedTool;
 	
+		// Reference to the index of the selected Scene
+	public int activeScene;
+	
 		// Reference to the ActionHistory that tracks actions and
 		// can be used to undo and redo them
 	public ActionHistory actionHistory;
@@ -32,5 +35,6 @@ public class AppState {
 		this.selectedTool = Tools.getAvailableTools()[0];			// DEBUG LINE, REMOVE
 		this.actionHistory = new ActionHistory();
 		this.hotkeyListener = new HotkeyListener();
+		this.activeScene = -1;
 	}
 }

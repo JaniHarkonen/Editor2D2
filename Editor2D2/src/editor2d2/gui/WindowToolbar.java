@@ -8,16 +8,19 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import editor2d2.Application;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
+import editor2d2.gui.metadata.MetaDataModal;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
+import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.writer.ProjectWriter;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
@@ -118,12 +121,43 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
 		}
 		
-			// Meta data settings
-		JMenu settingsMetaData = new JMenu("Meta data");
+			// Scene settings
+		JMenu settingsScene = new JMenu("Scene");
+		
+				// Scene - Meta data
+			JMenuItem itemSceneMetaData = new JMenuItem(new AbstractAction("Meta data") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionMetaData();
+				}
+			});
+		
+				// Scene - Rename scene
+			JMenuItem itemRenameScene = new JMenuItem(new AbstractAction("Rename scene") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionOnRenameScene();
+				}
+			});
+			
+				// Scene - Delete scene
+			JMenuItem itemDeleteScene = new JMenuItem(new AbstractAction("Delete scene") {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionOnDeleteScene();
+				}
+			});
+			
+		settingsScene.add(itemSceneMetaData);
+		settingsScene.add(itemRenameScene);
+		settingsScene.add(itemDeleteScene);
 		
 		add(menuProject);
 		add(menuAsset);
-		add(settingsMetaData);
+		add(settingsScene);
 	}
 	
 	
@@ -181,5 +215,27 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		
 		Application.controller.getActiveProject().setFilepath(res.filepaths[0].getPath());
 		actionOnSaveProject();
+	}
+	
+	private void actionOnRenameScene() {
+		Scene scene = Application.controller.getActiveScene();
+		String newName = JOptionPane.showInputDialog(null, "Enter scene name", scene.getName());
+		
+		if( newName == null || newName.equals("") )
+		return;
+		
+		Application.controller.renameActiveScene(newName);
+	}
+	
+	private void actionOnDeleteScene() {
+		Application.controller.deleteActiveScene();
+	}
+	
+	private void actionMetaData() {
+		if( Application.controller.getActiveScene() == null )
+		return;
+		
+		Window window = Application.window;
+		window.popup("Scene meta data", new MetaDataModal(window.getModalWindow()));
 	}
 }

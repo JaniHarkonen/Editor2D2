@@ -9,7 +9,6 @@ import editor2d2.model.project.scene.Scene;
 import editor2d2.modules.data.layer.DataLayer;
 import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.image.layer.TileLayer;
-import editor2d2.modules.image.placeable.Tile;
 import editor2d2.modules.object.layer.InstanceLayer;
 
 /**
@@ -62,17 +61,6 @@ public class DebugUtils {
 				ol1.setName("objs");
 				DataLayer dl1 = new DataLayer(scene1, 32);
 				dl1.setName("weapon.dat");
-				
-					// Tiles
-				/*int d = 0;
-				for( int x = 0; x < 6; x++ )
-				{
-					for( int y = 0; y < 6; y++ )
-					{
-						tl1.place(x, y, new Tile());
-						d++;
-					}
-				}*/
 				
 			scene1.addLayer(tl1);
 			scene1.addLayer(ol1);

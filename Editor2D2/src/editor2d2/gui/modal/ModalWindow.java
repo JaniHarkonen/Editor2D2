@@ -36,10 +36,10 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 	private AssetPane assetPane;
 	
 	
-	public ModalWindow(Window main) {
+	public ModalWindow(Window main, String title) {
 		this.views = new ArrayList<ModalView<? extends Asset>>();
 		
-		this.dialog = new JDialog(main.getFrame(), "Asset settings", false);
+		this.dialog = new JDialog(main.getFrame(), title, false);
 		this.dialog.setSize(DEFAULT_MODAL_WIDTH, DEFAULT_MODAL_HEIGHT);
 		this.dialog.getContentPane().add(this.element);
 		this.dialog.setVisible(false);
@@ -57,6 +57,10 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		this.assetPane = (AssetPane) Application.window.subscriptionService.get(Handles.ASSET_PANE, "ModalWindow", this);
 	}
 	
+	public ModalWindow(Window main) {
+		this(main, "Asset settings");
+	}
+	
 	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
@@ -69,6 +73,20 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		if( mv == null )
 		return;
 		
+		this.views.add(mv);
+		update();
+		
+		this.dialog.setVisible(true);
+		this.dialog.setLocationRelativeTo(null);
+	}
+	
+	public void openModal(String title, ModalView<? extends Asset> mv) {
+		if( mv == null )
+		return;
+		
+		this.dialog.setTitle(title);
+		
+		this.views = new ArrayList<ModalView<? extends Asset>>();
 		this.views.add(mv);
 		update();
 		

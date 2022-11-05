@@ -24,7 +24,7 @@ public class ScenePane extends GUIComponent {
 		if( this.scene == null )
 		return container;
 		
-		container.add((new SceneView(this.scene)).render());
+		container.add((new SceneView()).render());
 		
 		return container;
 	}

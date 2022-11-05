@@ -1,6 +1,10 @@
 package editor2d2.model.project.scene.placeable;
 
+import java.awt.Graphics2D;
+import java.awt.Point;
+
 import editor2d2.common.Bounds;
+import editor2d2.common.GeometryUtilities;
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
@@ -27,6 +31,9 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Reference to the layer the placeable is placed in
 	protected Layer layer;
 	
+		// Whether the Placeable has been selected
+	protected boolean isSelected;
+	
 	
 	protected Placeable() {
 		this.asset = null;
@@ -35,6 +42,7 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		this.cellX = -1;
 		this.cellY = -1;
 		this.layer = null;
+		this.isSelected = false;
 	}
 	
 	
@@ -84,6 +92,42 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// CAN BE OVERRIDDEN
 	public void delete() {
 		this.layer.delete(getCellX(), getCellY());
+	}
+	
+		// Draws a rectangle around a given area if the Placeable
+		// has been selected
+	protected void drawSelection(Graphics2D g, int x, int y, int w, int h, double rotation) {
+		if( !getSelected() )
+		return;
+		
+		if( rotation == 0 )
+		{
+			g.drawRect(x, y, w, h);
+			return;
+		}
+		
+		int x1 = x;
+		int y1 = y;
+		int x2 = x;
+		int y2 = y;
+		
+		for( int i = 0; i < 3; i++ )
+		{
+			x1 = x2;
+			y1 = y2;
+			Point.Double p = GeometryUtilities.pointAtDistance(x1, y1, h, rotation + i * 90);
+			x2 = (int) p.x;
+			y2 = (int) p.y;
+			
+			g.drawLine(x1, y1, x2, y2);
+		}
+		
+		x1 = x2;
+		y1 = y2;
+		x2 = x;
+		y2 = y;
+		
+		g.drawLine(x1, y1, x2, y2);
 	}
 	
 	
@@ -140,6 +184,11 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return this.asset;
 	}
 	
+		// Returns whether the Placeable has been selected
+	public boolean getSelected() {
+		return this.isSelected;
+	}
+	
 		// Sets the coordinate offsets
 	public void setOffsets(double xoff, double yoff) {
 		this.xOffset = xoff;
@@ -158,5 +207,10 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		return;
 		
 		this.asset = asset;
+	}
+	
+		// Sets the Placeable as selected
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 }

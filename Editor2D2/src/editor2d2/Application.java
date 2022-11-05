@@ -29,7 +29,8 @@ public class Application {
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch( Exception e ) { }
+		}
+		catch( Exception e ) { }
 		
 		FactoryService.initialize();
 		resources = Resources.instantiate();

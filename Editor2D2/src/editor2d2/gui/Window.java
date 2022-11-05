@@ -80,9 +80,14 @@ public class Window implements Vendor {
 		this.subscriptionService.register(Handles.MODAL, this);
 	}
 	
-		// Pops up a given Modal View in the window's Modal Window
+		// Pops up a given Modal View of an Asset in the window's Modal Window
 	public void popup(ModalView<? extends Asset> mv) {
 		this.modal.openModal(mv);
+	}
+	
+		// Pops up a given Modal View with a specified title
+	public void popup(String title, ModalView<? extends Asset> mv) {
+		this.modal.openModal(title, mv);
 	}
 	
 		// Opens a file system dialog for opening files/directories with given settings
@@ -179,5 +184,9 @@ public class Window implements Vendor {
 		// Returns a reference to the Modal Window
 	public ModalWindow getModalWindow() {
 		return this.modal;
+	}
+	
+	public void unfocusAllComponents() {
+		this.window.requestFocusInWindow();
 	}
 }
