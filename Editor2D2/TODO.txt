@@ -1,14 +1,8 @@
-TODO - ScenesAndLayers
+TODO - ...
 
 OVERVIEW
-- finish LayerManagerPane, LayerPane and LayerPropertiesPane
-  functionalities
-- finish Scene management functionalities
-- finish meta data modal
 
 SPECIFICS
-- Layer panes
-	-- ? add ability to toggle layer visibility in LayerPane
 
 	
 REMEMBER: 	Instance layer selection bug is due to
@@ -33,6 +27,7 @@ LATER
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
 	-- pay attention to memory usage as well
+- fix object selection and selection rendering
 	   
 TASKS LEFT
 - write TMove (undo, redo)

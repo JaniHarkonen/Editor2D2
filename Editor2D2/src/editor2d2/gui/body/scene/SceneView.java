@@ -82,6 +82,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
 		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
 		Application.window.subscriptionService.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
+		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
 		
 		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
 	}
@@ -89,9 +90,10 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
+		boolean skipUpdate = false;
+		
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
-			boolean skipUpdate = false;
 			HotkeyListener hl = (HotkeyListener) vendor;
 			
 				// Determine the order of Tool functionality
@@ -123,9 +125,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 				// Pan-mode
 			this.isSpaceDown = HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SPACE);
-			
-			if( !skipUpdate )
-			update();
 		}
 		else
 		{
@@ -136,14 +135,11 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					SceneControlsPane controls = (SceneControlsPane) vendor;
 					this.cursorCellWidth = controls.getCursorCellWidth();
 					this.cursorCellHeight = controls.getCursorCellHeight();
-					update();
-					
 					break;
 					
 					// Cursor grid visibility was toggled
 				case Handles.CURSOR_GRID_TOGGLED:
 					this.drawCursorGrid = !this.drawCursorGrid;
-					update();
 					break;
 					
 					// Layer grid visibility was toggled
@@ -151,8 +147,17 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					this.drawLayerGrid = !this.drawLayerGrid;
 					update();
 					break;
+				
+					// Layer visibility was toggled
+				case editor2d2.model.Handles.LAYER_VISIBILITY:
+					break;
+					
+				default: skipUpdate = true; break;
 			}
 		}
+		
+		if( !skipUpdate )
+		update();
 	}
 	
 

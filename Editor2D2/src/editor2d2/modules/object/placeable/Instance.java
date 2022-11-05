@@ -70,11 +70,8 @@ public class Instance extends Placeable {
 		rctxt.gg.drawImage(img, at, null);
 		
 			// DEBUG, remove later
-		if( getSelected() )
-		{
-			rctxt.gg.setColor(Color.RED);
-			rctxt.gg.drawRect((int) f_x, (int) f_y, (int) f_w, (int) f_h);
-		}
+		rctxt.gg.setColor(Color.RED);
+		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, this.rotation);
 	}
 	
 	@Override
@@ -185,5 +182,4 @@ public class Instance extends Placeable {
 	public PropertyManager getPropertyManager() {
 		return this.propertyManager;
 	}
-
 }

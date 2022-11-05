@@ -62,12 +62,9 @@ public class Tile extends Placeable {
 		
 		rctxt.gg.drawImage(img, at, null);
 		
-			// DEBUG, remove later
-		if( getSelected() )
-		{
-			rctxt.gg.setColor(Color.RED);
-			rctxt.gg.drawRect((int) f_x, (int) f_y, (int) f_w, (int) f_h);
-		}
+			// Highlight if selected
+		rctxt.gg.setColor(Color.RED);
+		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, 0d);
 	}
 	
 	@Override

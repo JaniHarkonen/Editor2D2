@@ -66,6 +66,10 @@ public class DataCell extends Placeable {
 				ty = (float) (f_y + ((f_w / 2) - textDimensions.getCenterY()));
 		
 		rctxt.gg.drawString(srcValue, tx, ty);
+		
+			// Highlight if selected
+		rctxt.gg.setColor(Color.RED);
+		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, 0d);
 	}
 	
 	@Override

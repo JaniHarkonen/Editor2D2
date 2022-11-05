@@ -32,7 +32,13 @@ public abstract class Layer implements HasAsset {
 	
 	protected Layer(Scene scene, int cellWidth, int cellHeight) {
 		this.scene = scene;
-		this.objectGrid = new Grid(Math.max(1, scene.getWidth() / cellWidth), Math.max(1, scene.getHeight() / cellHeight), cellWidth, cellHeight);
+		
+		this.objectGrid = new Grid(
+			Math.max(1, scene.getWidth() / cellWidth),
+			Math.max(1, scene.getHeight() / cellHeight),
+			cellWidth, cellHeight
+		);
+		
 		this.name = null;
 		this.isVisible = true;
 		this.opacity = 1.0;
@@ -187,6 +193,15 @@ public abstract class Layer implements HasAsset {
 		}
 		
 		this.objectGrid = resizedGrid;
+	}
+	
+		// Resizes the object grid to the given cellular dimensions
+	public void resizeObjectGrid(int cw, int ch) {
+		if( cw <= 0 || ch <= 0 )
+		return;
+		
+		this.objectGrid.setCellDimensions(this.scene.getWidth() / cw, this.scene.getHeight() / ch);
+		this.objectGrid.setDimensions(cw, ch);
 	}
 	
 	public ArrayList<Placeable> selectPlaceables(int cx, int cy) {

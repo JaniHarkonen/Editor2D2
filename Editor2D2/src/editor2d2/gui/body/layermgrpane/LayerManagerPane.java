@@ -1,6 +1,7 @@
 package editor2d2.gui.body.layermgrpane;
 
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
@@ -76,8 +77,12 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		{
 				// Controls
 			JPanel	containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-					containerControls.add(new ClickableButton("<", (e) -> { onBackToLayerManager(); }));
+					containerControls.add(new ClickableButton("Back", (e) -> { onBackToLayerManager(); }));
+					containerControls.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
+					//containerControls.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 			container.add(containerControls);
+			
+			addEmptySpace(container, 2);
 			
 				// Layer properties pane
 			container.add(this.editedLayerPropertiesPane.render());
@@ -90,6 +95,10 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		// Called upon editing a layer (...)
 	private void onEditLayer() {
 		Layer layer = Application.controller.getActiveLayer();
+		
+		if( layer == null )
+		return;
+		
 		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, layer, false);
 		update();
 	}

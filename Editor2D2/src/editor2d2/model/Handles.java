@@ -6,6 +6,7 @@ public final class Handles {
 	public static final String ACTIVE_PROJECT = "active-project";
 	public static final String OPEN_FOLDER = "open-folder";
 	public static final String ACTIVE_SCENE = "active-scene";
+	public static final String LAYER_VISIBILITY = "layer-visibility";
 	
 	
 		// Do not instantiate

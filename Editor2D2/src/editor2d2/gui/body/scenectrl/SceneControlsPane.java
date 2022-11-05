@@ -185,7 +185,7 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 		{
 			result = JOptionPane.showConfirmDialog(null,
 					  "Making the scene smaller causes objects left out of "
-					+ "bounds to be removed! \n"
+					+ "bounds to be removed! \n\n"
 					+ "Are you sure you want to continue?",
 					"Resize confirmation",
 					JOptionPane.YES_NO_OPTION);

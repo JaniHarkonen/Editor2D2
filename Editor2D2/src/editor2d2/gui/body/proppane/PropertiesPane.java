@@ -54,8 +54,7 @@ public abstract class PropertiesPane extends GUIComponent implements HasAsset {
 	 * properties pane. 
 	 */
 	protected JPanel createDefaultPropertiesPaneContainer(String title, JPanel body) {
-		JPanel container = GUIUtilities.createDefaultPanel();
-		container.add(new JLabel(title));
+		JPanel container = GUIUtilities.createTitledPanel(title, GUIUtilities.BOX_PAGE_AXIS);
 		container.add(new JLabel("Asset: " + this.source.getAsset().getName()));
 		
 		container.add(body);
