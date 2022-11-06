@@ -26,10 +26,14 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
 import editor2d2.gui.body.scenectrl.SceneControlsPane;
+import editor2d2.model.app.Controller;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.SelectionManager;
+import editor2d2.model.app.Tools;
 import editor2d2.model.app.actions.deletemany.ADeleteMany;
 import editor2d2.model.app.actions.deletemany.ADeleteManyContext;
+import editor2d2.model.app.actions.paste.APaste;
+import editor2d2.model.app.actions.paste.APasteContext;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Camera;
@@ -95,11 +99,12 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
 		boolean skipUpdate = false;
+		Controller controller = Application.controller;
 		
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
 			HotkeyListener hl = (HotkeyListener) vendor;
-			Layer activeLayer = Application.controller.getActiveLayer();
+			Layer activeLayer = controller.getActiveLayer();
 			
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
@@ -112,8 +117,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Delete Placebles upon pressing Delete key
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_DELETE) )
 			{
-				SelectionManager<Placeable> mngr = Application.controller.placeableSelectionManager;
-				ADeleteManyContext ac = new ADeleteManyContext(Application.controller, activeLayer);
+				SelectionManager<Placeable> mngr = controller.placeableSelectionManager;
+				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
 				
 				mngr.deselect();
@@ -121,32 +126,35 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
-			Application.controller.undoAction();
+			controller.undoAction();
 			
 				// Redo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Y') )
-			Application.controller.redoAction();
+			controller.redoAction();
 			
 				// Deselect all
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'D') )
-			Application.controller.placeableSelectionManager.deselect();
+			controller.placeableSelectionManager.deselect();
 			
 				// Copy selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'C') )
-			Application.controller.placeableSelectionManager.copyToClipboard();
+			controller.placeableSelectionManager.copyToClipboard();
 			
 				// Cut selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'X') )
 			{
-				Application.controller.placeableSelectionManager.copyToClipboard();
-				ADeleteManyContext ac = new ADeleteManyContext(Application.controller, activeLayer);
+				controller.placeableSelectionManager.copyToClipboard();
+				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
 			}
 			
 				// Paste selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'V') )
 			{
-				
+				APasteContext ac = new APasteContext(controller, activeLayer);
+				ac.selection = controller.placeableSelectionManager.getClipboardSelection();
+				(new APaste()).perform(ac);
+				controller.selectTool(Tools.getAvailableTools()[1]);
 			}
 			
 				// Pan-mode

@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import editor2d2.Application;
+import editor2d2.DebugUtils;
 import editor2d2.common.Bounds;
 import editor2d2.model.app.actions.move.AMove;
 import editor2d2.model.app.actions.move.AMoveContext;
@@ -42,6 +43,8 @@ public class TMove extends Tool {
 			{
 				double cx = p.getX() - c.locationX;
 				double cy = p.getY() - c.locationY;
+				
+				DebugUtils.log(p, this);
 				
 				this.offsets.add(new Point.Double(cx, cy));
 			}

@@ -50,7 +50,7 @@ public class PlaceableSelectionManager extends SelectionManager<Placeable> {
 	}
 	
 	public void copyToClipboard() {
-		this.clipboard = this.getSelection();
+		this.clipboard = getSelection();
 	}
 	
 	public ArrayList<Placeable> getClipboardSelection() {

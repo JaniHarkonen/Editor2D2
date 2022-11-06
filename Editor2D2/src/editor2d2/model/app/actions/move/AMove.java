@@ -51,8 +51,7 @@ public class AMove extends Action {
 			
 			this.selection.add(p);
 			this.initialPositions.add(new Point.Double(p.getX(), p.getY()));
-			p.delete();
-			ac.targetLayer.place(ac.locationX + off.x, ac.locationY + off.y, p);
+			ac.targetLayer.attemptPlace(ac.locationX + off.x, ac.locationY + off.y, p);
 		}
 	}
 }
