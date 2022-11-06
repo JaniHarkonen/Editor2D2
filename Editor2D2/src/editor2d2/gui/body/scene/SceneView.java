@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -25,10 +26,14 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
 import editor2d2.gui.body.scenectrl.SceneControlsPane;
+import editor2d2.model.app.Controller;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.SelectionManager;
+import editor2d2.model.app.Tools;
 import editor2d2.model.app.actions.deletemany.ADeleteMany;
 import editor2d2.model.app.actions.deletemany.ADeleteManyContext;
+import editor2d2.model.app.actions.paste.APaste;
+import editor2d2.model.app.actions.paste.APasteContext;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
 import editor2d2.model.project.scene.Camera;
@@ -63,8 +68,11 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
 	private boolean drawLayerGrid;
 	
+	private BufferedImage overlay;
+	
 	
 	public SceneView() {
+		this.overlay = null;
 		this.scene = Application.controller.getActiveScene();
 		this.view = createView();
 		this.isSpaceDown = false;
@@ -91,10 +99,12 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
 		boolean skipUpdate = false;
+		Controller controller = Application.controller;
 		
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
 			HotkeyListener hl = (HotkeyListener) vendor;
+			Layer activeLayer = controller.getActiveLayer();
 			
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
@@ -107,9 +117,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Delete Placebles upon pressing Delete key
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_DELETE) )
 			{
-				SelectionManager<Placeable> mngr = Application.controller.placeableSelectionManager;
-				Layer l = Application.controller.getActiveLayer();
-				ADeleteManyContext ac = new ADeleteManyContext(Application.controller, l);
+				SelectionManager<Placeable> mngr = controller.placeableSelectionManager;
+				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
 				
 				mngr.deselect();
@@ -117,11 +126,36 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
-			Application.controller.undoAction();
+			controller.undoAction();
 			
 				// Redo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Y') )
-			Application.controller.redoAction();
+			controller.redoAction();
+			
+				// Deselect all
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'D') )
+			controller.placeableSelectionManager.deselect();
+			
+				// Copy selection
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'C') )
+			controller.placeableSelectionManager.copyToClipboard();
+			
+				// Cut selection
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'X') )
+			{
+				controller.placeableSelectionManager.copyToClipboard();
+				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
+				(new ADeleteMany()).perform(ac);
+			}
+			
+				// Paste selection
+			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'V') )
+			{
+				APasteContext ac = new APasteContext(controller, activeLayer);
+				ac.selection = controller.placeableSelectionManager.getClipboardSelection();
+				(new APaste()).perform(ac);
+				controller.selectTool(Tools.getAvailableTools()[1]);
+			}
 			
 				// Pan-mode
 			this.isSpaceDown = HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SPACE);
@@ -183,6 +217,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		tc.locationX = Grid.snapToGrid(x, this.cursorCellWidth);
 		tc.locationY = Grid.snapToGrid(y, this.cursorCellHeight);
 		tc.order = order;
+		tc.sceneView = this;
 		
 		int outcome = Application.controller.useTool(tc, stop);
 		
@@ -197,9 +232,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		// Creates the JPanel that will render the Scene by creating an
 		// anonymous class extending JPanel
 	private JPanel createView() {
-		/*if( this.scene == null )
-		return new JPanel();*/
-		
 		Camera cam = this.scene.getCamera();
 		
 		@SuppressWarnings("serial")
@@ -233,14 +265,15 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				
 					// Render the Camera bounds
 				Bounds cbounds = cam.getBounds();
-				
-				gg.setColor(Color.RED);
 				Rectangle2D.Double bounds_cam = new Rectangle2D.Double(
 					cam.getOnScreenX(cbounds.left), cam.getOnScreenY(cbounds.top),
 					cam.getOnScreenX(cbounds.right), cam.getOnScreenY(cbounds.bottom)
 				);
-					
+				
+				gg.setColor(Color.RED);
 				gg.draw(bounds_cam);
+				
+				Layer activeLayer = Application.controller.getActiveLayer();
 				
 					// Render grids
 				if( drawCursorGrid || drawLayerGrid )
@@ -267,8 +300,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 						// Render Layer grid
 					if( drawLayerGrid )
 					{
-						Layer activeLayer = Application.controller.getActiveLayer();
-						
 						if( activeLayer != null )
 						{
 							cw = activeLayer.getObjectGrid().getCellWidth() * cam.getZ();
@@ -281,6 +312,15 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 							drawGrid(gg, ox, oy, (int) cam.getOnScreenX(right), (int) cam.getOnScreenY(bottom), (int) cw, (int) ch);
 						}
 					}
+				}
+				
+				if( overlay != null )
+				{
+					gg.drawImage(overlay,
+						(int) onScreenOriginX,
+						(int) onScreenOriginY,
+						null
+					);
 				}
 			}
 		};
@@ -322,6 +362,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				cam.shift(0, 0, -e.getWheelRotation() * 0.1);
+				overlay = null;
 				update();
 			}
 		});
@@ -384,5 +425,11 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		// Returns the height of a cursor cell
 	public int getCursorCellHeight() {
 		return this.cursorCellHeight;
+	}
+	
+		// Sets the drawable overlay
+	public void setOverlay(BufferedImage overlay) {
+		this.overlay = overlay;
+		update();
 	}
 }

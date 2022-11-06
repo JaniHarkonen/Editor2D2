@@ -6,7 +6,9 @@ import java.util.Set;
 import editor2d2.model.project.scene.placeable.Placeable;
 
 public class PlaceableSelectionManager extends SelectionManager<Placeable> {
-
+	
+	private ArrayList<Placeable> clipboard;
+	
 	
 	@Override
 	public void setSelection(ArrayList<Placeable> selection) {
@@ -45,6 +47,14 @@ public class PlaceableSelectionManager extends SelectionManager<Placeable> {
 	public void deselect() {
 		updatePlaceables(this.selection.keySet(), false);
 		super.deselect();
+	}
+	
+	public void copyToClipboard() {
+		this.clipboard = getSelection();
+	}
+	
+	public ArrayList<Placeable> getClipboardSelection() {
+		return this.clipboard;
 	}
 	
 	

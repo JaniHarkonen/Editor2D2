@@ -62,6 +62,8 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 	@Override
 	public abstract void draw(RenderContext rctxt);
 	
+	public abstract void drawPlaceable(Graphics2D gg, double dx, double dy, double dw, double dh);
+	
 	
 		// Creates a duplicate of this Placeable
 		// CAN BE OVERRIDDEN

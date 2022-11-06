@@ -2,6 +2,7 @@ package editor2d2.modules.data.placeable;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 import editor2d2.common.grid.Grid;
@@ -36,13 +37,22 @@ public class DataCell extends Placeable {
 		double f_w = objs.getCellWidth() * cam_z;
 		double f_h = objs.getCellHeight() * cam_z;
 		
+		drawPlaceable(rctxt.gg, f_x, f_y, f_w, f_h);
+		
+			// Highlight if selected
+		rctxt.gg.setColor(Color.RED);
+		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, 0d);
+	}
+	
+	@Override
+	public void drawPlaceable(Graphics2D gg, double dx, double dy, double dw, double dh) {
 		Data src = getData();
 		Color srcColor = src.getColor();
 		String srcValue = src.getValue();
 		
-		Rectangle2D shape = new Rectangle2D.Double(f_x, f_y, f_w, f_h);
-		rctxt.gg.setColor(srcColor);
-		rctxt.gg.fill(shape);
+		Rectangle2D shape = new Rectangle2D.Double(dx, dy, dw, dh);
+		gg.setColor(srcColor);
+		gg.fill(shape);
 		
 			// Draw value
 		int colr = srcColor.getRed(),
@@ -56,20 +66,16 @@ public class DataCell extends Placeable {
 		if( invColorBrightness < 0.45 || invColorBrightness > 0.55 )
 		invColor = new Color(Color.HSBtoRGB(0, 0, invColorBrightness));
 		
-		rctxt.gg.setColor(invColor);
+		gg.setColor(invColor);
 		
 			// Center the value text
-		FontMetrics fm = rctxt.gg.getFontMetrics();
-		Rectangle2D textDimensions = fm.getStringBounds(srcValue, rctxt.gg);
+		FontMetrics fm = gg.getFontMetrics();
+		Rectangle2D textDimensions = fm.getStringBounds(srcValue, gg);
 		
-		float 	tx = (float) (f_x + ((f_w / 2) - textDimensions.getCenterX())),
-				ty = (float) (f_y + ((f_w / 2) - textDimensions.getCenterY()));
+		float 	tx = (float) (dx + ((dw / 2) - textDimensions.getCenterX())),
+				ty = (float) (dy + ((dh / 2) - textDimensions.getCenterY()));
 		
-		rctxt.gg.drawString(srcValue, tx, ty);
-		
-			// Highlight if selected
-		rctxt.gg.setColor(Color.RED);
-		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, 0d);
+		gg.drawString(srcValue, tx, ty);
 	}
 	
 	@Override

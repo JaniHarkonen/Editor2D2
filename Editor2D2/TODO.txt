@@ -1,10 +1,13 @@
-TODO - ...
+TODO - TMove
 
 OVERVIEW
+- Implement Tool for moving selections
+- Implement copy and paste
 
 SPECIFICS
+- add ability to paste Placeables, default to TMove
 
-	
+
 REMEMBER: 	Instance layer selection bug is due to
 			an off by one error in the
 			selectPlaceables(int,int,int,int).
