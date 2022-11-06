@@ -28,7 +28,6 @@ import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.SelectionManager;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Folder;
-import editor2d2.model.project.Project;
 import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
@@ -355,10 +354,6 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		return;
 		
 		deleteMultipleAssets(this.assetSelectionManager.getSelection());
-		Project project = Application.controller.getActiveProject();
-		Application.controller.getActiveProject().getRootFolder().printFolder();
-		for( Asset a : project.getAllAssets() )
-		System.out.println(a.getName());
 		updateWithState();
 	}
 }

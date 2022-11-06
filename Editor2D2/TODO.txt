@@ -19,6 +19,9 @@ SPECIFICS
 	-- check all requried fields are displayed
 	-- check all required fields have validation
 	-- test placed Placeable vs non-placed
+	
+	VV add scrollbar for larger Images
+	VV scrollbar should save state
 - test SceneControlsPane
 	-- test resizing
 	-- test grid settings
