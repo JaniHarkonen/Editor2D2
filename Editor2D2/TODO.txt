@@ -6,8 +6,8 @@ OVERVIEW
 
 SPECIFICS
 - test project Project tab
-	-- test loading a project
 	-- test saving a project
+		o Layer writer should write whether the Layer is visible
 	-- test saving project as
 - test AssetPane
 	-- test creating assets / folders
@@ -69,7 +69,6 @@ REMEMBER2:
 			while keys are being held.
 
 LATER
-- Layer writer should write whether the Layer is visible
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
