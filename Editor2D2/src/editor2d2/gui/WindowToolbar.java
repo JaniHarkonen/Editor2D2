@@ -177,6 +177,17 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	
 		// Creates a new Project and opens it in the editor
 	private void actionOnNewProject() {
+		int result = JOptionPane.showConfirmDialog(
+			null,
+			"All unsaved changes will be lost.\n"
+		  + "Are you sure you want to continue?",
+		    "New project",
+		    JOptionPane.OK_CANCEL_OPTION
+		);
+		
+		if( result != JOptionPane.OK_OPTION )
+		return;
+		
 		Project p = new Project();
 		Application.controller.openProject(p);
 	}

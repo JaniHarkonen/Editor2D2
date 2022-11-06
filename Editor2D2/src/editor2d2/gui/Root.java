@@ -37,7 +37,7 @@ public class Root extends GUIComponent implements Subscriber {
 		
 			// Right pane
 		containerRightSide.add((new PropertiesPaneContainer()).render());	// Properties pane
-		containerRightSide.add((new LayerManagerPane()).render()); 		// Layer manager pane
+		containerRightSide.add((new LayerManagerPane()).render()); 			// Layer manager pane
 		
 			// Scene-asset split
 		JPanel containerTopSide = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);

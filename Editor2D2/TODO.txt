@@ -1,11 +1,62 @@
-TODO - TMove
+TODO - MajorBugfixes
 
 OVERVIEW
-- Implement Tool for moving selections
-- Implement copy and paste
+- make sure that all required functionalities have been
+  implemented and generally work as intended
 
 SPECIFICS
-- add ability to paste Placeables, default to TMove
+- test project Project tab
+	-- test loading a project
+	-- test saving a project
+	-- test saving project as
+- test AssetPane
+	-- test creating assets / folders
+	-- test multiple assets
+	-- test renaming assets / folders
+	-- test editing assets / folders
+	-- test deleting assets / folders
+- test ModalWindow
+	-- test asset creation
+	-- test multiple assets
+	-- check that modals have all required fields
+	   and that fields cannot be broken
+- test PropertiesPanes
+	-- check all requried fields are displayed
+	-- check all required fields have validation
+	-- test placed Placeable vs non-placed
+- test SceneControlsPane
+	-- test resizing
+	-- test grid settings
+	-- test grid toggles
+- test SceneView
+	-- test tab switching
+	-- test tab creation
+	-- test tab deletion
+	-- test tab renaming
+	-- test tab meta data settings
+		o test setting compilation statement
+- test Tools and Toolbar
+	-- test Tool switching
+	-- test Tool hotkeys
+	-- test Tool tooltip
+	-- display Tool description
+	-- test selection, additive, subtractive (undo, redo)
+	-- test move (undo, redo)
+	-- test place selection, deletion, allow stack, single (undo, redo)
+	-- test flood fill (undo, redo)
+	-- test rotate (undo, redo)
+	-- test scale, vertical, horizontal (undo, redo)
+- test LayerManagerPane
+	-- test layer selection
+	-- test layer visibility toggle
+	-- test layer addition
+	-- test layer deletion
+	-- test layer editing
+		o test back
+		o test name, validation
+		o test setting grid dimensions
+		o test setting opacity
+		o test setting visibility
 
 
 REMEMBER: 	Instance layer selection bug is due to
@@ -33,9 +84,6 @@ LATER
 - fix object selection and selection rendering
 	   
 TASKS LEFT
-- write TMove (undo, redo)
-	-- add copy and paste (cut?)
-- hotkeys (for TMove)
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces

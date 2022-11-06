@@ -37,7 +37,7 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
-		this.placeableSelectionManager = new PlaceableSelectionManager();//new SelectionManager<Placeable>();
+		this.placeableSelectionManager = new PlaceableSelectionManager();
 		DebugUtils.controllerDebugSetup(this);
 	}
 	
