@@ -2,6 +2,7 @@ package editor2d2.model.app.tool;
 
 import java.util.ArrayList;
 
+import editor2d2.gui.body.scene.SceneView;
 import editor2d2.model.app.Controller;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.placeable.Placeable;
@@ -34,6 +35,10 @@ public class ToolContext {
 		// Reference to the Controller that is controlling the
 		// tool
 	public Controller controller;
+	
+		// Reference to the SceneView that the Tool action is
+		// emitted from
+	public SceneView sceneView;
 	
 	
 	public ToolContext(	Layer targetLayer,

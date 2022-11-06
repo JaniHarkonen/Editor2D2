@@ -1,6 +1,7 @@
 package editor2d2.modules.object.placeable;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -45,14 +46,6 @@ public class Instance extends Placeable {
 	
 	@Override
 	public void draw(RenderContext rctxt) {
-		BufferedImage img;
-		
-		if( this.sprite == null )
-		img = Application.resources.getGraphic("icon-null-object");
-		else
-		img = this.sprite.getImage();
-		
-		
 		Camera cam = rctxt.camera;
 		double cam_z = cam.getZ();
 		
@@ -61,17 +54,29 @@ public class Instance extends Placeable {
 		double f_w = this.width * cam_z;
 		double f_h = this.height * cam_z;
 		
-			// Apply a transform to rotate and scale the instance
-		AffineTransform at = new AffineTransform();
-		at.setToRotation(Math.toRadians(this.rotation), f_x + f_w / 2, f_y + f_h / 2);
-		at.translate(f_x, f_y);
-		at.scale(f_w / img.getWidth(), f_h / img.getHeight());
-		
-		rctxt.gg.drawImage(img, at, null);
+		drawPlaceable(rctxt.gg, f_x, f_y, f_w, f_h);
 		
 			// DEBUG, remove later
 		rctxt.gg.setColor(Color.RED);
 		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, this.rotation);
+	}
+	
+	@Override
+	public void drawPlaceable(Graphics2D gg, double dx, double dy, double dw, double dh) {
+		BufferedImage img;
+		
+		if( this.sprite == null )
+		img = Application.resources.getGraphic("icon-null-object");
+		else
+		img = this.sprite.getImage();
+		
+			// Apply a transform to rotate and scale the instance
+		AffineTransform at = new AffineTransform();
+		at.setToRotation(Math.toRadians(this.rotation), dx + dw / 2, dy + dh / 2);
+		at.translate(dx, dy);
+		at.scale(dw / img.getWidth(), dh / img.getHeight());
+		
+		gg.drawImage(img, at, null);
 	}
 	
 	@Override

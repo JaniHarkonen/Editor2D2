@@ -1,6 +1,7 @@
 package editor2d2.modules.image.placeable;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -39,14 +40,6 @@ public class Tile extends Placeable {
 	
 	@Override
 	public void draw(RenderContext rctxt) {
-		BufferedImage img;
-		Image src = getImage();
-		
-		if( src == null )
-		img = Application.resources.getGraphic("icon-null-texture");
-		else
-		img = src.getImage().getSubimage(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
-
 		Camera cam = rctxt.camera;
 		Grid objs = getLayer().getObjectGrid();
 		double cam_z = cam.getZ();
@@ -56,15 +49,29 @@ public class Tile extends Placeable {
 		double f_w = objs.getCellWidth() * cam_z;
 		double f_h = objs.getCellHeight() * cam_z;
 		
-		AffineTransform at = new AffineTransform();
-		at.translate(f_x, f_y);
-		at.scale(f_w / img.getWidth(), f_h / img.getHeight());
-		
-		rctxt.gg.drawImage(img, at, null);
+		drawPlaceable(rctxt.gg, f_x, f_y, f_w, f_h);
 		
 			// Highlight if selected
 		rctxt.gg.setColor(Color.RED);
 		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, 0d);
+	}
+	
+	@Override
+	public void drawPlaceable(Graphics2D gg, double dx, double dy, double dw, double dh) {
+		BufferedImage img;
+		Image src = getImage();
+		
+		if( src == null )
+		img = Application.resources.getGraphic("icon-null-texture");
+		else
+		img = src.getImage().getSubimage(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+		
+		
+		AffineTransform at = new AffineTransform();
+		at.translate(dx, dy);
+		at.scale(dw / img.getWidth(), dh / img.getHeight());
+		
+		gg.drawImage(img, at, null);
 	}
 	
 	@Override
