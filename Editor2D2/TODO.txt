@@ -16,16 +16,19 @@ SPECIFICS
 	-- test renaming assets / folders
 	-- test editing assets / folders
 	-- test deleting assets / folders
-- test SceneControlsPane
-	-- test resizing
-	-- test grid settings
-	-- test grid toggles
 - test Tools and Toolbar
 	-- test Tool switching
+		o pasting Placeables should *visibly* auto-switch to TMove
 	-- test Tool hotkeys
-	-- test Tool tooltip
+		o HotkeyListener becomes messed up when the
+		  window looses focus or a popup is displayed
+		  while keys are being held.
+	XX test Tool tooltip
 	-- display Tool description
 	-- test selection, additive, subtractive (undo, redo)
+		o Instance layer selection bug is due to
+		  an off by one error in the
+		  selectPlaceables(int,int,int,int).
 	-- test move (undo, redo)
 	-- test place selection, deletion, allow stack, single (undo, redo)
 	-- test flood fill (undo, redo)
@@ -33,28 +36,20 @@ SPECIFICS
 	-- test scale, vertical, horizontal (undo, redo)
 - test LayerManagerPane
 	-- test layer selection
-	-- test layer visibility toggle
+	XX test layer visibility toggle
 	-- test layer addition
 	-- test layer deletion
 	-- test layer editing
-		o test back
+		x test back
 		o test name, validation
+			. don't allow quotes, "", in names (check for others)
 		o test setting grid dimensions
-		o test setting opacity
-		o test setting visibility
+		x test setting opacity
+		x test setting visibility
 
 - ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
 
-
-REMEMBER: 	Instance layer selection bug is due to
-			an off by one error in the
-			selectPlaceables(int,int,int,int).
-			
-REMEMBER2:
-			HotkeyListener becomes messed up when the
-			window looses focus or a popup is displayed
-			while keys are being held.
 
 LATER
 - make sure that GUIComponents dont update on HotkeyListner
@@ -62,13 +57,16 @@ LATER
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
-- ? should SelectionManagers be declared in the AppState
-- de-messify Root
 - speedup Tile rendering performance by getting the subimage
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
 	-- pay attention to memory usage as well
-- fix object selection and selection rendering
+- fix object selection
+	-- Instances need to take the rotation of the Instance
+	   into account when selecting
+	-- rectangle highlighting selection should be centered
+	   (anchored) around the Instance (currently anchor point
+	   is at the top-left corner)
 	   
 TASKS LEFT
 - create abstractions for compiling

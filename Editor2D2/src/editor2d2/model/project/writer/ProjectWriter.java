@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import editor2d2.common.grid.Grid;
+import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
@@ -61,7 +62,14 @@ public class ProjectWriter {
 					
 					for( int x = 0; x < w; x++ )
 					for( int y = 0; y < h; y++ )
-					writeLine(bw, writer.writePlaceable(objGrid.getFast(x, y)));
+					{
+						Gridable g = objGrid.getFast(x, y);
+						
+						if( g == null )
+						continue;
+						
+						writeLine(bw, writer.writePlaceable(g));
+					}
 					
 					writeLine(bw, "/layer");
 				}

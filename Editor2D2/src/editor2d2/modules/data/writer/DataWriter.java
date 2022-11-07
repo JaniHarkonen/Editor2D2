@@ -21,5 +21,4 @@ public class DataWriter extends AbstractWriter {
 	public String writePlaceable(Placeable p) {
 		return p.getAsset().getIdentifier() + " " + p.getCellX() + " " + p.getCellY();
 	}
-
 }

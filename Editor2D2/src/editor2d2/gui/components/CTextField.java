@@ -125,6 +125,9 @@ public class CTextField extends GUIComponent {
 		// Sets the text of the text field
 	public void setText(String t) {
 		this.textField.setText(t);
+		
+		if( this.requirements != null )
+		validateInput();
 	}
 	
 		// Returns a reference to the RequirementFilter
