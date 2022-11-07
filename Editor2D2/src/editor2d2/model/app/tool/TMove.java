@@ -25,6 +25,7 @@ public class TMove extends Tool {
 	public TMove() {
 		super();
 		this.name = "Move";
+		this.description = "Moves selected objects.\nLeft-click: move selection";
 		this.shortcutKey = "M";
 		this.icon = Application.resources.getGraphic("icon-tool-move");
 		this.offsets = null;

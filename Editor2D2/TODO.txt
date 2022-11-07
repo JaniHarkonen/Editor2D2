@@ -24,7 +24,7 @@ SPECIFICS
 		  window looses focus or a popup is displayed
 		  while keys are being held.
 	XX test Tool tooltip
-	-- display Tool description
+	XX display Tool description
 	-- test selection, additive, subtractive (undo, redo)
 		o Instance layer selection bug is due to
 		  an off by one error in the

@@ -322,6 +322,13 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 						null
 					);
 				}
+				
+				Tool selectedTool = Application.controller.getSelectedTool();
+				
+				g.setColor(Color.BLACK);
+				
+				if( selectedTool != null )
+				drawStringNewline(selectedTool.getDescription(), 0, 16, 16, gg);
 			}
 		};
 		
@@ -414,6 +421,14 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			for( int i = y1; i < y2; i += ch )
 			g.drawLine(x1, i, x2, i);
 		}
+	}
+	
+		// Draws a string containing newline characters
+	private void drawStringNewline(String str, int x, int y, int sep, Graphics2D g) {
+		String[] split = str.split("\n");
+		int s = split.length;
+		for( int i = 0; i < s; i++ )
+		g.drawString(split[i], x, y + i * sep);
 	}
 	
 	

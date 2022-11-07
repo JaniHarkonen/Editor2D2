@@ -15,6 +15,7 @@ public class TPlace extends Tool {
 	public TPlace() {
 		super();
 		this.name = "Place";
+		this.description = "Places an instance of the selected asset.\nLeft-click: place\nLeft-click + CTRL: place single\nRight-click: delete";
 		this.shortcutKey = "X";
 		this.icon = Application.resources.getGraphic("icon-tool-place");
 	}

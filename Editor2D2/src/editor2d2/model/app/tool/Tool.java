@@ -18,6 +18,9 @@ public abstract class Tool {
 		// Name of the Tool that will be shown in the UI
 	protected String name;
 	
+		// Description on using the Tool
+	protected String description;
+	
 		// Shortcut keyboard key
 	protected String shortcutKey;
 	
@@ -29,6 +32,7 @@ public abstract class Tool {
 		this.name = null;
 		this.shortcutKey = "";
 		this.icon = Application.resources.getGraphic("icon-null-object");
+		this.description = "";
 	}
 	
 	
@@ -93,6 +97,12 @@ public abstract class Tool {
 		return this.icon;
 	}
 	
+		// Returns the description of the Tool
+	public String getDescription() {
+		return this.description;
+	}
+	
+	
 		// Sets the name of the Tool
 	public void setName(String name) {
 		if( name == null )
@@ -111,5 +121,10 @@ public abstract class Tool {
 		// toolbar
 	public void setIcon(BufferedImage icon) {
 		this.icon = icon;
+	}
+	
+		// Sets the description of the Tool
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

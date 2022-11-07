@@ -95,7 +95,7 @@ public class Camera {
 		
 			// Reset Graphics2D composite
 		rctxt.gg.setComposite(prevComp);
-		rctxt.gg.drawString("Placeables rendered: " + renderCount, 0, 16);
+		rctxt.gg.drawString("Placeables rendered: " + renderCount, 0, 100);
 	}
 	
 	/**

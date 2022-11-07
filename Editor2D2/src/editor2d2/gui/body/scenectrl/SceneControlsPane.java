@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
@@ -212,7 +211,6 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 	}
 	
 	public int getCursorCellHeight() {
-		DebugUtils.log(this.txtCursorGridHeight.getRequirementFilter().getValue(), this);
 		return (int) this.txtCursorGridHeight.getRequirementFilter().getValue();
 	}
 }
