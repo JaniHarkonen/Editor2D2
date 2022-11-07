@@ -10,12 +10,6 @@ SPECIFICS
 		o Layer writer should write whether the Layer is visible
 		o Scenes should write the compilation statement
 	-- test saving project as
-- test AssetPane
-	-- test creating assets / folders
-	-- test multiple assets
-	-- test renaming assets / folders
-	-- test editing assets / folders
-	-- test deleting assets / folders
 - test Tools and Toolbar
 	-- test Tool switching
 		o pasting Placeables should *visibly* auto-switch to TMove

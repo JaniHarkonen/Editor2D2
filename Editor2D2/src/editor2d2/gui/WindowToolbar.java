@@ -22,6 +22,7 @@ import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.writer.ProjectWriter;
+import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -118,7 +119,12 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			
 				// Populate Asset menu
 			for( String type : ctypes )
-			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
+			{
+				AbstractFactories<? extends Asset> factories = FactoryService.getFactories(type);
+				String title = "Create " + type + " (Ctrl+Shift+" + factories.getAssetCreationShortcut() + ")";
+				
+				menuAsset.add(createAssetMenuItem(title, factories.createModal(modal, true)));
+			}
 		}
 		
 			// Scene settings

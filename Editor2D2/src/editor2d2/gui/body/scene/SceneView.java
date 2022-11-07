@@ -328,7 +328,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				g.setColor(Color.BLACK);
 				
 				if( selectedTool != null )
-				drawStringNewline(selectedTool.getDescription(), 0, 16, 16, gg);
+				drawStringNewline(selectedTool.getDescription(), 8, 16, 16, gg);
 			}
 		};
 		

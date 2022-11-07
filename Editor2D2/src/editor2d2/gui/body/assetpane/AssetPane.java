@@ -21,6 +21,7 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.Handles;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.gui.modal.ModalView;
 import editor2d2.gui.modal.ModalWindow;
 import editor2d2.model.app.Controller;
@@ -324,8 +325,10 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		return;
 		
 		String newName = (String) JOptionPane.showInputDialog("Enter the new name:", asset.getName());
+		RequireStringName rfName = new RequireStringName();
+		rfName.updateInput(newName);
 		
-		if( newName == null || newName.equals("") )
+		if( !rfName.checkValid() )
 		return;
 		
 			// Creates a new Scene and adds it to the target project
