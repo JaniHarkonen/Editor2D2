@@ -8,6 +8,7 @@ import java.io.IOException;
 import editor2d2.common.grid.Grid;
 import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
+import editor2d2.model.project.Folder;
 import editor2d2.model.project.Project;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
@@ -38,16 +39,29 @@ public class ProjectWriter {
 			
 				// Write Assets
 			writeLine(bw, "assets");
-			
-			for( Asset a : project.getAllAssets() )
-			writeLine(bw, FactoryService.getFactories(a.getAssetClassName()).createWriter().writeAsset(a));
-			
+				writeFolder(bw, project.getRootFolder(), true);
 			writeLine(bw, "/assets");
 			
 				// Write Scenes
 			for( Scene s : project.getAllScenes() )
 			{
-				writeLine(bw, "scene \"" + s.getName() + "\" " + s.getWidth() + " " + s.getHeight());
+				String compilationStatement = s.getCompilationStatement();
+				int statementLines = 0;
+				
+					// Determine compilation statement length
+				if( compilationStatement.length() > 0 )
+				statementLines = compilationStatement.split("\n").length;
+				
+				writeLine(bw,
+					"scene \"" +
+					s.getName() + "\" " +
+					s.getWidth() + " " + 
+					s.getHeight() + " statement " + statementLines
+				);
+				
+					// Write compilation statement if there is one
+				if( statementLines > 0 )
+				writeLine(bw, compilationStatement);
 				
 					// Write Layers
 				for( Layer l : s.getLayers() )
@@ -65,9 +79,7 @@ public class ProjectWriter {
 					{
 						Gridable g = objGrid.getFast(x, y);
 						
-						if( g == null )
-						continue;
-						
+						if( g != null )
 						writeLine(bw, writer.writePlaceable(g));
 					}
 					
@@ -100,5 +112,25 @@ public class ProjectWriter {
 		// insert \n at the end of each write-method
 	private void writeLine(BufferedWriter bw, String line) throws IOException {
 		bw.write(line + "\n");
+	}
+	
+		// Writes a folder recursively
+	private void writeFolder(BufferedWriter bw, Folder folder, boolean isRoot) throws IOException {
+		if( !isRoot )
+		writeLine(bw, "folder \"" + folder.getName() + "\"");
+		
+		for( Asset a : folder.getAllAssets() )
+		{
+			if( a instanceof Folder )
+			{
+				writeFolder(bw, (Folder) a, false);
+				continue;
+			}
+			
+			writeLine(bw, FactoryService.getFactories(a.getAssetClassName()).createWriter().writeAsset(a));
+		}
+		
+		if( !isRoot )
+		writeLine(bw, "/folder");
 	}
 }

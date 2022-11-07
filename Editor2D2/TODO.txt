@@ -5,11 +5,6 @@ OVERVIEW
   implemented and generally work as intended
 
 SPECIFICS
-- test project Project tab
-	-- test saving a project
-		o Layer writer should write whether the Layer is visible
-		o Scenes should write the compilation statement
-	-- test saving project as
 - test Tools and Toolbar
 	-- test Tool switching
 		o pasting Placeables should *visibly* auto-switch to TMove

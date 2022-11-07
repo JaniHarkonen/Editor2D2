@@ -69,7 +69,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	private void generate() {
 		
 			// Project menu
-		JMenuItem itemNewProject = new JMenuItem(new AbstractAction("New project") {
+		JMenuItem itemNewProject = new JMenuItem(new AbstractAction("New project (Ctrl+N)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -77,7 +77,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 
-		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project") {
+		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project (Ctrl+O)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -85,7 +85,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 		
-		JMenuItem itemSaveProject = new JMenuItem(new AbstractAction("Save project") {
+		JMenuItem itemSaveProject = new JMenuItem(new AbstractAction("Save project (Ctrl+S)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -93,7 +93,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 		
-		JMenuItem itemSaveProjectAs = new JMenuItem(new AbstractAction("Save project as...") {
+		JMenuItem itemSaveProjectAs = new JMenuItem(new AbstractAction("Save project as... (Ctrl+Shift+S)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
