@@ -8,6 +8,7 @@ SPECIFICS
 - test project Project tab
 	-- test saving a project
 		o Layer writer should write whether the Layer is visible
+		o Scenes should write the compilation statement
 	-- test saving project as
 - test AssetPane
 	-- test creating assets / folders
@@ -15,24 +16,10 @@ SPECIFICS
 	-- test renaming assets / folders
 	-- test editing assets / folders
 	-- test deleting assets / folders
-- test PropertiesPanes
-	-- check all requried fields are displayed
-	-- check all required fields have validation
-	-- test placed Placeable vs non-placed
-	
-	VV add scrollbar for larger Images
-	VV scrollbar should save state
 - test SceneControlsPane
 	-- test resizing
 	-- test grid settings
 	-- test grid toggles
-- test SceneView
-	-- test tab switching
-	-- test tab creation
-	-- test tab deletion
-	-- test tab renaming
-	-- test tab meta data settings
-		o test setting compilation statement
 - test Tools and Toolbar
 	-- test Tool switching
 	-- test Tool hotkeys
@@ -55,6 +42,9 @@ SPECIFICS
 		o test setting grid dimensions
 		o test setting opacity
 		o test setting visibility
+
+- ModalWindow shouldn't close if there still are tabs open,
+  instead, the active tab should close
 
 
 REMEMBER: 	Instance layer selection bug is due to
