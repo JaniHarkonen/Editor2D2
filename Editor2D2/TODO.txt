@@ -9,7 +9,7 @@ SPECIFICS
 	-- test Tool switching
 		o pasting Placeables should *visibly* auto-switch to TMove
 	-- test Tool hotkeys
-		o HotkeyListener becomes messed up when the
+		x HotkeyListener becomes messed up when the
 		  window looses focus or a popup is displayed
 		  while keys are being held.
 	XX test Tool tooltip
@@ -38,6 +38,10 @@ SPECIFICS
 
 - ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
+  
+- add ability to change the rendition order of Layers
+	-- move Layer one level up
+	-- move Layer one level down
 
 
 LATER

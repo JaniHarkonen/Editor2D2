@@ -28,7 +28,7 @@ public class Scene {
 		this.name = null;
 		this.layers = new ArrayList<Layer>();
 		this.camera = null;
-		this.compilationStatement = null;
+		this.compilationStatement = "";
 	}
 	
 	public Scene(String name) {

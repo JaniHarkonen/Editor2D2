@@ -1,5 +1,7 @@
 package editor2d2.gui;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -68,6 +70,16 @@ public class Window implements Vendor {
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.window.addKeyListener(Application.controller.getHotkeyListener());
 		this.window.setFocusable(true);
+		this.window.addWindowFocusListener(new WindowFocusListener() {
+
+			@Override
+			public void windowGainedFocus(WindowEvent e) { }
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				Application.controller.getHotkeyListener().resetKeys();
+			}
+		});
 		
 		this.window.setJMenuBar(new WindowToolbar());
 		this.window.add((new Root()).render());
