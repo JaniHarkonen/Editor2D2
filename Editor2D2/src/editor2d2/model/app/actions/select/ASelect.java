@@ -27,6 +27,9 @@ public class ASelect extends Action {
 	public void undo() {
 		SelectionManager<Placeable> mngr = this.controller.placeableSelectionManager;
 		
+		if( this.initialSelection == null || this.initialSelection.size() <= 0 )
+		return;
+		
 		mngr.deselect();
 		mngr.setSelection(this.initialSelection);
 	}
@@ -34,6 +37,9 @@ public class ASelect extends Action {
 	@Override
 	public void redo() {
 		SelectionManager<Placeable> mngr = this.controller.placeableSelectionManager;
+		
+		if( this.selection == null || this.selection.size() <= 0 )
+		return;
 		
 		switch( this.type )
 		{

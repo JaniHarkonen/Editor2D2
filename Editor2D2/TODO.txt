@@ -14,8 +14,8 @@ SPECIFICS
 		  while keys are being held.
 	XX test Tool tooltip
 	XX display Tool description
-	-- test selection, additive, subtractive (undo, redo)
-		o Instance layer selection bug is due to
+	XX test selection, additive, subtractive (undo, redo)
+		x Instance layer selection bug is due to
 		  an off by one error in the
 		  selectPlaceables(int,int,int,int).
 	-- test move (undo, redo)

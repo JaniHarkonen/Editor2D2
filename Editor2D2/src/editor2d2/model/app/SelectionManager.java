@@ -26,7 +26,11 @@ public class SelectionManager<T> {
 		return;
 		
 		this.selection = new HashMap<T, Boolean>();
+		
+		if( selection.size() > 0 )
 		this.firstSelection = selection.get(0);
+		else
+		this.firstSelection = null;
 		
 		for( int i = 0; i < selection.size(); i++ )
 		this.selection.put(selection.get(i), true);

@@ -154,7 +154,7 @@ public class InstanceLayer extends Layer {
 			Placeable p = gridSelection.get(i - offset);
 			Bounds pb = p.getBounds();
 			
-			if( pb.right < x1 || pb.bottom < y1 || pb.left > x2 || pb.top > y2 )
+			if( pb.right <= x1 || pb.bottom <= y1 || pb.left > x2 || pb.top > y2 )
 			{
 				gridSelection.remove(i - offset);
 				offset++;
