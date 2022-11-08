@@ -20,8 +20,8 @@ SPECIFICS
 		  selectPlaceables(int,int,int,int).
 	-- test move (undo, redo)
 	-- test place selection, deletion, allow stack, single (undo, redo)
-	-- test flood fill (undo, redo)
-	-- test rotate (undo, redo)
+	XX test flood fill (undo, redo)
+	XX test rotate (undo, redo)
 	-- test scale, vertical, horizontal (undo, redo)
 - test LayerManagerPane
 	-- test layer selection

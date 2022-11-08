@@ -145,6 +145,6 @@ public class Grid {
 	
 		// Checks whether a cellular coordinate is valid
 	protected boolean checkCellValid(int cx, int cy) {
-		return !(cx < 0 || cy < 0 || cx > this.rowLength || cy > this.columnLength);
+		return (cx >= 0 && cy >= 0 && cx < this.rowLength && cy < this.columnLength);//!(cx < 0 || cy < 0 || cx >= this.rowLength || cy >= this.columnLength);
 	}
 }
