@@ -30,8 +30,8 @@ SPECIFICS
 	-- test layer deletion
 	-- test layer editing
 		x test back
-		o test name, validation
-			. don't allow quotes, "", in names (check for others)
+		x test name, validation
+			x don't allow quotes, "", in names (check for others)
 		o test setting grid dimensions
 		x test setting opacity
 		x test setting visibility
@@ -42,6 +42,8 @@ SPECIFICS
 - add ability to change the rendition order of Layers
 	-- move Layer one level up
 	-- move Layer one level down
+	
+- add ability to snap camera view back to origin
 
 
 LATER

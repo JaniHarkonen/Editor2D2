@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import editor2d2.Application;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.metadata.MetaDataModal;
@@ -208,6 +209,13 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		return;
 		
 		Project p = (new ProjectLoader()).loadProject(res.filepaths[0]);
+		
+		if( p == null )
+		{
+			JOptionPane.showMessageDialog(null, "Error: File doesn't exist!", "Error loading", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		Application.controller.openProject(p);
 	}
 	
@@ -237,8 +245,11 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	private void actionOnRenameScene() {
 		Scene scene = Application.controller.getActiveScene();
 		String newName = JOptionPane.showInputDialog(null, "Enter scene name", scene.getName());
+		RequireStringName rfName = new RequireStringName();
 		
-		if( newName == null || newName.equals("") )
+		rfName.updateInput(newName);
+		
+		if( !rfName.checkValid() )
 		return;
 		
 		Application.controller.renameActiveScene(newName);

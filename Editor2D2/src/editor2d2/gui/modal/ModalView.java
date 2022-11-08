@@ -7,7 +7,7 @@ import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
-import editor2d2.gui.components.requirements.RequireStringNonEmpty;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
 
@@ -34,7 +34,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		setFactorySettings();
 		
 		this.host = host;
-		this.txtName = new CTextField("Name:", new RequireStringNonEmpty());
+		this.txtName = new CTextField("Name:", new RequireStringName());
 		this.txtIdentifier = new CTextField("Identifier:", new RequireUnusedIdentifier(Application.controller.getActiveProject()));
 		this.isEdited = false;
 	}

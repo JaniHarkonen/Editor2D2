@@ -24,7 +24,7 @@ import editor2d2.gui.components.ClickableButton;
 import editor2d2.gui.components.requirements.Require;
 import editor2d2.gui.components.requirements.RequireDoubleBetween;
 import editor2d2.gui.components.requirements.RequireIntegerBetween;
-import editor2d2.gui.components.requirements.RequireStringNonEmpty;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.modules.FactoryService;
@@ -63,7 +63,7 @@ public class LayerPropertiesPane extends GUIComponent implements Vendor, Subscri
 		this.host = host;
 		
 			// Layer name field
-		this.txtName = new CTextField("Name: ", new RequireStringNonEmpty());
+		this.txtName = new CTextField("Name: ", new RequireStringName());
 		this.txtName.orientation = BoxLayout.PAGE_AXIS;
 		
 			// Layer grid cell width
@@ -204,7 +204,7 @@ public class LayerPropertiesPane extends GUIComponent implements Vendor, Subscri
 	
 		// Called upon clicking "Apply", applies changes to the source layer
 	protected void onApply() {
-		RequireStringNonEmpty rfName = (RequireStringNonEmpty) this.txtName.getRequirementFilter();
+		RequireStringName rfName = (RequireStringName) this.txtName.getRequirementFilter();
 		RequireIntegerBetween rfWidth = (RequireIntegerBetween) this.txtGridCellWidth.getRequirementFilter();
 		RequireIntegerBetween rfHeight = (RequireIntegerBetween) this.txtGridCellHeight.getRequirementFilter();
 		RequireDoubleBetween rfOpacity = (RequireDoubleBetween) this.txtOpacity.getRequirementFilter();

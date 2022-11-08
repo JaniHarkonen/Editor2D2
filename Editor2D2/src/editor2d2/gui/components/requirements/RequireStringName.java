@@ -14,7 +14,7 @@ public class RequireStringName extends RequirementFilter<String> {
 		if( this.input == null || this.input.trim().equals("") )
 		return false;
 		
-		if( this.input.contains("\"") )
+		if( this.input.contains("\"") || this.input.contains("'") )
 		return false;
 		
 		this.value = this.input;
