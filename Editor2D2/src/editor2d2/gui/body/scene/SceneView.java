@@ -91,6 +91,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
 		Application.window.subscriptionService.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
 		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
+		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
 		
 		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
 	}
@@ -184,6 +185,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				
 					// Layer visibility was toggled
 				case editor2d2.model.Handles.LAYER_VISIBILITY:
+				case editor2d2.model.Handles.LAYER_DELETED:
 					break;
 					
 				default: skipUpdate = true; break;

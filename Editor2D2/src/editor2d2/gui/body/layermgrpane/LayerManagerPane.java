@@ -14,7 +14,7 @@ import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.modules.object.layer.InstanceLayer;
+import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
@@ -79,7 +79,6 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			JPanel	containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 					containerControls.add(new ClickableButton("Back", (e) -> { onBackToLayerManager(); }));
 					containerControls.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
-					//containerControls.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 			container.add(containerControls);
 			
 			addEmptySpace(container, 2);
@@ -106,7 +105,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		// Called upon adding a new layer (+)
 	private void onAddLayer() {
 		Scene scene = Application.controller.getActiveScene();
-		InstanceLayer newLayer = new InstanceLayer(scene);
+		TileLayer newLayer = new TileLayer(scene);
 		newLayer.setName("Layer " + System.currentTimeMillis());
 		
 		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, newLayer, true);
@@ -115,12 +114,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	
 		// Called upon deleting a layer (-)
 	private void onDeleteLayer() {
-		Layer target = Application.controller.getActiveLayer();
-		
-		if( target == null )
-		return;
-		
-		Application.controller.getActiveScene().removeLayer(target);
+		Application.controller.removeActiveLayer();
 		update();
 	}
 	

@@ -54,6 +54,7 @@ public class ProjectLoader {
 	
 		// Reference to the loader that is currently being
 		// used to load Placeable
+	@SuppressWarnings("rawtypes")
 	private AbstractLoader currentLoader;
 	
 	public ProjectLoader() {
@@ -143,6 +144,7 @@ public class ProjectLoader {
 	
 		// Handles the interpretation of parsed project
 		// file lines
+	@SuppressWarnings("unchecked")
 	private int interpret(ParsedCommand pc) {
 		
 		switch( pc.getCommand() )

@@ -26,8 +26,11 @@ SPECIFICS
 - test LayerManagerPane
 	-- test layer selection
 	XX test layer visibility toggle
-	-- test layer addition
-	-- test layer deletion
+	XX test layer addition
+	XX test layer deletion
+	-- add ability to change the rendition order of Layers
+		o move Layer one level up
+		o move Layer one level down
 	-- test layer editing
 		x test back
 		x test name, validation
@@ -38,10 +41,6 @@ SPECIFICS
 
 - ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
-  
-- add ability to change the rendition order of Layers
-	-- move Layer one level up
-	-- move Layer one level down
 	
 - add ability to snap camera view back to origin
 

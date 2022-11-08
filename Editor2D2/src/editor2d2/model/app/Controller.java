@@ -123,7 +123,7 @@ public class Controller implements Vendor {
 	public void renameActiveScene(String newName) {
 		getActiveScene().setName(newName);
 		
-		subscriptionService.register(Handles.ACTIVE_SCENE, this);
+		this.subscriptionService.register(Handles.ACTIVE_SCENE, this);
 	}
 	
 		// Deletes the active Scene
@@ -136,6 +136,19 @@ public class Controller implements Vendor {
 		int sceneCount = activeProject.getAllScenes().size() - 1;
 		int newIndex = Math.min(sceneCount, index);
 		openScene(newIndex);
+	}
+	
+		// Removes the active Layer
+	public void removeActiveLayer() {
+		Layer activeLayer = getActiveLayer();
+		Scene activeScene = getActiveScene();
+		
+		if( activeScene == null || activeLayer == null )
+		return;
+		
+		activeScene.removeLayer(activeLayer);
+		
+		this.subscriptionService.register(Handles.LAYER_DELETED, this);
 	}
 	
 	/******************* SELECTION *********************/
