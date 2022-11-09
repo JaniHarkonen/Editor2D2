@@ -30,6 +30,21 @@ public class TPlace extends Tool {
 	}
 	
 	@Override
+	protected int useSecondary(ToolContext c) {
+		if( c.targetLayer == null )
+		return USE_FAILED;
+		
+		ArrayList<Placeable> placeablesAt = c.targetLayer.selectPlaceables(c.locationX, c.locationY);
+		if( placeablesAt.size() > 0 )
+		{
+			(new ADelete()).perform(new ADeleteContext(c));
+			return USE_SUCCESSFUL;
+		}
+		
+		return USE_FAILED;
+	}
+	
+	@Override
 	protected int useTertiary(ToolContext c) {
 		Placeable selectedPlaceable = c.selection.get(0);
 		Layer l = c.targetLayer;
@@ -50,20 +65,5 @@ public class TPlace extends Tool {
 		(new APlace()).perform(new APlaceContext(c));
 		
 		return USE_SUCCESSFUL;
-	}
-	
-	@Override
-	protected int useSecondary(ToolContext c) {
-		if( c.targetLayer == null )
-		return USE_FAILED;
-		
-		ArrayList<Placeable> placeablesAt = c.targetLayer.selectPlaceables(c.locationX, c.locationY);
-		if( placeablesAt.size() > 0 )
-		{
-			(new ADelete()).perform(new ADeleteContext(c));
-			return USE_SUCCESSFUL;
-		}
-		
-		return USE_FAILED;
 	}
 }

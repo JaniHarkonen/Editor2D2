@@ -8,13 +8,15 @@ import editor2d2.model.project.scene.placeable.Placeable;
 
 public class AScaleContext extends ActionContext {
 	
-	public double scaleIncrement;
+	public double horizontalScaleIncrement;
+	public double verticalScaleIncrement;
 	public ArrayList<Placeable> initialSelection;
 	
 
 	public AScaleContext(ToolContext tc) {
 		super(tc);
-		this.scaleIncrement = 0;
+		this.horizontalScaleIncrement = 0;
+		this.verticalScaleIncrement = 0;
 		this.initialSelection = null;
 	}
 

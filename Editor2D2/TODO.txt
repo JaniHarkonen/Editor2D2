@@ -28,7 +28,7 @@ SPECIFICS
 	-- test place selection, deletion, allow stack, single (undo, redo)
 	XX test flood fill (undo, redo)
 	XX test rotate (undo, redo)
-	-- test scale, vertical, horizontal (undo, redo)
+	XX test scale, vertical, horizontal (undo, redo)
 
 - ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
