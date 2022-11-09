@@ -297,8 +297,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					int ox = (int) onScreenOriginX;
 					int oy = (int) onScreenOriginY;
 					
-					double cw = cursorCellWidth * cam.getZ();
-					double ch = cursorCellHeight * cam.getZ();
+					double cw = cursorCellWidth * cam_z;
+					double ch = cursorCellHeight * cam_z;
 					
 					double right = Math.min(scene.getWidth(), cbounds.right);
 					double bottom = Math.min(scene.getHeight(), cbounds.bottom);
@@ -312,8 +312,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					{
 						if( activeLayer != null )
 						{
-							cw = activeLayer.getObjectGrid().getCellWidth() * cam.getZ();
-							ch = activeLayer.getObjectGrid().getCellHeight() * cam.getZ();
+							cw = activeLayer.getObjectGrid().getCellWidth() * cam_z;
+							ch = activeLayer.getObjectGrid().getCellHeight() * cam_z;
 							
 							gg.setColor(Color.RED);
 							dash[0] = 5.0f;
@@ -324,11 +324,15 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					}
 				}
 				
+					// Render overlay
 				if( overlay != null )
 				{
-					gg.drawImage(overlay,
+					gg.drawImage(
+						overlay, 
 						(int) onScreenOriginX,
 						(int) onScreenOriginY,
+						//(int) (overlay.getWidth() * cam_z),
+						//(int) (overlay.getHeight() * cam_z),
 						null
 					);
 				}
@@ -437,6 +441,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	private void drawStringNewline(String str, int x, int y, int sep, Graphics2D g) {
 		String[] split = str.split("\n");
 		int s = split.length;
+		
 		for( int i = 0; i < s; i++ )
 		g.drawString(split[i], x, y + i * sep);
 	}
