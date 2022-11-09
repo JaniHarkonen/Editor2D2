@@ -18,6 +18,7 @@ SPECIFICS
 		x Instance layer selection bug is due to
 		  an off by one error in the
 		  selectPlaceables(int,int,int,int).
+	  	o the selection should be rendered as mouse is dragged
 	-- test move (undo, redo)
 	-- test place selection, deletion, allow stack, single (undo, redo)
 	XX test flood fill (undo, redo)
@@ -28,14 +29,14 @@ SPECIFICS
 	XX test layer visibility toggle
 	XX test layer addition
 	XX test layer deletion
-	-- add ability to change the rendition order of Layers
-		o move Layer one level up
-		o move Layer one level down
-	-- test layer editing
+	XX add ability to change the rendition order of Layers
+		x move Layer one level up
+		x move Layer one level down
+	XX test layer editing
 		x test back
 		x test name, validation
 			x don't allow quotes, "", in names (check for others)
-		o test setting grid dimensions
+		x test setting grid dimensions
 		x test setting opacity
 		x test setting visibility
 

@@ -8,6 +8,7 @@ public final class Handles {
 	public static final String ACTIVE_SCENE = "active-scene";
 	public static final String LAYER_VISIBILITY = "layer-visibility";
 	public static final String LAYER_DELETED = "layer-deleted";
+	public static final String LAYER_REORDER = "layer-reorder";
 	
 	
 		// Do not instantiate

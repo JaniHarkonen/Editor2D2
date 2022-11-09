@@ -41,6 +41,7 @@ import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
 public class SceneView extends GUIComponent implements Subscriber, Vendor {
@@ -86,14 +87,20 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 		
-		Application.controller.getHotkeyListener().subscribe("SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
-		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
-		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
+		SubscriptionService subsrvController = Application.controller.subscriptionService;
+		SubscriptionService subsrvWindow = Application.window.subscriptionService;
 		
-		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
+		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+		
+		subsrvWindow.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
+		
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_REORDER, "SceneView", this);
+		
+		subsrvWindow.register(Handles.SCENE_VIEW, this);
 	}
 	
 	
@@ -186,6 +193,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					// Layer visibility was toggled
 				case editor2d2.model.Handles.LAYER_VISIBILITY:
 				case editor2d2.model.Handles.LAYER_DELETED:
+				case editor2d2.model.Handles.LAYER_REORDER:
 					break;
 					
 				default: skipUpdate = true; break;
