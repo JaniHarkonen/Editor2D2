@@ -25,7 +25,7 @@ SPECIFICS
 	XX test rotate (undo, redo)
 	-- test scale, vertical, horizontal (undo, redo)
 - test LayerManagerPane
-	-- test layer selection
+	XX test layer selection
 	XX test layer visibility toggle
 	XX test layer addition
 	XX test layer deletion
