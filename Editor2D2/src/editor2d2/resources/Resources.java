@@ -56,6 +56,7 @@ public final class Resources {
 			loadGraphic("icon-resize-scene", path + "assets\\icon_resize_scene.png");
 			loadGraphic("icon-toggle-cursor-grid", path + "assets\\icon_toggle_cursor_grid.png");
 			loadGraphic("icon-toggle-layer-grid", path + "assets\\icon_toggle_layer_grid.png");
+			loadGraphic("icon-return-to-origin", path + "assets\\icon_return_origin.png");
 			
 				// Layer pane controls
 			loadGraphic("icon-toggle-layer-visibility-on", path + "assets\\icon_toggle_layer_visible_on.png");

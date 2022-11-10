@@ -18,6 +18,7 @@ public final class Handles {
 	public static final String CURSOR_GRID_SETTINGS_CHANGED = "cursor-grid-settings-changed";
 	public static final String CURSOR_GRID_TOGGLED = "cursor-grid-toggled";
 	public static final String LAYER_GRID_TOGGLED = "layer-grid-toggled";
+	public static final String CAMERA_RETURNED_TO_ORIGIN = "camera-returned-to-origin";
 	
 		// Do not instantiate
 	private Handles() { }

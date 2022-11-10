@@ -95,6 +95,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		subsrvWindow.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
 		subsrvWindow.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
 		subsrvWindow.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.CAMERA_RETURNED_TO_ORIGIN, "SceneView", this);
 		
 		subsrvController.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
 		subsrvController.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
@@ -187,13 +188,13 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					// Layer grid visibility was toggled
 				case Handles.LAYER_GRID_TOGGLED:
 					this.drawLayerGrid = !this.drawLayerGrid;
-					update();
 					break;
 				
 					// Layer visibility was toggled
 				case editor2d2.model.Handles.LAYER_VISIBILITY:
 				case editor2d2.model.Handles.LAYER_DELETED:
 				case editor2d2.model.Handles.LAYER_REORDER:
+				case Handles.CAMERA_RETURNED_TO_ORIGIN:
 					break;
 					
 				default: skipUpdate = true; break;
