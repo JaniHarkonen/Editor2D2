@@ -19,7 +19,7 @@ SPECIFICS
 		  an off by one error in the
 		  selectPlaceables(int,int,int,int).
 	  	x the selection should be rendered as mouse is dragged
-		o Instances need to take the rotation of the Instance
+		x Instances need to take the rotation of the Instance
 		  into account when selecting
 		x rectangle highlighting selection should be centered
 		  (anchored) around the Instance (currently anchor point
@@ -30,7 +30,7 @@ SPECIFICS
 	XX test rotate (undo, redo)
 	XX test scale, vertical, horizontal (undo, redo)
 
-- ModalWindow shouldn't close if there still are tabs open,
+X ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
 - add ability to snap camera view back to origin
 - deleting Layer should deselect it

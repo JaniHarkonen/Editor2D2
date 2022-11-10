@@ -11,9 +11,9 @@ import javax.swing.JTabbedPane;
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
+import editor2d2.gui.Handles;
 import editor2d2.gui.Window;
 import editor2d2.gui.body.assetpane.AssetPane;
-import editor2d2.gui.Handles;
 import editor2d2.model.project.Asset;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -105,6 +105,28 @@ public class ModalWindow extends GUIComponent implements Subscriber {
 		// Closes the modal window and clears the views
 	public void closeModalWindow() {
 		closeModalWindow(true);
+	}
+	
+		// Closes a given modal window only
+	public void closeModalWindow(ModalView<? extends Asset> mv) {
+		if( mv == null )
+		return;
+		
+		if( this.views.size() <= 1 )
+		closeModalWindow();
+		else
+		{
+			for( int i = 0; i < this.views.size(); i++ )
+			{
+				ModalView<? extends Asset> view = this.views.get(i);
+				if( view != mv )
+				continue;
+				
+				this.views.remove(i);
+				update();
+				return;
+			}
+		}
 	}
 	
 	

@@ -118,7 +118,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		
 		finalizeCreation();
 		
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Called upon clicking "Save"
@@ -127,13 +127,13 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		if( !saveChanges(true) )
 		return;
 		
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Called upon clicking "Cancel"
 		// CAN BE OVERRIDDEN
 	protected void actionCancel() {
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Updates the Project and the Asset Pane to the creation
