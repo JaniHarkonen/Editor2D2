@@ -9,12 +9,12 @@ public final class GeometryUtilities {
 	
 		// Converts degrees to radians
 	public static double degToRad(double ang) {
-		return ang / (180 / Math.PI);
+		return ang / (180.0d / Math.PI);
 	}
 	
 		// Converts radians to degrees
 	public static double radToDeg(double rad) {
-		return rad * (180 / Math.PI);
+		return rad * (180.0d / Math.PI);
 	}
 	
 		// Clamps an angle between 0 and 359 degrees

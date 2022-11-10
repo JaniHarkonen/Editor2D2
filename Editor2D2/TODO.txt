@@ -21,7 +21,7 @@ SPECIFICS
 	  	x the selection should be rendered as mouse is dragged
 		o Instances need to take the rotation of the Instance
 		  into account when selecting
-		o rectangle highlighting selection should be centered
+		x rectangle highlighting selection should be centered
 		  (anchored) around the Instance (currently anchor point
 		  is at the top-left corner)
 	-- test move (undo, redo)

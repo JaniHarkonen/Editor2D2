@@ -30,7 +30,7 @@ public class TPlace extends Tool {
 		
 			// Tertiary functionality also handles stacking
 			// (4th order functionality)
-		if( outcome != USE_SUCCESSFUL )
+		if( outcome == USE_UNSPECIFIED )
 		return useTertiary(c);
 		
 		return outcome;
