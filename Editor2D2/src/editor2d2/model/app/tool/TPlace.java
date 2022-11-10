@@ -15,9 +15,25 @@ public class TPlace extends Tool {
 	public TPlace() {
 		super();
 		this.name = "Place";
-		this.description = "Places an instance of the selected asset.\nLeft-click: place\nLeft-click + CTRL: place single\nRight-click: delete";
+		this.description = "Places an instance of the selected asset.\n"
+						 + "Left-click: place\n"
+						 + "Left-click + CTRL: place single\n"
+						 + "Left-click + SHIFT: stack objects\n"
+						 + "Right-click: delete";
 		this.shortcutKey = "X";
 		this.icon = Application.resources.getGraphic("icon-tool-place");
+	}
+	
+	@Override
+	public int use(ToolContext c) {
+		int outcome = super.use(c);
+		
+			// Tertiary functionality also handles stacking
+			// (4th order functionality)
+		if( outcome != USE_SUCCESSFUL )
+		return useTertiary(c);
+		
+		return outcome;
 	}
 	
 	
@@ -46,6 +62,9 @@ public class TPlace extends Tool {
 	
 	@Override
 	protected int useTertiary(ToolContext c) {
+		if( c.selection == null || c.selection.size() <= 0 )
+		return USE_FAILED;
+		
 		Placeable selectedPlaceable = c.selection.get(0);
 		Layer l = c.targetLayer;
 		
@@ -55,7 +74,7 @@ public class TPlace extends Tool {
 		ArrayList<Placeable> placeablesAt = l.selectPlaceables(c.locationX + 1, c.locationY + 1);
 		String selectedIdentifier = selectedPlaceable.getAsset().getIdentifier();
 		
-		if( placeablesAt.size() > 0 )
+		if( placeablesAt.size() > 0 && c.order != 4 )
 		{
 			Placeable otherPlaceable = placeablesAt.get(0);
 			if( otherPlaceable.getAsset().getIdentifier().equals(selectedIdentifier) )

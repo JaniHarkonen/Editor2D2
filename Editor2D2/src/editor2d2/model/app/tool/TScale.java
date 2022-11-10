@@ -19,7 +19,10 @@ public class TScale extends Tool {
 	public TScale() {
 		super();
 		this.name = "Scale";
-		this.description = "Scale selection.\nLeft-click: scale with mouse\nLeft-click + CTRL: scale horizonally only\nLeft-click + ALT: scale vertically only";
+		this.description = "Scale selection.\n"
+						 + "Left-click: scale with mouse\n"
+						 + "Left-click + CTRL: scale horizonally only\n"
+						 + "Left-click + SHIFT: scale vertically only";
 		this.shortcutKey = "D";
 		this.initialSelection = new ArrayList<Placeable>();
 	}

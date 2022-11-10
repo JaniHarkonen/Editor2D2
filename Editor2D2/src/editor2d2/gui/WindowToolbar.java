@@ -35,6 +35,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 
 	public WindowToolbar() {
 		generate();
+		this.setFocusable(false);
 		
 		Application.controller.getHotkeyListener().subscribe("WindowToolbar", this);
 	}

@@ -35,7 +35,7 @@ public class TSelect extends Tool {
 	public TSelect() {
 		super();
 		this.name = "Select";
-		this.description = "Selects objects.\nLeft-click: select\nLeft-click + CTRL: add selection\nLeft-click + ALT: subtract selection";
+		this.description = "Selects objects.\nLeft-click: select\nLeft-click + CTRL: add selection\nLeft-click + SHIFT: subtract selection";
 		this.shortcutKey = "S";
 		this.icon = Application.resources.getGraphic("icon-tool-select");
 		this.initialSelection = null;

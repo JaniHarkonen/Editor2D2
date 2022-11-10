@@ -117,7 +117,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
 			this.useOrder = Tool.TERTIARY_FUNCTION;
-			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_ALT) )
+			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SHIFT) )
 			this.useOrder = 4;
 			else
 			this.useOrder = Tool.PRIMARY_FUNCTION;
@@ -331,8 +331,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 						overlay, 
 						(int) onScreenOriginX,
 						(int) onScreenOriginY,
-						//(int) (overlay.getWidth() * cam_z),
-						//(int) (overlay.getHeight() * cam_z),
 						null
 					);
 				}
@@ -351,6 +349,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if( isSpaceDown )
+				return;
+				
 				int toolUseOrder = -1;
 				
 				if( GUIUtilities.checkLeftClick(e) )
@@ -393,21 +394,22 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				
-				int toolUseOrder = -1;
-				
-				if( SwingUtilities.isLeftMouseButton(e) && !isSpaceDown )
-				toolUseOrder = useOrder;
-				else if( SwingUtilities.isRightMouseButton(e) )
-				toolUseOrder = Tool.SECONDARY_FUNCTION;
-				
-				if( toolUseOrder > 0 )
-				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, toolUseOrder);
-				
-					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
-					// on the first click)
-				else if( SwingUtilities.isLeftMouseButton(e) && isSpaceDown )
+				if( !isSpaceDown )
 				{
+					int toolUseOrder = -1;
+					
+					if( SwingUtilities.isLeftMouseButton(e) )
+					toolUseOrder = useOrder;
+					else if( SwingUtilities.isRightMouseButton(e) )
+					toolUseOrder = Tool.SECONDARY_FUNCTION;
+					
+					if( toolUseOrder > 0 )
+					useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, toolUseOrder);
+				}
+				else if( SwingUtilities.isLeftMouseButton(e) )
+				{
+						// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
+						// on the first click)
 					if( !sceneDragger.checkDragging() )
 					sceneDragger.startDragging(e.getX(), e.getY(), 1);
 					else
