@@ -33,7 +33,7 @@ SPECIFICS
 X ModalWindow shouldn't close if there still are tabs open,
   instead, the active tab should close
 X add ability to snap camera view back to origin
-- deleting Layer should deselect it
+X deleting Layer should deselect it
 
 
 LATER

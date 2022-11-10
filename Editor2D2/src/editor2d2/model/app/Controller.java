@@ -148,6 +148,8 @@ public class Controller implements Vendor {
 		
 		activeScene.removeLayer(activeLayer);
 		
+		selectLayer(null);
+		this.placeableSelectionManager.deselect();
 		this.subscriptionService.register(Handles.LAYER_DELETED, this);
 	}
 	
