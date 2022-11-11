@@ -16,6 +16,7 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CImage;
+import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.app.Tools;
 import editor2d2.model.app.tool.Tool;
@@ -30,6 +31,7 @@ public class Toolbar extends GUIComponent implements Subscriber {
 	
 	public Toolbar() {
 		Application.controller.getHotkeyListener().subscribe("Toolbar", this);
+		Application.controller.subscriptionService.subscribe(Handles.SELECTED_TOOL, "Toolbar", this);
 	}
 	
 	
@@ -48,6 +50,8 @@ public class Toolbar extends GUIComponent implements Subscriber {
 				}
 			}
 		}
+		else if( handle.equals(Handles.SELECTED_TOOL) )
+		update();
 	}
 	
 

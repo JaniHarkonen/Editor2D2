@@ -13,6 +13,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -152,7 +153,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Cut selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'X') )
 			{
-				controller.placeableSelectionManager.copyToClipboard();
+				if( !controller.placeableSelectionManager.copyToClipboard() )
+				return;
+				
 				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
 			}
@@ -160,8 +163,14 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Paste selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'V') )
 			{
+				ArrayList<Placeable> clipboardSelection = controller.placeableSelectionManager.getClipboardSelection();
+				
+				if( clipboardSelection == null || clipboardSelection.size() <= 0 )
+				return;
+				
 				APasteContext ac = new APasteContext(controller, activeLayer);
-				ac.selection = controller.placeableSelectionManager.getClipboardSelection();
+				
+				ac.selection = clipboardSelection;
 				controller.selectTool(Tools.getAvailableTools()[1]);
 				(new APaste()).perform(ac);
 			}

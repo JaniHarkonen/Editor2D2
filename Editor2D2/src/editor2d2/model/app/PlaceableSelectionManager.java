@@ -10,6 +10,11 @@ public class PlaceableSelectionManager extends SelectionManager<Placeable> {
 	private ArrayList<Placeable> clipboard;
 	
 	
+	public PlaceableSelectionManager() {
+		this.clipboard = new ArrayList<Placeable>();
+	}
+	
+	
 	@Override
 	public void setSelection(ArrayList<Placeable> selection) {
 		if( selection == null )
@@ -49,8 +54,14 @@ public class PlaceableSelectionManager extends SelectionManager<Placeable> {
 		super.deselect();
 	}
 	
-	public void copyToClipboard() {
+	public boolean copyToClipboard() {
 		this.clipboard = getSelection();
+		
+		if( this.clipboard.size() > 0 )
+		return true;
+		
+		this.clipboard = new ArrayList<Placeable>();
+		return false;
 	}
 	
 	public ArrayList<Placeable> getClipboardSelection() {

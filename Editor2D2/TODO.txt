@@ -1,39 +1,9 @@
-TODO - MajorBugfixes
+TODO - ...
 
 OVERVIEW
-- make sure that all required functionalities have been
-  implemented and generally work as intended
+
 
 SPECIFICS
-- test Tools and Toolbar
-	-- test Tool switching
-		o pasting Placeables should *visibly* auto-switch to TMove
-	XX test Tool hotkeys
-		x HotkeyListener becomes messed up when the
-		  window looses focus or a popup is displayed
-		  while keys are being held.
-	XX test Tool tooltip
-	XX display Tool description
-	XX test selection, additive, subtractive (undo, redo)
-		x Instance layer selection bug is due to
-		  an off by one error in the
-		  selectPlaceables(int,int,int,int).
-	  	x the selection should be rendered as mouse is dragged
-		x Instances need to take the rotation of the Instance
-		  into account when selecting
-		x rectangle highlighting selection should be centered
-		  (anchored) around the Instance (currently anchor point
-		  is at the top-left corner)
-	XX test move (undo, redo)
-	XX test place selection, deletion, allow stack, single (undo, redo)
-	XX test flood fill (undo, redo)
-	XX test rotate (undo, redo)
-	XX test scale, vertical, horizontal (undo, redo)
-
-X ModalWindow shouldn't close if there still are tabs open,
-  instead, the active tab should close
-X add ability to snap camera view back to origin
-X deleting Layer should deselect it
 
 
 LATER
@@ -59,6 +29,10 @@ TASKS LEFT
 - remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils
 - fix remaining minor bugs
+	-- remove ability to copy unplaced Placeables
+	-- remove ability to place placed Placeables
+	-- refresh SceneView after removing an Asset
+	-- deselect all Placeables after removing an Asset
 - create a TEMPLATE module
 - remove comments, add Javadoc
 	   

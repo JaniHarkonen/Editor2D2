@@ -177,6 +177,8 @@ public class Controller implements Vendor {
 		// into the active Scene
 	public void selectTool(Tool tool) {
 		this.appState.selectedTool = tool;
+		
+		this.subscriptionService.register(Handles.SELECTED_TOOL, this);
 	}
 	
 		// Uses/stops using the currently selected Tool
