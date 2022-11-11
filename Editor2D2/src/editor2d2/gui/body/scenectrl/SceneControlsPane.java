@@ -72,8 +72,20 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 		JPanel container = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
 			// Icon - Resize Scene
-		JPanel resizeContainer = GUIUtilities.createDefaultPanel();
+		JPanel resizeContainer = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 		
+				// Icon - Return camera to origin
+			CIcon iconReturnToOrigin = new CIcon(
+				Application.resources.getGraphic("icon-return-to-origin"),
+				(e) -> {
+					actionReturnToOrigin();
+				},
+				24, 24
+			);
+			
+			iconReturnToOrigin.tooltip = "Return camera to origin";
+			
+				// Icon - Resize Scene
 			CIcon iconResizeScene = new CIcon(
 				Application.resources.getGraphic("icon-resize-scene"),
 				(e) -> {
@@ -83,12 +95,14 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 			);
 			
 			iconResizeScene.tooltip = "Resize scene";
+			
+		resizeContainer.add(iconReturnToOrigin.render());
+		addEmptySpace(resizeContainer, 2);
 		resizeContainer.add(iconResizeScene.render());
 		resizeContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
 		
 			
 		JPanel gridControlsContainer = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-		
 				// Icon - Toggle Layer grid
 			CIcon iconToggleLayerGrid = new CIcon(
 				Application.resources.getGraphic("icon-toggle-layer-grid"),
@@ -203,6 +217,17 @@ public class SceneControlsPane extends GUIComponent implements Vendor, Subscribe
 	
 	private void actionToggleCursorGrid() {
 		Application.window.subscriptionService.register(Handles.CURSOR_GRID_TOGGLED, this);
+	}
+	
+	private void actionReturnToOrigin() {
+		Scene activeScene = Application.controller.getActiveScene();
+		
+		if( activeScene == null )
+		return;
+		
+		activeScene.getCamera().setPosition(0, 0, 1);
+		
+		Application.window.subscriptionService.register(Handles.CAMERA_RETURNED_TO_ORIGIN, this);
 	}
 	
 	

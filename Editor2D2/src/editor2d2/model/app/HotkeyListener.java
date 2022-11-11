@@ -97,4 +97,9 @@ public class HotkeyListener extends SubscriptionService implements KeyListener, 
 		
 		return true;
 	}
+	
+		// Resets all inputs
+	public void resetKeys() {
+		this.heldKeys = new ArrayList<Integer>();
+	}
 }

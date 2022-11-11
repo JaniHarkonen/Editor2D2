@@ -3,6 +3,7 @@ package editor2d2.gui.body.layermgrpane;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -14,11 +15,11 @@ import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
-import editor2d2.modules.object.layer.InstanceLayer;
+import editor2d2.modules.image.layer.TileLayer;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
-public class LayerManagerPane extends GUIComponent implements Subscriber {
+public class LayerManagerPane extends GUIComponent implements Vendor, Subscriber {
 
 	private LayerPropertiesPane editedLayerPropertiesPane;
 	
@@ -28,6 +29,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		
 		Application.controller.getHotkeyListener().subscribe("LayerManagerPane", this);
 		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_SCENE, "LayerManagerPane", this);
+		Application.controller.subscriptionService.subscribe(Handles.LAYER_REORDER, "LayerManagerPane", this);
 	}
 	
 	
@@ -45,8 +47,16 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, 'N') )
 			onAddLayer();
 		}
-		else if( handle.equals(Handles.ACTIVE_SCENE) )
-		update();
+		else
+		{
+			switch( handle )
+			{
+				case Handles.ACTIVE_SCENE:
+				case Handles.LAYER_REORDER:
+					update();
+					break;
+			}
+		}
 	}
 	
 
@@ -56,14 +66,6 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		
 		if( this.editedLayerPropertiesPane == null )
 		{
-		
-				// Controls area
-			JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
-				containerControls.add(new ClickableButton("+",   (e) -> { onAddLayer(); }));
-				containerControls.add(new ClickableButton("-",   (e) -> { onDeleteLayer(); }));
-				containerControls.add(new ClickableButton("...", (e) -> { onEditLayer(); }));
-			container.add(containerControls);
-			
 				// Layer panes
 			Scene activeScene = Application.controller.getActiveScene();
 			
@@ -72,6 +74,15 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 				for( Layer layer : activeScene.getLayers() )
 				container.add((new LayerPane(this, layer)).render());
 			}
+		
+				// Controls area
+			JPanel containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
+				containerControls.add(new ClickableButton("+",   (e) -> { onAddLayer(); }));
+				containerControls.add(new ClickableButton("-",   (e) -> { onDeleteLayer(); }));
+				containerControls.add(new ClickableButton("...", (e) -> { onEditLayer(); }));
+				containerControls.add(new ClickableButton("^", (e) -> { onMoveLayerUp(); }));
+				containerControls.add(new ClickableButton("V", (e) -> { onMoveLayerDown(); }));
+			container.add(containerControls);
 		}
 		else
 		{
@@ -79,7 +90,6 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 			JPanel	containerControls = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);
 					containerControls.add(new ClickableButton("Back", (e) -> { onBackToLayerManager(); }));
 					containerControls.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
-					//containerControls.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 			container.add(containerControls);
 			
 			addEmptySpace(container, 2);
@@ -106,7 +116,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 		// Called upon adding a new layer (+)
 	private void onAddLayer() {
 		Scene scene = Application.controller.getActiveScene();
-		InstanceLayer newLayer = new InstanceLayer(scene);
+		TileLayer newLayer = new TileLayer(scene);
 		newLayer.setName("Layer " + System.currentTimeMillis());
 		
 		this.editedLayerPropertiesPane = new LayerPropertiesPane(this, newLayer, true);
@@ -115,12 +125,7 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	
 		// Called upon deleting a layer (-)
 	private void onDeleteLayer() {
-		Layer target = Application.controller.getActiveLayer();
-		
-		if( target == null )
-		return;
-		
-		Application.controller.getActiveScene().removeLayer(target);
+		Application.controller.removeActiveLayer();
 		update();
 	}
 	
@@ -128,6 +133,56 @@ public class LayerManagerPane extends GUIComponent implements Subscriber {
 	private void onBackToLayerManager() {
 		this.editedLayerPropertiesPane = null;
 		update();
+	}
+	
+		// Moves the selected Layer down a level in rendition order
+	private void onMoveLayerDown() {
+		Scene activeScene = Application.controller.getActiveScene();
+		Layer activeLayer = Application.controller.getActiveLayer();
+		ArrayList<Layer> layers = activeScene.getLayers();
+		
+		for( int i = 0; i < layers.size(); i++ )
+		{
+			Layer l = layers.get(i);
+			
+			if( l == activeLayer )
+			{
+				if( i == layers.size() - 1 )
+				break;
+				
+				layers.set(i, layers.get(i + 1));
+				layers.set(i + 1, l);
+				
+				break;
+			}
+		}
+		
+		Application.controller.subscriptionService.register(Handles.LAYER_REORDER, this);
+	}
+	
+		// Moves the selected Layer up a level in rendition order
+	private void onMoveLayerUp() {
+		Scene activeScene = Application.controller.getActiveScene();
+		Layer activeLayer = Application.controller.getActiveLayer();
+		ArrayList<Layer> layers = activeScene.getLayers();
+		
+		for( int i = 0; i < layers.size(); i++ )
+		{
+			Layer l = layers.get(i);
+			
+			if( l == activeLayer )
+			{
+				if( i == 0 )
+				break;
+				
+				layers.set(i, layers.get(i - 1));
+				layers.set(i - 1, l);
+				
+				break;
+			}
+		}
+		
+		Application.controller.subscriptionService.register(Handles.LAYER_REORDER, this);
 	}
 	
 	

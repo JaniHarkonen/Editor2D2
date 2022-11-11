@@ -10,6 +10,8 @@ public class TFill extends Tool {
 	public TFill() {
 		super();
 		this.name = "Fill";
+		this.description = "Fills a closed area with a tile."
+						 + "\nLeft-click: fill";
 		this.shortcutKey = "F";
 		this.icon = Application.resources.getGraphic("icon-tool-fill");
 	}

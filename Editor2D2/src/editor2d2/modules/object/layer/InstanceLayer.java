@@ -29,12 +29,12 @@ public class InstanceLayer extends Layer {
 		// Places an object to the given coordinates in the layer
 		// and places it into the object grid
 	@Override
-	public void place(int x, int y, Placeable p) {
-		place((double) x, y, p);
+	public Placeable place(int x, int y, Placeable p) {
+		return place((double) x, y, p);
 	}
 	
 	@Override
-	public void place(double x, double y, Placeable p) {
+	public Placeable place(double x, double y, Placeable p) {
 		Instance inst = (Instance) p;
 		int cw = this.objectGrid.getCellWidth(),
 			ch = this.objectGrid.getCellHeight();
@@ -46,7 +46,7 @@ public class InstanceLayer extends Layer {
 		
 			// Out of bounds
 		if( cell instanceof NullCell )
-		return;
+		return null;
 		
 			// No objects exist in the cell, create a new object list
 			// to represent the cell
@@ -61,6 +61,8 @@ public class InstanceLayer extends Layer {
 		inst.setOffsets(x - cx * cw, y - cy * ch);
 		
 		((ObjectArray) cell).add(inst);
+		
+		return null;
 	}
 	
 	@Override
@@ -154,7 +156,7 @@ public class InstanceLayer extends Layer {
 			Placeable p = gridSelection.get(i - offset);
 			Bounds pb = p.getBounds();
 			
-			if( pb.right < x1 || pb.bottom < y1 || pb.left > x2 || pb.top > y2 )
+			if( pb.right <= x1 || pb.bottom <= y1 || pb.left > x2 || pb.top > y2 )
 			{
 				gridSelection.remove(i - offset);
 				offset++;

@@ -1,15 +1,13 @@
 package editor2d2.gui.modal;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.components.CTextField;
 import editor2d2.gui.components.ClickableButton;
-import editor2d2.gui.components.requirements.RequireStringNonEmpty;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.HasAsset;
 
@@ -36,7 +34,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		setFactorySettings();
 		
 		this.host = host;
-		this.txtName = new CTextField("Name:", new RequireStringNonEmpty());
+		this.txtName = new CTextField("Name:", new RequireStringName());
 		this.txtIdentifier = new CTextField("Identifier:", new RequireUnusedIdentifier(Application.controller.getActiveProject()));
 		this.isEdited = false;
 	}
@@ -73,16 +71,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		container.add(wrappedElement);
 		container.add(containerControls);
 		
-		JPanel containerContainer = GUIUtilities.createDefaultPanel();
-		JScrollPane scroller = new JScrollPane(container);
-		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
-		JScrollBar verticalScrollBar = scroller.getVerticalScrollBar();
-		verticalScrollBar.setUnitIncrement(16);
-		
-		containerContainer.add(scroller);
-		return containerContainer;
+		return container;
 	}
 	
 		// Creates a default Asset with default settings and sets it as
@@ -129,7 +118,7 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		
 		finalizeCreation();
 		
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Called upon clicking "Save"
@@ -138,13 +127,13 @@ public abstract class ModalView<A extends Asset> extends GUIComponent implements
 		if( !saveChanges(true) )
 		return;
 		
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Called upon clicking "Cancel"
 		// CAN BE OVERRIDDEN
 	protected void actionCancel() {
-		this.host.closeModalWindow();
+		this.host.closeModalWindow(this);
 	}
 	
 		// Updates the Project and the Asset Pane to the creation

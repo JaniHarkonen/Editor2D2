@@ -108,7 +108,7 @@ public class Folder extends PseudoAsset {
 	
 	
 		// DEBUG - prints the folder contents
-	public void printFolder() {
+	/*public void printFolder() {
 		DebugUtils.log("folder: " + getName(), this);
 		for( Asset a : this.assets )
 		{
@@ -117,5 +117,5 @@ public class Folder extends PseudoAsset {
 			else
 			System.out.println(a);
 		}
-	}
+	}*/
 }

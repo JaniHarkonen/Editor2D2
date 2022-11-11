@@ -36,7 +36,8 @@ public class AScale extends Action {
 	@Override
 	public void performImpl(ActionContext c) {
 		AScaleContext ac = (AScaleContext) c;
-		double scaleIncrement = ac.scaleIncrement;
+		double horIncr = ac.horizontalScaleIncrement;
+		double verIncr = ac.verticalScaleIncrement;
 		
 		this.initialSelection = ac.initialSelection;
 		this.finalSelection = ac.selection;
@@ -49,7 +50,7 @@ public class AScale extends Action {
 			Instance ip = (Instance) p;
 			double 	w = ip.getWidth(),
 					h = ip.getHeight();
-			ip.setDimensions(w + scaleIncrement, h + scaleIncrement);
+			ip.setDimensions(w + horIncr, h + verIncr);
 		}
 	}
 

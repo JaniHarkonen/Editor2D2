@@ -6,6 +6,8 @@ import java.io.File;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 import editor2d2.Application;
 import editor2d2.gui.GUIUtilities;
@@ -52,14 +54,26 @@ public class ImageModal extends ModalView<Image> {
 		
 			// Preview
 		JLabel lPreview = new JLabel("Preview: ");
-		lPreview.setMinimumSize(new Dimension(Integer.MAX_VALUE, lPreview.getHeight()));
+		addEmptySpace(modal);
 		modal.add(lPreview);
+		lPreview.setMinimumSize(new Dimension(Integer.MAX_VALUE, 16));
 		
 				// Preview image
-			CImage previewImage = new CImage();
-			previewImage.setImage(image);
-			
-		modal.add(previewImage.render());
+			CImage imgPreview = new CImage();
+			imgPreview.setImage(image);
+		
+			// Wrap inside a scroll pane
+		JPanel imageContainer = GUIUtilities.createDefaultPanel();
+		JScrollPane scroller = new JScrollPane(imgPreview.render());
+		
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		JScrollBar verticalScrollBar = scroller.getVerticalScrollBar();
+		verticalScrollBar.setUnitIncrement(16);
+		
+		imageContainer.add(scroller);
+		modal.add(imageContainer);
 		
 			// Load image button
 		modal.add(new ClickableButton("Load", (e) -> { actionLoadFile(); }));

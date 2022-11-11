@@ -1,5 +1,6 @@
 package editor2d2.gui.components;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -51,6 +52,19 @@ public class CImage extends GUIComponent {
 			}
 		};
 		
+		double sx = 1;
+		double sy = 1;
+		
+		if( this.affineTransform != null )
+		{
+			sx = this.affineTransform.getScaleX();
+			sy = this.affineTransform.getScaleY();
+		}
+		
+		int sizeWidth = (int) (this.image.getWidth() * sx);
+		int sizeHeight = (int) (this.image.getHeight() * sy);
+		
+		this.container.setPreferredSize(new Dimension(sizeWidth, sizeHeight));
 		return this.container;
 	}
 	

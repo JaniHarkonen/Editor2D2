@@ -1,5 +1,11 @@
 package editor2d2.model.app.tool;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import editor2d2.Application;
@@ -19,13 +25,23 @@ public class TSelect extends Tool {
 		// List of initially selected Placeables
 	private ArrayList<Placeable> initialSelection;
 	
+		// Selection color (FILL)
+	private Color selectionFillColor;
+	
+		// Selection color (OUTLINE)
+	private Color selectionOutlineColor;
+	
 	
 	public TSelect() {
 		super();
 		this.name = "Select";
+		this.description = "Selects objects.\nLeft-click: select\nLeft-click + CTRL: add selection\nLeft-click + SHIFT: subtract selection";
 		this.shortcutKey = "S";
 		this.icon = Application.resources.getGraphic("icon-tool-select");
 		this.initialSelection = null;
+		
+		this.selectionOutlineColor = Color.RED;
+		this.selectionFillColor = new Color(255, 135, 135);
 	}
 	
 	@Override
@@ -49,6 +65,32 @@ public class TSelect extends Tool {
 			
 			return USE_SUCCESSFUL;
 		}
+		
+		BufferedImage selectionOverlay = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
+		double camZ = c.controller.getActiveScene().getCamera().getZ();
+		
+		Rectangle.Double selectionArea = new Rectangle.Double(
+			this.startX * camZ,
+			this.startY * camZ,
+			(c.locationX - this.startX) * camZ,
+			(c.locationY - this.startY) * camZ
+		);
+		
+		
+		Graphics2D gOverlay = (Graphics2D) selectionOverlay.getGraphics();
+		Composite prevComp = gOverlay.getComposite();
+		
+			// Transparent
+		gOverlay.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+		
+		gOverlay.setColor(this.selectionFillColor);
+		gOverlay.fill(selectionArea);
+		gOverlay.setColor(this.selectionOutlineColor);
+		gOverlay.draw(selectionArea);
+		
+		gOverlay.setComposite(prevComp);
+		
+		c.sceneView.setOverlay(selectionOverlay);
 		
 		return USE_FAILED;
 	}
@@ -98,6 +140,7 @@ public class TSelect extends Tool {
 		
 		(new ASelect()).perform(ac);
 		Application.controller.subscriptionService.register(Handles.SELECTED_PLACEABLE, Application.controller);
+		c.sceneView.setOverlay(null);
 		
 		return USE_SUCCESSFUL;
 	}

@@ -14,7 +14,14 @@ public abstract class AbstractWriter {
 	
 	public String writeLayer(Layer l) {
 		Grid ogrid = l.getObjectGrid();
-		return "data \"" + l.getName() + "\" " + ogrid.getCellWidth() + " " + ogrid.getCellHeight() + " " + l.getOpacity();
+		return (
+			"layer " + l.getReferencedAsset().getAssetClassName() + " \"" +
+			l.getName() + "\" " +
+			ogrid.getCellWidth() + " " +
+			ogrid.getCellHeight() + " " +
+			l.getOpacity() + " " +
+			(l.checkVisible() ? "true" : "false")
+		);
 	}
 	
 	public abstract String writePlaceable(Placeable p);

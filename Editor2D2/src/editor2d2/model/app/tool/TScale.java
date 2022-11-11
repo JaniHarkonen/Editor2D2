@@ -19,6 +19,10 @@ public class TScale extends Tool {
 	public TScale() {
 		super();
 		this.name = "Scale";
+		this.description = "Scale selection.\n"
+						 + "Left-click: scale with mouse\n"
+						 + "Left-click + CTRL: scale horizonally only\n"
+						 + "Left-click + SHIFT: scale vertically only";
 		this.shortcutKey = "D";
 		this.initialSelection = new ArrayList<Placeable>();
 	}
@@ -26,7 +30,6 @@ public class TScale extends Tool {
 	
 	@Override
 	protected int usePrimary(ToolContext c) {
-		
 		if( !c.isContinuation )
 		{
 			this.previousX = c.locationX;
@@ -42,7 +45,49 @@ public class TScale extends Tool {
 		}
 		
 		AScaleContext ac = new AScaleContext(c);
-		ac.scaleIncrement = c.locationX - this.previousX;
+		ac.horizontalScaleIncrement = c.locationX - this.previousX;
+		ac.verticalScaleIncrement = c.locationX - this.previousX;
+		ac.initialSelection = this.initialSelection;
+		
+		this.previousX = c.locationX;
+		(new AScale()).performImpl(ac);
+		
+		return USE_SUCCESSFUL;
+	}
+	
+	@Override
+	public int use(ToolContext c) {
+		if( c.selection == null || c.selection.size() <= 0 )
+		return USE_FAILED;
+		
+		if( !c.isContinuation )
+		{
+			this.previousX = c.locationX;
+			this.initialSelection = new ArrayList<Placeable>();
+			
+				// Duplicate each selected Placeable and store
+				// to enable rollback when undoing the Action
+			for( Placeable p : c.selection )
+			{
+				if( p instanceof Instance )
+				this.initialSelection.add(p.duplicate());
+			}
+		}
+		
+		double dx = c.locationX - this.previousX;
+		
+		AScaleContext ac = new AScaleContext(c);
+		
+		if( c.order == Tool.PRIMARY_FUNCTION )
+		{
+			ac.horizontalScaleIncrement = dx;
+			ac.verticalScaleIncrement = dx;
+		}
+		else if( c.order == Tool.TERTIARY_FUNCTION )
+		ac.horizontalScaleIncrement = dx;
+		else if( c.order == 4 )
+		ac.verticalScaleIncrement = dx;
+		
 		ac.initialSelection = this.initialSelection;
 		
 		this.previousX = c.locationX;

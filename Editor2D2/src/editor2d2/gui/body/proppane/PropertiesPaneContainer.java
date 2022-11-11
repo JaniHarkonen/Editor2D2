@@ -17,6 +17,8 @@ public class PropertiesPaneContainer extends GUIComponent implements Subscriber 
 	
 
 	public PropertiesPaneContainer() {
+		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_PROJECT, "PropertiesPaneContainer", this);
+		
 		Vendor v = Application.controller.subscriptionService.get(Handles.SELECTED_PLACEABLE, "PropertiesPaneContainer", this);
 		
 		if( v != null )
@@ -42,10 +44,17 @@ public class PropertiesPaneContainer extends GUIComponent implements Subscriber 
 
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
-		if( Handles.handleEquals(handle, Handles.SELECTED_PLACEABLE) )
+		switch( handle )
 		{
-			this.selectedPlaceable = ((Controller) vendor).placeableSelectionManager.getSelectedItem();
-			update();
+			case Handles.SELECTED_PLACEABLE:
+				this.selectedPlaceable = ((Controller) vendor).placeableSelectionManager.getSelectedItem();
+				break;
+			
+			case Handles.ACTIVE_PROJECT:
+				this.selectedPlaceable = null;
+				break;
 		}
+		
+		update();
 	}
 }

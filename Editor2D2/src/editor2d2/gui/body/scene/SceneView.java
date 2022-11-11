@@ -13,6 +13,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -41,6 +42,7 @@ import editor2d2.model.project.scene.Layer;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.subservice.Subscriber;
+import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
 public class SceneView extends GUIComponent implements Subscriber, Vendor {
@@ -86,13 +88,21 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		int d = Integer.MAX_VALUE / 2;
 		this.sceneDragger = new DragBox(-d, -d, d * 2, d * 2);
 		
-		Application.controller.getHotkeyListener().subscribe("SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
-		Application.window.subscriptionService.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
-		Application.controller.subscriptionService.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
+		SubscriptionService subsrvController = Application.controller.subscriptionService;
+		SubscriptionService subsrvWindow = Application.window.subscriptionService;
 		
-		Application.window.subscriptionService.register(Handles.SCENE_VIEW, this);
+		Application.controller.getHotkeyListener().subscribe("SceneView", this);
+		
+		subsrvWindow.subscribe(Handles.CURSOR_GRID_SETTINGS_CHANGED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
+		subsrvWindow.subscribe(Handles.CAMERA_RETURNED_TO_ORIGIN, "SceneView", this);
+		
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
+		subsrvController.subscribe(editor2d2.model.Handles.LAYER_REORDER, "SceneView", this);
+		
+		subsrvWindow.register(Handles.SCENE_VIEW, this);
 	}
 	
 	
@@ -109,7 +119,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
 			this.useOrder = Tool.TERTIARY_FUNCTION;
-			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_ALT) )
+			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SHIFT) )
 			this.useOrder = 4;
 			else
 			this.useOrder = Tool.PRIMARY_FUNCTION;
@@ -143,7 +153,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Cut selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'X') )
 			{
-				controller.placeableSelectionManager.copyToClipboard();
+				if( !controller.placeableSelectionManager.copyToClipboard() )
+				return;
+				
 				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
 			}
@@ -151,10 +163,16 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				// Paste selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'V') )
 			{
+				ArrayList<Placeable> clipboardSelection = controller.placeableSelectionManager.getClipboardSelection();
+				
+				if( clipboardSelection == null || clipboardSelection.size() <= 0 )
+				return;
+				
 				APasteContext ac = new APasteContext(controller, activeLayer);
-				ac.selection = controller.placeableSelectionManager.getClipboardSelection();
-				(new APaste()).perform(ac);
+				
+				ac.selection = clipboardSelection;
 				controller.selectTool(Tools.getAvailableTools()[1]);
+				(new APaste()).perform(ac);
 			}
 			
 				// Pan-mode
@@ -179,11 +197,13 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					// Layer grid visibility was toggled
 				case Handles.LAYER_GRID_TOGGLED:
 					this.drawLayerGrid = !this.drawLayerGrid;
-					update();
 					break;
 				
 					// Layer visibility was toggled
 				case editor2d2.model.Handles.LAYER_VISIBILITY:
+				case editor2d2.model.Handles.LAYER_DELETED:
+				case editor2d2.model.Handles.LAYER_REORDER:
+				case Handles.CAMERA_RETURNED_TO_ORIGIN:
 					break;
 					
 				default: skipUpdate = true; break;
@@ -287,8 +307,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					int ox = (int) onScreenOriginX;
 					int oy = (int) onScreenOriginY;
 					
-					double cw = cursorCellWidth * cam.getZ();
-					double ch = cursorCellHeight * cam.getZ();
+					double cw = cursorCellWidth * cam_z;
+					double ch = cursorCellHeight * cam_z;
 					
 					double right = Math.min(scene.getWidth(), cbounds.right);
 					double bottom = Math.min(scene.getHeight(), cbounds.bottom);
@@ -302,8 +322,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					{
 						if( activeLayer != null )
 						{
-							cw = activeLayer.getObjectGrid().getCellWidth() * cam.getZ();
-							ch = activeLayer.getObjectGrid().getCellHeight() * cam.getZ();
+							cw = activeLayer.getObjectGrid().getCellWidth() * cam_z;
+							ch = activeLayer.getObjectGrid().getCellHeight() * cam_z;
 							
 							gg.setColor(Color.RED);
 							dash[0] = 5.0f;
@@ -314,14 +334,23 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					}
 				}
 				
+					// Render overlay
 				if( overlay != null )
 				{
-					gg.drawImage(overlay,
+					gg.drawImage(
+						overlay, 
 						(int) onScreenOriginX,
 						(int) onScreenOriginY,
 						null
 					);
 				}
+				
+				Tool selectedTool = Application.controller.getSelectedTool();
+				
+				g.setColor(Color.BLACK);
+				
+				if( selectedTool != null )
+				drawStringNewline(selectedTool.getDescription(), 8, 16, 16, gg);
 			}
 		};
 		
@@ -330,6 +359,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if( isSpaceDown )
+				return;
+				
 				int toolUseOrder = -1;
 				
 				if( GUIUtilities.checkLeftClick(e) )
@@ -372,21 +404,22 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				
-				int toolUseOrder = -1;
-				
-				if( SwingUtilities.isLeftMouseButton(e) && !isSpaceDown )
-				toolUseOrder = useOrder;
-				else if( SwingUtilities.isRightMouseButton(e) )
-				toolUseOrder = Tool.SECONDARY_FUNCTION;
-				
-				if( toolUseOrder > 0 )
-				useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, toolUseOrder);
-				
-					// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
-					// on the first click)
-				else if( SwingUtilities.isLeftMouseButton(e) && isSpaceDown )
+				if( !isSpaceDown )
 				{
+					int toolUseOrder = -1;
+					
+					if( SwingUtilities.isLeftMouseButton(e) )
+					toolUseOrder = useOrder;
+					else if( SwingUtilities.isRightMouseButton(e) )
+					toolUseOrder = Tool.SECONDARY_FUNCTION;
+					
+					if( toolUseOrder > 0 )
+					useTool(cam.getInSceneX(e.getX()), cam.getInSceneY(e.getY()), true, toolUseOrder);
+				}
+				else if( SwingUtilities.isLeftMouseButton(e) )
+				{
+						// Handle Scene dragging (uses SwingUtilities as getButton returns non-zero only
+						// on the first click)
 					if( !sceneDragger.checkDragging() )
 					sceneDragger.startDragging(e.getX(), e.getY(), 1);
 					else
@@ -414,6 +447,15 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			for( int i = y1; i < y2; i += ch )
 			g.drawLine(x1, i, x2, i);
 		}
+	}
+	
+		// Draws a string containing newline characters
+	private void drawStringNewline(String str, int x, int y, int sep, Graphics2D g) {
+		String[] split = str.split("\n");
+		int s = split.length;
+		
+		for( int i = 0; i < s; i++ )
+		g.drawString(split[i], x, y + i * sep);
 	}
 	
 	

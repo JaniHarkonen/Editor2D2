@@ -1,41 +1,24 @@
-TODO - TMove
+TODO - ...
 
 OVERVIEW
-- Implement Tool for moving selections
-- Implement copy and paste
+
 
 SPECIFICS
-- add ability to paste Placeables, default to TMove
 
-
-REMEMBER: 	Instance layer selection bug is due to
-			an off by one error in the
-			selectPlaceables(int,int,int,int).
-			
-REMEMBER2:
-			HotkeyListener becomes messed up when the
-			window looses focus or a popup is displayed
-			while keys are being held.
 
 LATER
-- Layer writer should write whether the Layer is visible
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
-- ? should SelectionManagers be declared in the AppState
-- de-messify Root
 - speedup Tile rendering performance by getting the subimage
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
 	-- pay attention to memory usage as well
-- fix object selection and selection rendering
+	
 	   
 TASKS LEFT
-- write TMove (undo, redo)
-	-- add copy and paste (cut?)
-- hotkeys (for TMove)
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
@@ -46,6 +29,10 @@ TASKS LEFT
 - remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils
 - fix remaining minor bugs
+	-- remove ability to copy unplaced Placeables
+	-- remove ability to place placed Placeables
+	-- refresh SceneView after removing an Asset
+	-- deselect all Placeables after removing an Asset
 - create a TEMPLATE module
 - remove comments, add Javadoc
 	   

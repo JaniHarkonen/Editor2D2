@@ -2,8 +2,10 @@ package editor2d2.modules.image.proppane;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -13,6 +15,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.proppane.PropertiesPane;
@@ -50,6 +53,12 @@ public class TilePropertiesPane extends PropertiesPane {
 		// Text field for the height of a selection cell
 	private CTextField txtSelectionHeight;
 	
+		// Scroll pane for the tile palette
+	private JScrollPane spPalette;
+	
+		// Last scroll pane position
+	private Point paletteScrollPanePosition;
+	
 	
 	public TilePropertiesPane(Placeable source) {
 		super(source);
@@ -65,6 +74,8 @@ public class TilePropertiesPane extends PropertiesPane {
 		this.txtSelectionCellY = new CTextField("Y: ", new RequireIntegerBetween(Require.MIN_ONLY, 0));
 		this.txtSelectionWidth = new CTextField("Width: ", new RequireIntegerBetween(1, img.getWidth()));
 		this.txtSelectionHeight = new CTextField("Height: ", new RequireIntegerBetween(1, img.getHeight()));
+		
+		this.paletteScrollPanePosition = new Point(0, 0);
 	}
 	
 	
@@ -90,6 +101,13 @@ public class TilePropertiesPane extends PropertiesPane {
 		this.selectionHeight = h;
 		
 		((Tile) source).setDrawArea(cx * w, cy * h, w, h);
+		updateWithState();
+	}
+	
+		// Updates the GUI-component storing the state first
+	public void updateWithState() {
+		this.paletteScrollPanePosition = new Point(this.spPalette.getViewport().getViewPosition());
+		
 		update();
 	}
 	
@@ -129,6 +147,8 @@ public class TilePropertiesPane extends PropertiesPane {
 			}
 		};
 		
+		palette.setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+		
 		palette.addMouseListener(new MouseAdapter() {
 			
 			@Override
@@ -144,7 +164,18 @@ public class TilePropertiesPane extends PropertiesPane {
 			}
 		});
 		
-		container.add(palette);
+			// Wrap the palette inside a scroll bar
+		JPanel paletteContainer = GUIUtilities.createDefaultPanel();
+		this.spPalette = new JScrollPane(palette);
+		
+		this.spPalette.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		this.spPalette.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		this.spPalette.getHorizontalScrollBar().setUnitIncrement(16);
+		this.spPalette.getVerticalScrollBar().setUnitIncrement(16);
+		this.spPalette.getViewport().setViewPosition(this.paletteScrollPanePosition);
+		
+		paletteContainer.add(this.spPalette);
+		container.add(paletteContainer);
 		
 			// Palette selection cell controls
 		JPanel paletteCellContainer = GUIUtilities.createDefaultPanel(GUIUtilities.BOX_LINE_AXIS);

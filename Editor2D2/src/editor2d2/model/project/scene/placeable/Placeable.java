@@ -93,7 +93,10 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Deletes the Placeable from the Layer it's on
 		// CAN BE OVERRIDDEN
 	public void delete() {
-		this.layer.delete(getCellX(), getCellY());
+		if( this.layer == null )
+		return;
+		
+		this.layer.delete(getCellX(), getCellY(), this);
 	}
 	
 		// Draws a rectangle around a given area if the Placeable
@@ -108,26 +111,45 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 			return;
 		}
 		
-		int x1 = x;
-		int y1 = y;
-		int x2 = x;
-		int y2 = y;
+			// Determine highlight rectangle starting point
+		Point.Double p = GeometryUtilities.pointAtDistance(x + w / 2, y + h / 2, w / 2, rotation);
+		Point.Double p2 = GeometryUtilities.pointAtDistance(p.x, p.y, h / 2, rotation + 90);
 		
-		for( int i = 0; i < 3; i++ )
-		{
-			x1 = x2;
-			y1 = y2;
-			Point.Double p = GeometryUtilities.pointAtDistance(x1, y1, h, rotation + i * 90);
-			x2 = (int) p.x;
-			y2 = (int) p.y;
-			
-			g.drawLine(x1, y1, x2, y2);
-		}
+			// Right side
+		int x1 = (int) p2.x;
+		int y1 = (int) p2.y;
 		
+		p = GeometryUtilities.pointAtDistance(x1, y1, w, rotation + 180);
+		
+		int x2 = (int) p.x;
+		int y2 = (int) p.y;
+		
+		g.drawLine(x1, y1, x2, y2);
+		
+			// Bottom
 		x1 = x2;
 		y1 = y2;
-		x2 = x;
-		y2 = y;
+		p = GeometryUtilities.pointAtDistance(x1, y1, h, rotation + 270);
+		x2 = (int) p.x;
+		y2 = (int) p.y;
+		
+		g.drawLine(x1, y1, x2, y2);
+		
+			// Left side
+		x1 = x2;
+		y1 = y2;
+		p = GeometryUtilities.pointAtDistance(x1, y1, w, rotation);
+		x2 = (int) p.x;
+		y2 = (int) p.y;
+		
+		g.drawLine(x1, y1, x2, y2);
+		
+			// Top
+		x1 = x2;
+		y1 = y2;
+		p = GeometryUtilities.pointAtDistance(x1, y1, h, rotation + 90);
+		x2 = (int) p.x;
+		y2 = (int) p.y;
 		
 		g.drawLine(x1, y1, x2, y2);
 	}
@@ -214,5 +236,12 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Sets the Placeable as selected
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
+	}
+	
+		// Sets the Layer of the Placeable
+		// NOTICE: changeLayer should typically be utilized when
+		// moving a Placeable to a different Layer
+	public void setLayer(Layer layer) {
+		this.layer = layer;
 	}
 }

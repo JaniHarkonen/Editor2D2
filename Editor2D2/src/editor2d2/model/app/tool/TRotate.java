@@ -16,6 +16,8 @@ public class TRotate extends Tool {
 	public TRotate() {
 		super();
 		this.name = "Rotate";
+		this.description = "Rotate selection towards mouse.\n"
+						 + "Left-click: rotate";
 		this.shortcutKey = "R";
 		this.icon = Application.resources.getGraphic("icon-tool-rotate");
 	}

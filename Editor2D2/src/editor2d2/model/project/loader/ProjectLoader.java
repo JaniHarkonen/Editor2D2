@@ -22,6 +22,7 @@ public class ProjectLoader {
 	public static final int ASSET = 1;
 	public static final int LAYER = 2;
 	public static final int PLACEABLE = 3;
+	public static final int COMPILATION_STATEMENT = 4;
 	
 	public static final int PARSE_SUCCESSFUL = 1;
 	public static final int PARSE_FAILED = 2;
@@ -48,8 +49,12 @@ public class ProjectLoader {
 		// Folder that Assets are being loaded into
 	private Folder targetFolder;
 	
+		// Lines of compilation statement left to read
+	private int compilationStatementLinesLeft;
+	
 		// Reference to the loader that is currently being
 		// used to load Placeable
+	@SuppressWarnings("rawtypes")
 	private AbstractLoader currentLoader;
 	
 	public ProjectLoader() {
@@ -60,6 +65,7 @@ public class ProjectLoader {
 		this.expectedLineType = ANY;
 		this.folderStack = new ArrayDeque<Folder>();
 		this.targetFolder = null;
+		this.compilationStatementLinesLeft = 0;
 	}
 	
 
@@ -88,6 +94,22 @@ public class ProjectLoader {
 				// Parse project file lines
 			while( (line = br.readLine()) != null )
 			{
+					// Read compilation statement
+				if( this.expectedLineType == COMPILATION_STATEMENT )
+				{
+					Scene scene = this.targetScene;
+					scene.setCompilationStatement(scene.getCompilationStatement() + line);
+					
+					this.compilationStatementLinesLeft--;
+					
+					if( this.compilationStatementLinesLeft <= 0 )
+					this.expectedLineType = LAYER;
+					else
+					scene.setCompilationStatement(scene.getCompilationStatement() + "\n");
+					
+					continue;
+				}
+				
 				ParsedCommand pc = parser.parse(line);
 				
 				if( pc == null )
@@ -122,6 +144,7 @@ public class ProjectLoader {
 	
 		// Handles the interpretation of parsed project
 		// file lines
+	@SuppressWarnings("unchecked")
 	private int interpret(ParsedCommand pc) {
 		
 		switch( pc.getCommand() )
@@ -140,6 +163,13 @@ public class ProjectLoader {
 					String name = pc.getString(0);
 					int width = (int) pc.getNumeral(1);
 					int height = (int) pc.getNumeral(2);
+					int compilationStatementLength = (int) pc.getNumeral(4);
+					
+					if( compilationStatementLength > 0 )
+					{
+						this.expectedLineType = COMPILATION_STATEMENT;
+						this.compilationStatementLinesLeft = compilationStatementLength;
+					}
 					
 					createScene(name, width, height);
 					
@@ -162,8 +192,9 @@ public class ProjectLoader {
 					int cw = (int) pc.getNumeral(2);
 					int ch = (int) pc.getNumeral(3);
 					double opacity = pc.getNumeral(4);
+					boolean isVisible = pc.getBoolean(5);
 					
-					createLayer(assetClass, name, cw, ch, opacity);
+					createLayer(assetClass, name, cw, ch, opacity, isVisible);
 					this.currentLoader = FactoryService.getFactories(assetClass).createLoader();
 					
 					return PARSE_SUCCESSFUL;
@@ -268,10 +299,15 @@ public class ProjectLoader {
 	
 		// Creates a new Layer and adds it to the currently
 		// loaded Scene
-	private void createLayer(String assetClass, String name, int cw, int ch, double opacity) {
+	private void createLayer(String assetClass,
+							 String name,
+							 int cw, int ch,
+							 double opacity,
+							 boolean isVisible) {
 		this.targetLayer = FactoryService.getFactories(assetClass).createLayer(this.targetScene, cw, ch);
 		this.targetLayer.setName(name);
 		this.targetLayer.setOpacity(opacity);
+		this.targetLayer.setVisible(isVisible);
 		
 		this.targetScene.addLayer(this.targetLayer);
 	}

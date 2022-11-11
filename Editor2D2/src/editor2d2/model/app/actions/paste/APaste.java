@@ -2,7 +2,6 @@ package editor2d2.model.app.actions.paste;
 
 import java.util.ArrayList;
 
-import editor2d2.DebugUtils;
 import editor2d2.model.app.actions.Action;
 import editor2d2.model.app.actions.ActionContext;
 import editor2d2.model.project.scene.Layer;
@@ -37,7 +36,6 @@ public class APaste extends Action {
 		{
 			Placeable dp = p.duplicate();
 			this.initialSelection.add(dp);
-			DebugUtils.log(p + " vs " + dp, this);
 		}
 		
 		ac.controller.placeableSelectionManager.setSelection(this.initialSelection);

@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import editor2d2.Application;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.gui.fsysdialog.FileSystemDialogResponse;
 import editor2d2.gui.fsysdialog.FileSystemDialogSettings;
 import editor2d2.gui.metadata.MetaDataModal;
@@ -22,6 +23,7 @@ import editor2d2.model.project.Project;
 import editor2d2.model.project.loader.ProjectLoader;
 import editor2d2.model.project.scene.Scene;
 import editor2d2.model.project.writer.ProjectWriter;
+import editor2d2.modules.AbstractFactories;
 import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
@@ -33,6 +35,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 
 	public WindowToolbar() {
 		generate();
+		this.setFocusable(false);
 		
 		Application.controller.getHotkeyListener().subscribe("WindowToolbar", this);
 	}
@@ -68,7 +71,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	private void generate() {
 		
 			// Project menu
-		JMenuItem itemNewProject = new JMenuItem(new AbstractAction("New project") {
+		JMenuItem itemNewProject = new JMenuItem(new AbstractAction("New project (Ctrl+N)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -76,7 +79,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 
-		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project") {
+		JMenuItem itemOpenProject = new JMenuItem(new AbstractAction("Open project (Ctrl+O)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -84,7 +87,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 		
-		JMenuItem itemSaveProject = new JMenuItem(new AbstractAction("Save project") {
+		JMenuItem itemSaveProject = new JMenuItem(new AbstractAction("Save project (Ctrl+S)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -92,7 +95,7 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 		
-		JMenuItem itemSaveProjectAs = new JMenuItem(new AbstractAction("Save project as...") {
+		JMenuItem itemSaveProjectAs = new JMenuItem(new AbstractAction("Save project as... (Ctrl+Shift+S)") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,7 +121,12 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			
 				// Populate Asset menu
 			for( String type : ctypes )
-			menuAsset.add(createAssetMenuItem("Create " + type, FactoryService.getFactories(type).createModal(modal, true)));
+			{
+				AbstractFactories<? extends Asset> factories = FactoryService.getFactories(type);
+				String title = "Create " + type + " (Ctrl+Shift+" + factories.getAssetCreationShortcut() + ")";
+				
+				menuAsset.add(createAssetMenuItem(title, factories.createModal(modal, true)));
+			}
 		}
 		
 			// Scene settings
@@ -177,6 +185,17 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	
 		// Creates a new Project and opens it in the editor
 	private void actionOnNewProject() {
+		int result = JOptionPane.showConfirmDialog(
+			null,
+			"All unsaved changes will be lost.\n"
+		  + "Are you sure you want to continue?",
+		    "New project",
+		    JOptionPane.OK_CANCEL_OPTION
+		);
+		
+		if( result != JOptionPane.OK_OPTION )
+		return;
+		
 		Project p = new Project();
 		Application.controller.openProject(p);
 	}
@@ -191,6 +210,13 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		return;
 		
 		Project p = (new ProjectLoader()).loadProject(res.filepaths[0]);
+		
+		if( p == null )
+		{
+			JOptionPane.showMessageDialog(null, "Error: File doesn't exist!", "Error loading", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		Application.controller.openProject(p);
 	}
 	
@@ -220,8 +246,11 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	private void actionOnRenameScene() {
 		Scene scene = Application.controller.getActiveScene();
 		String newName = JOptionPane.showInputDialog(null, "Enter scene name", scene.getName());
+		RequireStringName rfName = new RequireStringName();
 		
-		if( newName == null || newName.equals("") )
+		rfName.updateInput(newName);
+		
+		if( !rfName.checkValid() )
 		return;
 		
 		Application.controller.renameActiveScene(newName);

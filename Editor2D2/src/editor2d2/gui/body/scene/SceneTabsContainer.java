@@ -13,6 +13,7 @@ import editor2d2.Application;
 import editor2d2.gui.GUIComponent;
 import editor2d2.gui.GUIUtilities;
 import editor2d2.gui.body.scenectrl.SceneControlsPane;
+import editor2d2.gui.components.requirements.RequireStringName;
 import editor2d2.model.Handles;
 import editor2d2.model.app.HotkeyListener;
 import editor2d2.model.project.scene.Scene;
@@ -128,8 +129,10 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		// Creates a new scene upon clicking +
 	private void actionCreateScene() {
 		String name = (String) JOptionPane.showInputDialog("Enter scene name:");
+		RequireStringName rfName = new RequireStringName();
+		rfName.updateInput(name);
 		
-		if( name == null || name.equals("") )
+		if( !rfName.checkValid() )
 		return;
 		
 			// Creates a new Scene and adds it to the target project

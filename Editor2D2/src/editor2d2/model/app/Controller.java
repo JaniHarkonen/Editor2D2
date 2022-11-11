@@ -37,7 +37,7 @@ public class Controller implements Vendor {
 	private Controller(AppState appState) {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
-		this.placeableSelectionManager = new PlaceableSelectionManager();//new SelectionManager<Placeable>();
+		this.placeableSelectionManager = new PlaceableSelectionManager();
 		DebugUtils.controllerDebugSetup(this);
 	}
 	
@@ -123,7 +123,7 @@ public class Controller implements Vendor {
 	public void renameActiveScene(String newName) {
 		getActiveScene().setName(newName);
 		
-		subscriptionService.register(Handles.ACTIVE_SCENE, this);
+		this.subscriptionService.register(Handles.ACTIVE_SCENE, this);
 	}
 	
 		// Deletes the active Scene
@@ -136,6 +136,21 @@ public class Controller implements Vendor {
 		int sceneCount = activeProject.getAllScenes().size() - 1;
 		int newIndex = Math.min(sceneCount, index);
 		openScene(newIndex);
+	}
+	
+		// Removes the active Layer
+	public void removeActiveLayer() {
+		Layer activeLayer = getActiveLayer();
+		Scene activeScene = getActiveScene();
+		
+		if( activeScene == null || activeLayer == null )
+		return;
+		
+		activeScene.removeLayer(activeLayer);
+		
+		selectLayer(null);
+		this.placeableSelectionManager.deselect();
+		this.subscriptionService.register(Handles.LAYER_DELETED, this);
 	}
 	
 	/******************* SELECTION *********************/
@@ -162,6 +177,8 @@ public class Controller implements Vendor {
 		// into the active Scene
 	public void selectTool(Tool tool) {
 		this.appState.selectedTool = tool;
+		
+		this.subscriptionService.register(Handles.SELECTED_TOOL, this);
 	}
 	
 		// Uses/stops using the currently selected Tool
