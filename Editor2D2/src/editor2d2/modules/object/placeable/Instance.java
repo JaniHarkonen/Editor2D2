@@ -95,6 +95,9 @@ public class Instance extends Placeable {
 	
 	@Override
 	public void delete() {
+		if( this.layer == null )
+		return;
+		
 		ObjectArray oa = (ObjectArray) this.layer.getObjectGrid().get(getCellX(), getCellY());
 		oa.remove(this);
 	}

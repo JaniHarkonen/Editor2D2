@@ -24,7 +24,7 @@ SPECIFICS
 		x rectangle highlighting selection should be centered
 		  (anchored) around the Instance (currently anchor point
 		  is at the top-left corner)
-	-- test move (undo, redo)
+	XX test move (undo, redo)
 	XX test place selection, deletion, allow stack, single (undo, redo)
 	XX test flood fill (undo, redo)
 	XX test rotate (undo, redo)

@@ -69,29 +69,35 @@ public abstract class Layer implements HasAsset {
 	
 		// Places a given Gridable object into a cell in the object grid
 		// CAN BE OVERRIDDEN FOR MORE COMPLICATED PLACEABLES
-	public void place(int cx, int cy, Placeable p) {
+	public Placeable place(int cx, int cy, Placeable p) {
+		Placeable replaced = (Placeable) this.objectGrid.get(cx, cy);
+		
 		p.setCellPosition(cx, cy);
 		p.setOffsets(0, 0);
 		p.changeLayer(this);
 		
 		this.objectGrid.put(cx, cy, p);
+		
+		return replaced;
 	}
 	
 		// Places a given Placeable object into a cell in the object grid
 		// converting its coordinates into cellular coordinates
 		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
 		// COORDINATES
-	public void place(double x, double y, Placeable p) {
-		place((int) (x / this.objectGrid.getCellWidth()), (int) (y / this.objectGrid.getCellHeight()), p);
+	public Placeable place(double x, double y, Placeable p) {
+		return place((int) (x / this.objectGrid.getCellWidth()), (int) (y / this.objectGrid.getCellHeight()), p);
 	}
 	
 		// Attempts to place a Gridable object into a cell checking it first
 		// using the layer filter
 		// THIS METHOD SHOULD BE FAVORED OVER place
 		// ONLY USE place WHEN YOU KNOW THAT THE PLACEABLE IS ACCEPTED BY THE LAYER
-	public void attemptPlace(int cx, int cy, Placeable p) {
+	public Placeable attemptPlace(int cx, int cy, Placeable p) {
 		if( filterCheck(p) )
-		place(cx, cy, p);
+		return place(cx, cy, p);
+		
+		return null;
 	}
 	
 		// Attempts to place a Placeable object into a cell checking it first
@@ -99,9 +105,11 @@ public abstract class Layer implements HasAsset {
 		// cellular coordinates.
 		// CAN BE OVERRIDDEN FOR LAYERS THAT NEED TO RESPECT THE ACTUAL
 		// COORDIANTES
-	public void attemptPlace(double x, double y, Placeable p) {
+	public Placeable attemptPlace(double x, double y, Placeable p) {
 		if( filterCheck(p) )
-		place(x, y, p);
+		return place(x, y, p);
+	
+		return null;
 	}
 	
 	
@@ -110,6 +118,18 @@ public abstract class Layer implements HasAsset {
 		Gridable deleted = this.objectGrid.get(cx, cy);
 		
 		if( deleted == null || deleted instanceof NullCell )
+		return null;
+		
+		this.objectGrid.remove(cx, cy);
+		return (Placeable) deleted;
+	}
+	
+		// Removes a Gridable object from a cell replacing it with NULL
+		// IF the Gridable is the given one
+	public Placeable delete(int cx, int cy, Gridable g) {
+		Gridable deleted = this.objectGrid.get(cx, cy);
+		
+		if( deleted == null || deleted != g || deleted instanceof NullCell )
 		return null;
 		
 		this.objectGrid.remove(cx, cy);

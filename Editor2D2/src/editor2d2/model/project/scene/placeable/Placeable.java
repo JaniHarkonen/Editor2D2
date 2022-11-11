@@ -93,7 +93,10 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Deletes the Placeable from the Layer it's on
 		// CAN BE OVERRIDDEN
 	public void delete() {
-		this.layer.delete(getCellX(), getCellY());
+		if( this.layer == null )
+		return;
+		
+		this.layer.delete(getCellX(), getCellY(), this);
 	}
 	
 		// Draws a rectangle around a given area if the Placeable
@@ -233,5 +236,12 @@ public abstract class Placeable implements Gridable, Drawable, HasAsset {
 		// Sets the Placeable as selected
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
+	}
+	
+		// Sets the Layer of the Placeable
+		// NOTICE: changeLayer should typically be utilized when
+		// moving a Placeable to a different Layer
+	public void setLayer(Layer layer) {
+		this.layer = layer;
 	}
 }

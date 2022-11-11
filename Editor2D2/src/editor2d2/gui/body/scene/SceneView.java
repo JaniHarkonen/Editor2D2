@@ -162,8 +162,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			{
 				APasteContext ac = new APasteContext(controller, activeLayer);
 				ac.selection = controller.placeableSelectionManager.getClipboardSelection();
-				(new APaste()).perform(ac);
 				controller.selectTool(Tools.getAvailableTools()[1]);
+				(new APaste()).perform(ac);
 			}
 			
 				// Pan-mode

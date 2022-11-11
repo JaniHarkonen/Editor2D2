@@ -12,11 +12,12 @@ public class AMove extends Action {
 	
 	private ArrayList<Placeable> selection;
 	
+	private ArrayList<Placeable> replacedPlaceables;
+	
 	private ArrayList<Point.Double> initialPositions;
 	
 
-	@Override
-	public void undo() {
+	public void undo(boolean replace) {
 		for( int i = 0; i < this.selection.size(); i++ )
 		{
 			Placeable p = this.selection.get(i);
@@ -31,17 +32,29 @@ public class AMove extends Action {
 			off.x = prevX;
 			off.y = prevY;
 		}
+		
+		if( replace )
+		{
+			for( Placeable p : this.replacedPlaceables )
+			p.getLayer().place(p.getX(), p.getY(), p);
+		}
+	}
+	
+	@Override
+	public void undo() {
+		undo(true);
 	}
 
 	@Override
 	public void redo() {
-		undo();
+		undo(false);
 	}
 
 	@Override
 	public void performImpl(ActionContext c) {
 		AMoveContext ac = (AMoveContext) c;
 		this.initialPositions = new ArrayList<Point.Double>();
+		this.replacedPlaceables = new ArrayList<Placeable>();
 		this.selection = new ArrayList<Placeable>();
 		
 		for( int i = 0; i < ac.selection.size(); i++ )
@@ -49,9 +62,14 @@ public class AMove extends Action {
 			Placeable p = ac.selection.get(i);
 			Point.Double off = ac.offsets.get(i);
 			
+			p.delete();
 			this.selection.add(p);
 			this.initialPositions.add(new Point.Double(p.getX(), p.getY()));
-			ac.targetLayer.attemptPlace(ac.locationX + off.x, ac.locationY + off.y, p);
+			
+			Placeable replaced = ac.targetLayer.attemptPlace(ac.locationX + off.x, ac.locationY + off.y, p);
+			
+			if( replaced != null )
+			this.replacedPlaceables.add(replaced);
 		}
 	}
 }
