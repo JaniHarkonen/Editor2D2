@@ -1,12 +1,10 @@
-TODO - ...
+TODO - Later
 
 OVERVIEW
-
+- Implement all the changes that were supposed to be implemented
+  "later"
 
 SPECIFICS
-
-
-LATER
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
@@ -16,13 +14,15 @@ LATER
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
 	-- pay attention to memory usage as well
-	
-	   
-TASKS LEFT
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
 	   need to be written
+
+LATER
+
+	   
+TASKS LEFT
 - make sure that all the functionalities work with minor
   bugs
 - finalize graphics
@@ -33,6 +33,9 @@ TASKS LEFT
 	-- remove ability to place placed Placeables
 	-- refresh SceneView after removing an Asset
 	-- deselect all Placeables after removing an Asset
+	-- selection is not being rendered when selection
+	   starting coordinates are less than ending coords
+	-- selection ignores SPACE being held
 - create a TEMPLATE module
 - remove comments, add Javadoc
 	   
