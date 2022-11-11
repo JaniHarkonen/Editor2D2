@@ -19,6 +19,8 @@ public final class Handles {
 	public static final String CURSOR_GRID_TOGGLED = "cursor-grid-toggled";
 	public static final String LAYER_GRID_TOGGLED = "layer-grid-toggled";
 	public static final String CAMERA_RETURNED_TO_ORIGIN = "camera-returned-to-origin";
+	public static final String HORIZONTAL_SPLIT_ADJUSTED = "horizontal-split-adjusted";
+	public static final String VERTICAL_SPLIT_ADJUSTED = "vertical-split-adjusted";
 	
 		// Do not instantiate
 	private Handles() { }

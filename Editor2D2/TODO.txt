@@ -5,10 +5,12 @@ OVERVIEW
   "later"
 
 SPECIFICS
-- Tiles should write their tile coordinates to the map file
-- Tiles should read their tile coordinates from the map file
+X Tiles should write their tile coordinates to the map file
+X Tiles should read their tile coordinates from the map file
 - EObjects should write their sprites
 - EObjects should read their sprites
+- Scene bounds are currently rendered as a giant rectangle
+	-- only render bounds when they are visible
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon

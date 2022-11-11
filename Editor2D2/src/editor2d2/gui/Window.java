@@ -70,6 +70,7 @@ public class Window implements Vendor {
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.window.addKeyListener(Application.controller.getHotkeyListener());
 		this.window.setFocusable(true);
+		
 		this.window.addWindowFocusListener(new WindowFocusListener() {
 
 			@Override

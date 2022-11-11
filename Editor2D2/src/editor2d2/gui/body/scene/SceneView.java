@@ -97,6 +97,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		subsrvWindow.subscribe(Handles.CURSOR_GRID_TOGGLED, "SceneView", this);
 		subsrvWindow.subscribe(Handles.LAYER_GRID_TOGGLED, "SceneView", this);
 		subsrvWindow.subscribe(Handles.CAMERA_RETURNED_TO_ORIGIN, "SceneView", this);
+		subsrvWindow.subscribe(Handles.HORIZONTAL_SPLIT_ADJUSTED, "SceneView", this);
 		
 		subsrvController.subscribe(editor2d2.model.Handles.LAYER_VISIBILITY, "SceneView", this);
 		subsrvController.subscribe(editor2d2.model.Handles.LAYER_DELETED, "SceneView", this);
@@ -204,6 +205,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				case editor2d2.model.Handles.LAYER_DELETED:
 				case editor2d2.model.Handles.LAYER_REORDER:
 				case Handles.CAMERA_RETURNED_TO_ORIGIN:
+				case Handles.HORIZONTAL_SPLIT_ADJUSTED:
+				case Handles.VERTICAL_SPLIT_ADJUSTED:
 					break;
 					
 				default: skipUpdate = true; break;
@@ -266,15 +269,21 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					// Render the Scene
 				cam.render(gg);
 				
+				Bounds cbounds = cam.getBounds();
+				Rectangle2D.Double bounds_cam = new Rectangle2D.Double(
+					cam.getOnScreenX(cbounds.left), cam.getOnScreenY(cbounds.top),
+					cam.getOnScreenX(cbounds.right), cam.getOnScreenY(cbounds.bottom)
+				);
+				
 					// Render the Scene bounds
+				double onScreenOriginX = cam.getOnScreenX(0);
+				double onScreenOriginY = cam.getOnScreenY(0);
+				
 				float[] dash = { 6.0f, 6.0f };
 				gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 0.0f));
 				gg.setColor(Color.BLACK);
 				
 				double cam_z = cam.getZ();
-				
-				double onScreenOriginX = cam.getOnScreenX(0);
-				double onScreenOriginY = cam.getOnScreenY(0);
 				
 				Rectangle2D.Double bounds_scene = new Rectangle2D.Double(
 					onScreenOriginX, onScreenOriginY,
@@ -284,11 +293,6 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				gg.draw(bounds_scene);
 				
 					// Render the Camera bounds
-				Bounds cbounds = cam.getBounds();
-				Rectangle2D.Double bounds_cam = new Rectangle2D.Double(
-					cam.getOnScreenX(cbounds.left), cam.getOnScreenY(cbounds.top),
-					cam.getOnScreenX(cbounds.right), cam.getOnScreenY(cbounds.bottom)
-				);
 				
 				gg.setColor(Color.RED);
 				gg.draw(bounds_cam);
@@ -304,32 +308,32 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 2.0f));
 					gg.setColor(Color.BLACK);
 					
-					int ox = (int) onScreenOriginX;
-					int oy = (int) onScreenOriginY;
+					int ox = (int) Math.max(onScreenOriginX % cursorCellWidth, onScreenOriginX);
+					int oy = (int) Math.max(onScreenOriginY % cursorCellHeight, onScreenOriginY);
 					
 					double cw = cursorCellWidth * cam_z;
 					double ch = cursorCellHeight * cam_z;
 					
-					double right = Math.min(scene.getWidth(), cbounds.right);
-					double bottom = Math.min(scene.getHeight(), cbounds.bottom);
+					double right = cam.getOnScreenX(Math.min(scene.getWidth(), cbounds.right));
+					double bottom = cam.getOnScreenY(Math.min(scene.getHeight(), cbounds.bottom));
 					
 						// Render cursor grid
 					if( drawCursorGrid )
-					drawGrid(gg, ox, oy, (int) cam.getOnScreenX(right), (int) cam.getOnScreenY(bottom), (int) cw, (int) ch);
+					drawGrid(gg, ox, oy, (int) right, (int) bottom, (int) cw, (int) ch);
 					
 						// Render Layer grid
 					if( drawLayerGrid )
 					{
 						if( activeLayer != null )
 						{
-							cw = activeLayer.getObjectGrid().getCellWidth() * cam_z;
-							ch = activeLayer.getObjectGrid().getCellHeight() * cam_z;
+							cw = activeLayer.getObjectGrid().getCellWidth();
+							ch = activeLayer.getObjectGrid().getCellHeight();
 							
 							gg.setColor(Color.RED);
 							dash[0] = 5.0f;
 							dash[1] = 5.0f;
 							gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 2.0f));
-							drawGrid(gg, ox, oy, (int) cam.getOnScreenX(right), (int) cam.getOnScreenY(bottom), (int) cw, (int) ch);
+							drawGrid(gg, ox, oy, (int) right, (int) bottom, (int) cw, (int) ch);
 						}
 					}
 				}

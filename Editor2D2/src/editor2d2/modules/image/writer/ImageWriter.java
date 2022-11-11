@@ -1,9 +1,12 @@
 package editor2d2.modules.image.writer;
 
+import java.awt.Rectangle;
+
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.writer.AbstractWriter;
 import editor2d2.modules.image.asset.Image;
+import editor2d2.modules.image.placeable.Tile;
 
 public class ImageWriter extends AbstractWriter {
 
@@ -16,7 +19,17 @@ public class ImageWriter extends AbstractWriter {
 
 	@Override
 	public String writePlaceable(Placeable p) {
-		return p.getAsset().getIdentifier() + " " + p.getCellX() + " " + p.getCellY();
+		Tile t = (Tile) p;
+		Rectangle tileBounds = t.getDrawArea();
+		
+		return (
+			t.getAsset().getIdentifier() + " " +
+			t.getCellX() + " " +
+			t.getCellY() + " " +
+			tileBounds.x + " " +
+			tileBounds.y + " " +
+			tileBounds.width + " " +
+			tileBounds.height
+		);
 	}
-
 }

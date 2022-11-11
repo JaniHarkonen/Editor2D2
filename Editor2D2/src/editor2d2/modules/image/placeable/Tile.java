@@ -2,6 +2,7 @@ package editor2d2.modules.image.placeable;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -152,5 +153,12 @@ public class Tile extends Placeable {
 		this.tileImage = img;
 		else
 		this.tileImage = img.getSubimage(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+	}
+	
+	
+		// Returns a Rectangle representing the dimensions of the area
+		// on the Image asset that will be drawn
+	public Rectangle getDrawArea() {
+		return new Rectangle(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
 	}
 }
