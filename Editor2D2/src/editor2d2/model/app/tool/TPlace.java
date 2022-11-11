@@ -16,8 +16,8 @@ public class TPlace extends Tool {
 		super();
 		this.name = "Place";
 		this.description = "Places an instance of the selected asset.\n"
-						 + "Left-click: place\n"
-						 + "Left-click + CTRL: place single\n"
+						 + "Left-click: place single\n"
+						 + "Left-click + CTRL: place\n"
 						 + "Left-click + SHIFT: stack objects\n"
 						 + "Right-click: delete";
 		this.shortcutKey = "X";

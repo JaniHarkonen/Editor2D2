@@ -26,6 +26,7 @@ public class Image extends Asset {
 	public Tile createPlaceable() {
 		Tile tile = new Tile();
 		tile.setImage(this);
+		tile.setDrawArea(0, 0, this.image.getWidth(), this.image.getHeight());
 		
 		return tile;
 	}

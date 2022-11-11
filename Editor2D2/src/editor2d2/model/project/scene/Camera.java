@@ -43,6 +43,7 @@ public class Camera {
 	
 		// Renders the area in the map visible to the camera
 	public void render(Graphics2D gg) {
+		long currentTime = System.nanoTime();
 		RenderContext rctxt = new RenderContext(gg, this);
 		Composite prevComp = rctxt.gg.getComposite();
 		
@@ -95,7 +96,9 @@ public class Camera {
 		
 			// Reset Graphics2D composite
 		rctxt.gg.setComposite(prevComp);
+		currentTime = System.nanoTime() - currentTime;
 		rctxt.gg.drawString("Placeables rendered: " + renderCount, 0, 100);
+		rctxt.gg.drawString("Rendering time: " + (currentTime / 1000000) + " ms (" + currentTime + " ns)", 0, 116);
 	}
 	
 	/**

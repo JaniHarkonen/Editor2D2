@@ -5,12 +5,16 @@ OVERVIEW
   "later"
 
 SPECIFICS
+- Tiles should write their tile coordinates to the map file
+- Tiles should read their tile coordinates from the map file
+- EObjects should write their sprites
+- EObjects should read their sprites
 - make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
-- speedup Tile rendering performance by getting the subimage
+X speedup Tile rendering performance by getting the subimage
   only when the Image the Tile is based on changes
 	-- check other Placeables for render optimizations
 	-- pay attention to memory usage as well
@@ -21,7 +25,7 @@ SPECIFICS
 
 LATER
 
-	   
+
 TASKS LEFT
 - make sure that all the functionalities work with minor
   bugs
