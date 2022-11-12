@@ -5,8 +5,6 @@ OVERVIEW
   "later"
 
 SPECIFICS
-X Tiles should write their tile coordinates to the map file
-X Tiles should read their tile coordinates from the map file
 - EObjects should write their sprites
 - EObjects should read their sprites
 - Scene bounds are currently rendered as a giant rectangle
