@@ -110,6 +110,9 @@ public class ProjectLoader {
 					continue;
 				}
 				
+				if( line.equals("") )
+				continue;
+				
 				ParsedCommand pc = parser.parse(line);
 				
 				if( pc == null )

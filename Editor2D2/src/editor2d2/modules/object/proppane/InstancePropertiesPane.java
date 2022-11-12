@@ -169,6 +169,7 @@ public class InstancePropertiesPane extends PropertiesPane implements Subscriber
 				for( ObjectProperty op : props )
 				{
 					PropertyField pf = new PropertyField(op, false);
+					pf.getNameField().textField.setEnabled(false);
 					this.propertyFields.add(pf);
 					propertiesContainer.add(pf.render());
 				}
