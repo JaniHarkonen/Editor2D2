@@ -9,7 +9,7 @@ SPECIFICS
 - EObjects should read their sprites
 - Scene bounds are currently rendered as a giant rectangle
 	-- only render bounds when they are visible
-- make sure that GUIComponents dont update on HotkeyListner
+X make sure that GUIComponents dont update on HotkeyListner
   if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering

@@ -116,14 +116,17 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		{
 			HotkeyListener hl = (HotkeyListener) vendor;
 			Layer activeLayer = controller.getActiveLayer();
+			int toolUseOrder = -1;
+			
+			skipUpdate = true;
 			
 				// Determine the order of Tool functionality
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
-			this.useOrder = Tool.TERTIARY_FUNCTION;
+			toolUseOrder = Tool.TERTIARY_FUNCTION;
 			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SHIFT) )
-			this.useOrder = 4;
+			toolUseOrder = 4;
 			else
-			this.useOrder = Tool.PRIMARY_FUNCTION;
+			toolUseOrder = Tool.PRIMARY_FUNCTION;
 			
 				// Delete Placebles upon pressing Delete key
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_DELETE) )
@@ -133,23 +136,37 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				(new ADeleteMany()).perform(ac);
 				
 				mngr.deselect();
+				
+				skipUpdate = false;
 			}
 			
 				// Undo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Z') )
-			controller.undoAction();
+			{
+				controller.undoAction();
+				skipUpdate = false;
+			}
 			
 				// Redo
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'Y') )
-			controller.redoAction();
+			{
+				controller.redoAction();
+				skipUpdate = false;
+			}
 			
 				// Deselect all
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'D') )
-			controller.placeableSelectionManager.deselect();
+			{
+				controller.placeableSelectionManager.deselect();
+				skipUpdate = false;
+			}
 			
 				// Copy selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'C') )
-			controller.placeableSelectionManager.copyToClipboard();
+			{
+				controller.placeableSelectionManager.copyToClipboard();
+				skipUpdate = false;
+			}
 			
 				// Cut selection
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'X') )
@@ -159,6 +176,8 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				
 				ADeleteManyContext ac = new ADeleteManyContext(controller, activeLayer);
 				(new ADeleteMany()).perform(ac);
+				
+				skipUpdate = false;
 			}
 			
 				// Paste selection
@@ -174,10 +193,21 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				ac.selection = clipboardSelection;
 				controller.selectTool(Tools.getAvailableTools()[1]);
 				(new APaste()).perform(ac);
+				
+				skipUpdate = false;
 			}
 			
 				// Pan-mode
 			this.isSpaceDown = HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SPACE);
+			
+			if( toolUseOrder >= 0 )
+			{
+				this.useOrder = toolUseOrder;
+				skipUpdate = false;
+			}
+			
+			if( this.isSpaceDown )
+			skipUpdate = false;
 		}
 		else
 		{
