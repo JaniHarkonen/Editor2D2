@@ -5,11 +5,6 @@ OVERVIEW
   "later"
 
 SPECIFICS
-- Scene bounds are currently rendered as a giant rectangle
-	-- only render bounds when they are visible
-- make sure that GUIComponent.update is called only upon
-  onNotification as often as possible to avoid littering
-  the GUI-code with "update()"
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
@@ -19,8 +14,6 @@ LATER
 
 
 TASKS LEFT
-- make sure that all the functionalities work with minor
-  bugs
 - finalize graphics
 - remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils

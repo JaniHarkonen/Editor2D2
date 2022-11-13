@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -295,37 +295,61 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				super.paintComponent(g);
 				
 				Graphics2D gg = (Graphics2D) g;
+				Bounds cbounds = cam.getBounds();
 				
 					// Render the Scene
 				cam.render(gg);
-				
-				Bounds cbounds = cam.getBounds();
-				Rectangle2D.Double bounds_cam = new Rectangle2D.Double(
-					cam.getOnScreenX(cbounds.left), cam.getOnScreenY(cbounds.top),
-					cam.getOnScreenX(cbounds.right), cam.getOnScreenY(cbounds.bottom)
-				);
 				
 					// Render the Scene bounds
 				double onScreenOriginX = cam.getOnScreenX(0);
 				double onScreenOriginY = cam.getOnScreenY(0);
 				
+				double viewPortRight = cam.getOnScreenX(Math.min(scene.getWidth(), cbounds.right));
+				double viewPortBottom = cam.getOnScreenY(Math.min(scene.getHeight(), cbounds.bottom));
+				
 				float[] dash = { 6.0f, 6.0f };
 				gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 0.0f));
 				gg.setColor(Color.BLACK);
 				
+					// Top bound
+				double x1 = Math.max(0, onScreenOriginX);
+				double y1 = Math.max(0, onScreenOriginY);
+				Line2D.Double sceneBound = new Line2D.Double(x1, y1, viewPortRight, y1);
+				
+				if( onScreenOriginY >= 0 )
+				gg.draw(sceneBound);
+				
+					// Left bound
+				if( onScreenOriginX >= 0 )
+				{
+					sceneBound.x1 = x1;
+					sceneBound.y1 = y1;
+					sceneBound.x2 = x1;
+					sceneBound.y2 = viewPortBottom;
+					gg.draw(sceneBound);
+				}
+				
+					// Bottom bound
+				if( viewPortBottom < cam.getPortHeight() )
+				{
+					sceneBound.x1 = x1;
+					sceneBound.y1 = viewPortBottom;
+					sceneBound.x2 = viewPortRight;
+					sceneBound.y2 = viewPortBottom;
+					gg.draw(sceneBound);
+				}
+				
+					// Right bound
+				if( viewPortRight < cam.getPortWidth() )
+				{
+					sceneBound.x1 = viewPortRight;
+					sceneBound.y1 = y1;
+					sceneBound.x2 = viewPortRight;
+					sceneBound.y2 = viewPortBottom;
+					gg.draw(sceneBound);
+				}
+				
 				double cam_z = cam.getZ();
-				
-				Rectangle2D.Double bounds_scene = new Rectangle2D.Double(
-					onScreenOriginX, onScreenOriginY,
-					scene.getWidth() * cam_z, scene.getHeight() * cam_z
-				);
-				
-				gg.draw(bounds_scene);
-				
-					// Render the Camera bounds
-				
-				gg.setColor(Color.RED);
-				gg.draw(bounds_cam);
 				
 				Layer activeLayer = Application.controller.getActiveLayer();
 				
@@ -344,12 +368,9 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 					double cw = cursorCellWidth * cam_z;
 					double ch = cursorCellHeight * cam_z;
 					
-					double right = cam.getOnScreenX(Math.min(scene.getWidth(), cbounds.right));
-					double bottom = cam.getOnScreenY(Math.min(scene.getHeight(), cbounds.bottom));
-					
 						// Render cursor grid
 					if( drawCursorGrid )
-					drawGrid(gg, ox, oy, (int) right, (int) bottom, (int) cw, (int) ch);
+					drawGrid(gg, ox, oy, (int) viewPortRight, (int) viewPortBottom, (int) cw, (int) ch);
 					
 						// Render Layer grid
 					if( drawLayerGrid )
@@ -363,7 +384,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 							dash[0] = 5.0f;
 							dash[1] = 5.0f;
 							gg.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2.0f, dash, 2.0f));
-							drawGrid(gg, ox, oy, (int) right, (int) bottom, (int) cw, (int) ch);
+							drawGrid(gg, ox, oy, (int) viewPortRight, (int) viewPortBottom, (int) cw, (int) ch);
 						}
 					}
 				}
