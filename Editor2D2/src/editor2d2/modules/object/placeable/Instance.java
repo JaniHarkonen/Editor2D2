@@ -56,7 +56,7 @@ public class Instance extends Placeable {
 		
 		drawPlaceable(rctxt.gg, f_x, f_y, f_w, f_h);
 		
-			// DEBUG, remove later
+			// Render selection highlight if selected
 		rctxt.gg.setColor(Color.RED);
 		drawSelection(rctxt.gg, (int) f_x, (int) f_y, (int) f_w - 1, (int) f_h - 1, this.rotation);
 	}

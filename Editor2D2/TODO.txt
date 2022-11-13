@@ -9,15 +9,9 @@ SPECIFICS
 - EObjects should read their sprites
 - Scene bounds are currently rendered as a giant rectangle
 	-- only render bounds when they are visible
-X make sure that GUIComponents dont update on HotkeyListner
-  if no expected sequence is held
 - make sure that GUIComponent.update is called only upon
   onNotification as often as possible to avoid littering
   the GUI-code with "update()"
-X speedup Tile rendering performance by getting the subimage
-  only when the Image the Tile is based on changes
-	-- check other Placeables for render optimizations
-	-- pay attention to memory usage as well
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
