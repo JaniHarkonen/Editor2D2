@@ -3,6 +3,7 @@ package editor2d2.modules.object.loader;
 import editor2d2.model.project.loader.AbstractLoader;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.modules.object.asset.EObject;
+import editor2d2.modules.object.asset.EObjectUnresolved;
 import editor2d2.modules.object.asset.ObjectProperty;
 import editor2d2.modules.object.asset.PropertyManager;
 import editor2d2.modules.object.placeable.Instance;
@@ -18,6 +19,7 @@ public class ObjectLoader extends AbstractLoader<EObject> {
 		double w = pc.getNumeral(2);
 		double h = pc.getNumeral(3);
 		double rot = pc.getNumeral(4);
+		String spr = pc.getReference(5);
 		
 		EObject object = new EObject();
 		object.setName(name);
@@ -27,6 +29,17 @@ public class ObjectLoader extends AbstractLoader<EObject> {
 		object.setRotation(rot);
 		
 		addPropertiesFromParse(object.getPropertyManager(), pc, 5);
+		
+			// If the EObject has a sprite, it is so far unresolved as
+			// only its identifier is known but not the reference
+		if( !spr.equals("<null>") )
+		{
+			EObjectUnresolved uobject = new EObjectUnresolved();
+			uobject.object = object;
+			uobject.spriteIdentifier = spr;
+			
+			return uobject;
+		}
 		
 		return object;
 	}

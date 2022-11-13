@@ -4,6 +4,7 @@ import editor2d2.common.grid.Gridable;
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.scene.placeable.Placeable;
 import editor2d2.model.project.writer.AbstractWriter;
+import editor2d2.modules.image.asset.Image;
 import editor2d2.modules.object.asset.EObject;
 import editor2d2.modules.object.asset.ObjectProperty;
 import editor2d2.modules.object.layer.ObjectArray;
@@ -15,6 +16,11 @@ public class ObjectWriter extends AbstractWriter {
 	public String writeAsset(Asset a) {
 		EObject object = (EObject) a;
 		String propString = "";
+		Image spr = object.getSprite();
+		String sprIdentifier = "<null>";
+		
+		if( spr != null )
+		sprIdentifier = spr.getIdentifier();
 		
 		for( ObjectProperty op : object.getPropertyManager().getAllProperties() )
 		propString += " \"" + op.name + "\" " + op.value + " " + op.isCompiled;
@@ -23,7 +29,8 @@ public class ObjectWriter extends AbstractWriter {
 			super.writeAsset(a) + " " +
 			object.getWidth() + " " +
 			object.getHeight() + " " +
-			object.getRotation() +
+			object.getRotation() + " " +
+			sprIdentifier + 
 			(propString.equals("") ? "" : propString)
 		);
 	}

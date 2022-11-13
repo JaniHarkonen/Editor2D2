@@ -42,7 +42,6 @@ public class EObject extends Asset {
 	public Instance createPlaceable(boolean copyProperties) {
 		Instance inst = new Instance();
 		inst.setObject(this);
-		inst.setSprite(this.sprite);
 		inst.setDimensions(this.width, this.height);
 		inst.setRotation(this.rotation);
 		

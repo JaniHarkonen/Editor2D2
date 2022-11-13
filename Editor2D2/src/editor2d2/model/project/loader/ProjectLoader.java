@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 import editor2d2.model.project.Asset;
 import editor2d2.model.project.Folder;
@@ -46,6 +47,10 @@ public class ProjectLoader {
 		// of the Project
 	private ArrayDeque<Folder> folderStack;
 	
+		// List of Assets with unresolved dependencies on other
+		// Assets
+	private ArrayList<UnresolvedAsset> unresolvedAssets;
+	
 		// Folder that Assets are being loaded into
 	private Folder targetFolder;
 	
@@ -66,12 +71,14 @@ public class ProjectLoader {
 		this.folderStack = new ArrayDeque<Folder>();
 		this.targetFolder = null;
 		this.compilationStatementLinesLeft = 0;
+		this.unresolvedAssets = null;
 	}
 	
 
 		// Loads a Project from a given file and returns it
 	public Project loadProject(File file) {
 		File projectFile = file;
+		this.unresolvedAssets = new ArrayList<UnresolvedAsset>();
 		
 			// Invalid file -> fail
 		if( !projectFile.exists() || projectFile.isDirectory() )
@@ -123,6 +130,14 @@ public class ProjectLoader {
 			
 			br.close();
 			
+				// Resolve Asset dependencies
+			ResolutionContext rc = new ResolutionContext();
+			rc.hostProject = this.targetProject;
+			for( UnresolvedAsset ua : this.unresolvedAssets )
+			{
+				if( !ua.resolve(rc) )
+				return null;
+			}
 		}
 		catch( IOException e )
 		{
@@ -245,6 +260,14 @@ public class ProjectLoader {
 								// Load an Asset in the currently targeted Folder
 							default: {
 								Asset loadedAsset = FactoryService.getFactories(pc.getCommand()).createLoader().loadAsset(pc);
+								
+								if( loadedAsset instanceof UnresolvedAsset )
+								{
+									UnresolvedAsset uloadedAsset = (UnresolvedAsset) loadedAsset;
+									this.unresolvedAssets.add(uloadedAsset);
+									loadedAsset = uloadedAsset.getUnresolvedAsset();
+								}
+								
 								this.targetProject.addAsset(loadedAsset, this.targetFolder);
 								
 								break;

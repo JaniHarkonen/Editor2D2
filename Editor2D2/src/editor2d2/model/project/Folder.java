@@ -2,8 +2,6 @@ package editor2d2.model.project;
 
 import java.util.ArrayList;
 
-import editor2d2.DebugUtils;
-
 public class Folder extends PseudoAsset {
 
 	

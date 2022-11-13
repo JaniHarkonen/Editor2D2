@@ -17,9 +17,6 @@ import editor2d2.modules.object.asset.PropertyManager;
 import editor2d2.modules.object.layer.ObjectArray;
 
 public class Instance extends Placeable {
-
-		// Reference to the Image that represents the instance
-	private Image sprite;
 	
 		// Rotation of the instance (in degrees)
 	private double rotation;
@@ -36,7 +33,6 @@ public class Instance extends Placeable {
 	
 	
 	public Instance() {
-		this.sprite = null;
 		this.width = 32;
 		this.height = 32;
 		this.rotation = 0;
@@ -64,11 +60,12 @@ public class Instance extends Placeable {
 	@Override
 	public void drawPlaceable(Graphics2D gg, double dx, double dy, double dw, double dh) {
 		BufferedImage img;
+		Image sprite = getObject().getSprite();
 		
-		if( this.sprite == null )
+		if( sprite == null )
 		img = Application.resources.getGraphic("icon-null-object");
 		else
-		img = this.sprite.getImage();
+		img = sprite.getImage();
 		
 			// Apply a transform to rotate and scale the instance
 		AffineTransform at = new AffineTransform();
@@ -84,7 +81,6 @@ public class Instance extends Placeable {
 		Instance inst = new Instance();
 		copyAttributes(this, inst);
 		
-		inst.sprite = this.sprite;
 		inst.width = this.width;
 		inst.height = this.height;
 		inst.rotation = this.rotation;
@@ -131,11 +127,6 @@ public class Instance extends Placeable {
 		this.asset = object;
 	}
 	
-		// Sets the Image that represents the instance
-	public void setSprite(Image sprite) {
-		this.sprite = sprite;
-	}
-	
 		// Sets the rotation of the Instance (in degrees)
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
@@ -167,7 +158,7 @@ public class Instance extends Placeable {
 	
 		// Returns the Image that represents the instance
 	public Image getSprite() {
-		return this.sprite;
+		return getObject().getSprite();
 	}
 	
 		// Returns the width of the Instance
