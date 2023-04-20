@@ -17,51 +17,148 @@ import editor2d2.model.project.Asset;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class is one of the root components outlined in 
+ * Application. Window is contains the root of the GUI as 
+ * well as references to commonly used global GUI-
+ * components such as the ModalWindow used by the modules 
+ * and the JFileChooser used to display a file system 
+ * dialog window. Window can be accessed by referencing 
+ * the Application: Application.window.
+ * 
+ * This class is a singleton and must therefore be 
+ * instantiated with the static instantiate-method. Once 
+ * the Window has been instantiated, it can be set up by 
+ * calling the setup-method which creates the instances 
+ * of all the commonly used GUI-components and creates 
+ * the master window.
+ * 
+ * Window also holds a public SubscriptionService that 
+ * should mainly be used amongst the GUI-components to 
+ * pass around information in cases where components 
+ * may not be available for referencing due to their 
+ * rendition order.
+ * 
+ * This application uses Swing for its GUI, thus the 
+ * master window is a JFrame.
+ * 
+ * @author User
+ *
+ */
 public class Window implements Vendor {
 
-		// This class is a singleton, only instantiate if not already
+	/**
+	 * Whether an instance of this class has been created.
+	 * (The class is a singleton, so only one instance is 
+	 * allowed.)
+	 */
 	public static boolean isInstantiated = false;
-	
-		// Default window width
+
+	/**
+	 * Default width of the master window.
+	 */
 	public static final int DEFAULT_WINDOW_WIDTH = 640;
 	
-		// Default window height
+	/**
+	 * Default height of the master window.
+	 */
 	public static final int DEFAULT_WINDOW_HEIGHT = 480;
 	
-		// Default window title
+	/**
+	 * Default master window title.
+	 */
 	public static final String DEFAULT_TITLE = "Editor2D v.2.0.0";
 	
-		// Reference to the SubscriptionService that the Window uses to pass
-		// information between GUI-components
+	/**
+	 * SubscriptionService used by the GUI-components to 
+	 * reference each other.
+	 */
 	public final SubscriptionService subscriptionService;
 	
-		// JFrame representing the window
+	/**
+	 * JFrame representing the master window.
+	 */
 	private JFrame window;
 	
-		// Reference to the Modal Window
+	/**
+	 * ModalWindow that can be used to display different 
+	 * types of ModalViews. Sometimes multiple ModalViews 
+	 * can be open at the same time.
+	 * 
+	 * See ModalWindow and ModalView for more information.
+	 */
 	private ModalWindow modal;
 	
-		// Reference to the JFileChooser that can be used to open a file system dialog
+	/**
+	 * JFileChooser instance that can be used to display 
+	 * the file system dialog window when loading or 
+	 * saving data to external files, for example.
+	 */
 	private JFileChooser fileSystemDialog;
 	
-		// Width of the Window
+	/**
+	 * The starting width of the master window.
+	 * (Doesn't update when the window is resized.)
+	 */
 	private int width;
 	
-		// Height of the Window
+	/**
+	 * The starting height of the master window.
+	 * (Doesn't update when the window is resized.)
+	 */
 	private int height;
 	
-		// Title of the Window
+	/**
+	 * The initial title of the master window.
+	 * (Doesn't update if the window title changes.)
+	 */
 	private String title;
 	
 	
+	/**
+	 * Constructs an instance of the Window with a given 
+	 * width, height and title. <b>Notice: </b>this 
+	 * constructor is privated because the class is a 
+	 * singleton, thus, an instance is only created when 
+	 * the static instantiate-method is called.
+	 * 
+	 * This method alone doesn't set up the master 
+	 * window, rather it only creates an instance and 
+	 * configures some basic settings. See setup-method 
+	 * for the setup itself.
+	 * 
+	 * See instantiate-method for more information.
+	 * 
+	 * @param width Initial width of the master window.
+	 * @param height Initial height of the master window.
+	 * @param title Initial title of the master window.
+	 */
 	private Window(int width, int height, String title) {
 		this.subscriptionService = new SubscriptionService();
 		this.width = width;
 		this.height = height;
 		this.title = title;
 	}
-	
-		// Runs the setup for the Window
+
+	/**
+	 * Sets up the master window and instantiates all the 
+	 * relevant GUI-components. The master window JFrame 
+	 * will be instantiated and configured here, and a 
+	 * WindowFocusListener will be added to it to manage 
+	 * hotkey presses when the window is out of focus 
+	 * (hotkeys will be cleared when focus is lost).
+	 * 
+	 * After the master window JFrame is established, a
+	 * Root instance will be created and rendered onto 
+	 * it. Root will function as the base GUI-component, 
+	 * a JPanel, where all the core components will be 
+	 * rendered. A WindowToolBar instance is also 
+	 * attatched to the master window that typically 
+	 * holds the window dropdown menus.
+	 * 
+	 * Finally the JFrame will be set visible and a 
+	 * ModalWindow and JFileChooser will be instantiated.
+	 */
 	public void setup() {
 		this.window = new JFrame();
 		this.window.setSize(this.width, this.height);
@@ -93,18 +190,60 @@ public class Window implements Vendor {
 		this.subscriptionService.register(Handles.MODAL, this);
 	}
 	
-		// Pops up a given Modal View of an Asset in the window's Modal Window
+	/**
+	 * Pops up a given ModalView instance of an Asset in 
+	 * the ModalWindow. The ModalView will be added to 
+	 * the ModalWindow if it is already open.
+	 * 
+	 * @param mv ModalView of an Asset that is to be 
+	 * displayed in the ModalWindow.
+	 */
 	public void popup(ModalView<? extends Asset> mv) {
 		this.modal.openModal(mv);
 	}
-	
-		// Pops up a given Modal View with a specified title
+
+	/**
+	 * Pops up a given ModalView instance of an Asset in 
+	 * the ModalWindow using a specified title. The ModalView 
+	 * will be added to the ModalWindow if it is already open.
+	 * 
+	 * @param title Title that the ModalWindow should use.
+	 * 
+	 * @param mv ModalView of an Asset that is to be 
+	 * displayed in the ModalWindow.
+	 */
 	public void popup(String title, ModalView<? extends Asset> mv) {
 		this.modal.openModal(title, mv);
 	}
 	
-		// Opens a file system dialog for opening files/directories with given settings
-		// and returns the selected file(s)
+	/**
+	 * Shows a file system dialog window for opening files 
+	 * and/or directories with given FileSystemDialogSettings 
+	 * and returns the selected files and/or directories.
+	 * 
+	 * FileSystemDialogSettings object will be used to 
+	 * determine functionalities allowed by the window 
+	 * including the available file types, whether directories 
+	 * can be selected, whether multiple items can be selected 
+	 * etc. If no FileSystemDialogSettings object is provided, 
+	 * this method will return NULL.
+	 * 
+	 * See FileSystemDialogSettings for more information 
+	 * on setting up a file system dialog window.
+	 * 
+	 * See FileSystemDialogResponse for more information on  
+	 * file system dialog responses that will be returned by 
+	 * this method.
+	 * 
+	 * @param settings FileSystemDialogSettings object that 
+	 * will be used to determine the file system dialog 
+	 * window features.
+	 * 
+	 * @return Returns a FileSystemDialogResponse object 
+	 * containing information on the user selection, including 
+	 * all selected files and/or directories, if there were 
+	 * any.
+	 */
 	public FileSystemDialogResponse showOpenDialog(FileSystemDialogSettings settings) {
 		FileSystemDialogResponse res = new FileSystemDialogResponse();
 		
@@ -149,8 +288,30 @@ public class Window implements Vendor {
 		return res;
 	}
 	
-		// Opens a file system dialog for saving files with given settings and returns
-		// the saved file
+	/**
+	 * Shows a file system dialog window for saving files with 
+	 * given FileSystemDialogSettings and returns the selected 
+	 * files and/or directories.
+	 * 
+	 * FileSystemDialogSettings objects have a more limited 
+	 * role in file saving, however, they are still used to 
+	 * determine the available file types.
+	 * 
+	 * See FileSystemDialogSettings for more information 
+	 * on setting up a file system dialog window.
+	 * 
+	 * See FileSystemDialogResponse for more information on  
+	 * file system dialog responses that will be returned by 
+	 * this method.
+	 * 
+	 * @param settings FileSystemDialogSettings object that 
+	 * will be used to determine the file system dialog 
+	 * window features.
+	 * 
+	 * @return Returns a FileSystemDialogResponse object 
+	 * containing information on the user selection, including 
+	 * the selected file.
+	 */
 	public FileSystemDialogResponse showSaveDialog(FileSystemDialogSettings settings) {
 		FileSystemDialogResponse res = new FileSystemDialogResponse();
 		
@@ -172,13 +333,35 @@ public class Window implements Vendor {
 		return res;
 	}
 	
-		// Instantiates the window, if it's not been already
-		// with default settings
+	/**
+	 * Creates an instance of Window if one has NOT been 
+	 * created already. This class is a singleton, thus, 
+	 * only one instance of Window is allowed. 
+	 * 
+	 * @return Returns a refrence to the created Window 
+	 * instance.
+	 */
 	public static Window instantiate() {
 		return instantiate(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_TITLE);
 	}
 	
-		// Instantiates the window with given settings
+	/**
+	 * Creates an instance of Window if one has NOT been 
+	 * created already. The master window will be given 
+	 * a specific initial width, height and title. 
+	 * 
+	 * This class is a singleton, thus, only one instance 
+	 * of Window is allowed. 
+	 * 
+	 * @param width Initial width of the master window 
+	 * (in pixels).
+	 * @param height Initial height of the master window 
+	 * (in pixels). 
+	 * @param title Initial title of the master window.
+	 * 
+	 * @return Returns a reference to the created Window 
+	 * instance.
+	 */
 	public static Window instantiate(int width, int height, String title) {
 		if( isInstantiated )
 		return null;
@@ -188,17 +371,34 @@ public class Window implements Vendor {
 		return new Window(width, height, title);
 	}
 	
+	// GETTERS AND SETTERS
 	
-		// Returns a reference to the JFrame of the window
+	/**
+	 * Returns a refrence to the JFrame representing 
+	 * the master window.
+	 * 
+	 * @return Returns the master window JFrame.
+	 */
 	public JFrame getFrame() {
 		return this.window;
 	}
 	
-		// Returns a reference to the Modal Window
+	/**
+	 * Returns a reference to the ModalWindow instance 
+	 * that can be used to display different types of 
+	 * ModalViews.
+	 * 
+	 * @return A reference to the ModalWindow.
+	 */
 	public ModalWindow getModalWindow() {
 		return this.modal;
 	}
 	
+	/**
+	 * Steals the window focus away from all GUI-
+	 * components and returns it back to the master 
+	 * window JFrame.
+	 */
 	public void unfocusAllComponents() {
 		this.window.requestFocusInWindow();
 	}

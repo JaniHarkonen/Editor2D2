@@ -105,7 +105,6 @@ public class DragBox {
 		this.isDragged = true;
 	}
 	
-		// Returns the current position change from the starting point of the drag
 	/**
 	 * Polls the DragBox and returns the current position change from the starting
 	 * point of the drag. A factor will be used to apply a transform (use 1.0 for

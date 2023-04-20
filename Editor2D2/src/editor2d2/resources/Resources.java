@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 /**
  * This class will be used to load and reference the assets native to
  * Editor2D as well as other external assets. This class is a singleton.
+ * 
  * @author User
  *
  */
@@ -85,7 +86,9 @@ public final class Resources {
 	/**
 	 * Loads an external graphic from a given file and returns
 	 * a reference to the Buffered Image representing it.
+	 * 
 	 * @param path Path of the image file to load from.
+	 * 
 	 * @return BufferedImage of the loaded image or NULL if the
 	 * loading failed.
 	 */
@@ -106,7 +109,9 @@ public final class Resources {
 	/**
 	 * Loads an external graphic from a given file and returns
 	 * a reference to the Buffered Image representing it.
+	 * 
 	 * @param file File object of the image file to load from.
+	 * 
 	 * @return BufferedImage of the loaded image or NULL if the
 	 * loading failed.
 	 */
@@ -119,6 +124,7 @@ public final class Resources {
 	
 	/**
 	 * Returns a reference to the graphic of a given name.
+	 * 
 	 * @param name Name of the graphic whose reference to return.
 	 * 
 	 * @return The reference to the graphic.
@@ -131,7 +137,9 @@ public final class Resources {
 	/**
 	 * Loads a graphic from a given file path and puts it in the
 	 * graphics map under a given name.
+	 * 
 	 * @param name Name of the graphics resource.
+	 * 
 	 * @param fname Path to the file containing the iamge of the
 	 * graphic.
 	 */
