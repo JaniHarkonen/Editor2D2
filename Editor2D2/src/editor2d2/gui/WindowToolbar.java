@@ -28,11 +28,50 @@ import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class contains all the functionalities of the 
+ * toolbar displayed on the top edge of the master 
+ * window. The toolbar contains the following features: 
+ * - ability to create a new project
+ * - ability to open an existing project
+ * - ability to save the project (also save as)
+ * - ability to compile a map
+ * 
+ * - ability to create any available asset
+ * 
+ * - set the metadata of a scene
+ * - rename a scene
+ * - delete a scene
+ * 
+ * This class also implements Subscriber as it 
+ * subscribes to the HotkeyListener (which extends 
+ * SubscriptionService) available through
+ * Application.controller. HotkeyListener will 
+ * provide WindowToolbar updates on hotkey presses so 
+ * that appropriate actions can be triggered.
+ * 
+ * This class is a pure Swing-component meaning it 
+ * extends a Swing-class JMenuBar rather than 
+ * implementing it through composition as in most 
+ * GUI-components.
+ * 
+ * @author User
+ *
+ */
 public class WindowToolbar extends JMenuBar implements Subscriber {
 	
+		// Mostly unnecessary
 	private static final long serialVersionUID = -1768214741403462691L;
 
 
+	/**
+	 * Constructs a WindowToolbar instance with the 
+	 * default settings. WindowToolbar is immediately 
+	 * subscribed to the HotkeyListener found in 
+	 * Application.controller to listen for hotkey 
+	 * presses which will be used to trigger actions 
+	 * outlined below.
+	 */
 	public WindowToolbar() {
 		generate();
 		this.setFocusable(false);
@@ -40,8 +79,10 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		Application.controller.getHotkeyListener().subscribe("WindowToolbar", this);
 	}
 	
-		// Regenerates the toolbar by removing its contents and calling "generate"
-		// again
+	/**
+	 * Re-renders the toolbar by clearing its contents
+	 * and repainting it.
+	 */
 	public void regenerate() {
 		removeAll();
 		generate();
@@ -51,22 +92,40 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
-		if( handle == Handles.MODAL )
+		if( handle == Handles.MODAL )	// ModalWindow updated
 		regenerate();
 		else if( HotkeyListener.didKeyUpdate(handle) )
 		{
 			HotkeyListener hl = Application.controller.getHotkeyListener();
 			
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'S') )
-			actionOnSaveProject();
+			actionOnSaveProject();	// Handle CTRL + S (save project)
 			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'O') )
-			actionOnLoadProject();
+			actionOnLoadProject();	// Handle CTRL + O (open project)
 			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 'N') )
-			actionOnNewProject();
+			actionOnNewProject();	// Handle CTRL + N (new project)
 		}
 	}
 	
-		// Generates the toolbar
+	/**
+	 * Generates the toolbar itself by calling Swing's
+	 * add-method on this object as it is inherited from 
+	 * JMenuBar. The toolbar will be populated with 
+	 * JMenus that contain dropdowns created using 
+	 * JMenuItems. Each JMenuItem is coupled with the 
+	 * appropriate ActionListener that triggers the 
+	 * corresponding action. 
+	 * 
+	 * Some menu items have to be created dynamically 
+	 * as Editor2D2 is meant to be a skeleton of sorts 
+	 * that more specialized map editors will be built 
+	 * upon. This means that the number of modules (types 
+	 * of assets) is variable, thus, FactoryService is 
+	 * utilized to get Asset specifications.
+	 * 
+	 * See FactoryService for more information on modules 
+	 * and different factories.
+	 */
 	@SuppressWarnings("serial")
 	private void generate() {
 		
@@ -168,8 +227,21 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		add(settingsScene);
 	}
 	
-	
-		// Creates a clickable menu item for the "Asset"-menu
+	/**
+	 * Creates a JMenuItem representing an asset in the 
+	 * "Asset"-menu. Upon clicking the menu item a given 
+	 * ModalView will be popped up using the ModalWindow 
+	 * instance from Application.window. The ModalWindow 
+	 * will have a given title.
+	 * 
+	 * @param title Title that the ModalWindow should 
+	 * have when the menu item is clicked.
+	 * @param mv ModalView to be displayed in the 
+	 * ModalWindow.
+	 * 
+	 * @return Returns a JMenuItem representing the 
+	 * asset menu item.
+	 */
 	@SuppressWarnings("serial")
 	private JMenuItem createAssetMenuItem(String title, ModalView<? extends Asset> mv) {
 		
@@ -182,8 +254,14 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 			}
 		});
 	}
-	
-		// Creates a new Project and opens it in the editor
+
+	/**
+	 * Triggered upon clicking "New project". First a 
+	 * confirmation yes/no dialog window will be 
+	 * displayed to confirm the creation of a new project. 
+	 * If the prompt is OK'd a new project will be 
+	 * created and the application will de-facto reset. 
+	 */
 	private void actionOnNewProject() {
 		int result = JOptionPane.showConfirmDialog(
 			null,
@@ -200,8 +278,18 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		Application.controller.openProject(p);
 	}
 	
-		// Loads a Project from an external file and opens it
-		// in editor
+	/**
+	 * Triggered upon clicking "Open project". A file 
+	 * system dialog window will be displayed to 
+	 * choose the project file that is to be opened. 
+	 * If no project file is chosen or the prompt is 
+	 * cancelled, nothing will happen. If the project 
+	 * file is found, it will be read, parsed and 
+	 * opened in the editor using the ProjectLoader.
+	 * 
+	 * See ProjectLoader for more information on 
+	 * loading and parsing projects.
+	 */
 	private void actionOnLoadProject() {
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		FileSystemDialogResponse res = Application.window.showOpenDialog(settings);
@@ -220,8 +308,23 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		Application.controller.openProject(p);
 	}
 	
-		// Saves the currently open Project into the file it was last
-		// saved in
+	/**
+	 * Triggered upon clicking "Save project". A file 
+	 * system dialog window will be displayed to 
+	 * choose the path and the name of the file that 
+	 * the project is to be saved to. If no file is 
+	 * chosen or the prompt is cancelled, nothing 
+	 * will happen and the project will remain 
+	 * unsaved. If a valid file is chosen, the project 
+	 * will be written into it using a ProjectWriter.
+	 * If the project has previously been saved in a 
+	 * file already, the file system dialog window 
+	 * wont be brought up and, instead, the project 
+	 * will be saved directly to the previous file.
+	 * 
+	 * See ProjectWriter for more information on 
+	 * saving and writing projects into files.
+	 */
 	private void actionOnSaveProject() {
 		Project activeProject = Application.controller.getActiveProject();
 		String path = activeProject.getFilepath();
@@ -232,6 +335,20 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		actionOnSaveProjectAs();
 	}
 	
+	/**
+	 * Triggered upon clicking "Save project as". A 
+	 * file system dialog window will be displayed 
+	 * to choose the path and the name of the file 
+	 * that the project is to be saved to. If no 
+	 * file is chosen or the prompt is cancelled, 
+	 * nothing will happen and the project will 
+	 * remain unsaved. If a valid file is chosen, 
+	 * the project will be written into it using a 
+	 * ProjectWriter.
+	 * 
+	 * See ProjectWriter for more information on 
+	 * saving and writing projects into files.
+	 */
 	private void actionOnSaveProjectAs() {
 		FileSystemDialogSettings settings = new FileSystemDialogSettings();
 		FileSystemDialogResponse res = Application.window.showSaveDialog(settings);
@@ -243,6 +360,14 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		actionOnSaveProject();
 	}
 	
+	/**
+	 * Triggered upon clicking "Rename scene". An 
+	 * input dialog window will be displayed where 
+	 * the new scene name can be entered. If the 
+	 * input cannot be validated, nothing happens.
+	 * If a valid input is entered, the scene will 
+	 * be renamed.
+	 */
 	private void actionOnRenameScene() {
 		Scene scene = Application.controller.getActiveScene();
 		String newName = JOptionPane.showInputDialog(null, "Enter scene name", scene.getName());
@@ -256,10 +381,22 @@ public class WindowToolbar extends JMenuBar implements Subscriber {
 		Application.controller.renameActiveScene(newName);
 	}
 	
+	/**
+	 * Triggered upon clicking "Delete scene". The 
+	 * scene that is currently active (open and 
+	 * visible) in the editor will be removed. 
+	 */
 	private void actionOnDeleteScene() {
 		Application.controller.deleteActiveScene();
 	}
 	
+	/**
+	 * Triggered upon clicking "Meta data". A 
+	 * ModalWindow will be popped up displaying 
+	 * MetaDataModal instance. The MetaDataModal 
+	 * contains the meta data string of the active 
+	 * scene.
+	 */
 	private void actionMetaData() {
 		if( Application.controller.getActiveScene() == null )
 		return;

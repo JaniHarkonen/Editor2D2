@@ -18,6 +18,27 @@ import editor2d2.model.project.scene.Camera;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
+/**
+ * An instance of this class is the root node for all 
+ * GUI-components aside from the WindowToolbar and 
+ * potentially other pure Swing-components.
+ * 
+ * See draw-method to find all GUI-components rendered 
+ * under this component (they are commented).
+ * 
+ * This class implements both Vendor and Subscriber. It 
+ * notifies components when the horizontal and vertical 
+ * splits in the application are adjusted. Root also 
+ * receives project updates each time the currently 
+ * active project changes, such as when creating a new 
+ * project or opening a project.
+ * 
+ * See WindowToolbar for an explanation on pure Swing-
+ * components.
+ * 
+ * @author User
+ *
+ */
 public class Root extends GUIComponent implements Vendor, Subscriber {
 	
 	public Root() {
@@ -39,6 +60,7 @@ public class Root extends GUIComponent implements Vendor, Subscriber {
 		spHorizontal.add(containerLeftSide, JSplitPane.LEFT);
 		spHorizontal.add(containerRightSide, JSplitPane.RIGHT);
 		
+			// Horizontal split adjustment listener
 		spHorizontal.addPropertyChangeListener(
 			JSplitPane.DIVIDER_LOCATION_PROPERTY,
 			new PropertyChangeListener() {
@@ -67,6 +89,7 @@ public class Root extends GUIComponent implements Vendor, Subscriber {
 		spAssets.add((new AssetPane()).render(), SwingConstants.BOTTOM);	// Asset pane
 		spAssets.setDividerLocation(Window.DEFAULT_WINDOW_HEIGHT / 2);
 		
+			// Vertical split adjustment listener
 		spAssets.addPropertyChangeListener(
 			JSplitPane.DIVIDER_LOCATION_PROPERTY,
 			new PropertyChangeListener() {
@@ -91,12 +114,30 @@ public class Root extends GUIComponent implements Vendor, Subscriber {
 		update();
 	}
 	
+	/**
+	 * Called upon adjusting the horizontal split of the 
+	 * horizontal split pane. This method accepts a 
+	 * PropertyChangeEvent object containing statistics 
+	 * regarding the adjustment event.
+	 * 
+	 * @param e PropertyChangeEvent object describing the 
+	 * adjustment event.
+	 */
 	private void actionHorizontalSplitPaneAdjusted(PropertyChangeEvent e) {
 		Camera activeCamera = Application.controller.getActiveScene().getCamera();
 		activeCamera.setPortDimensions((int) e.getNewValue(), activeCamera.getPortHeight());
 		Application.controller.subscriptionService.register(editor2d2.gui.Handles.HORIZONTAL_SPLIT_ADJUSTED, this);
 	}
 	
+	/**
+	 * Called upon adjusting the vertical split of the 
+	 * vertical split pane. This method accepts a 
+	 * PropertyChangeEvent object containing statistics 
+	 * regarding the adjustment event.
+	 * 
+	 * @param e PropertyChangeEvent object describing the 
+	 * adjustment event.
+	 */
 	private void actionVerticalSplitPaneAdjusted(PropertyChangeEvent e) {
 		Camera activeCamera = Application.controller.getActiveScene().getCamera();
 		activeCamera.setPortDimensions(activeCamera.getPortWidth(), (int) e.getNewValue());
