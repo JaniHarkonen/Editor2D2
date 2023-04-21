@@ -27,6 +27,13 @@ TASKS LEFT
 	-- selection ignores SPACE being held
 - create a TEMPLATE module
 - remove comments, add Javadoc
+	-- CImage and CIcon need getters/setters???
+		-> public fields
+	-- remove ColorPreviewPanel default constructor
+	   as the default panel has NULL color and NULL
+	   value which cannot be later changed
+	   	-> default panel will likely crash
+	   	-> other solution is to add setters/getters
 	   
 	   
 SKETCHES
