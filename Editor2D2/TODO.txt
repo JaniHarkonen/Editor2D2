@@ -34,6 +34,17 @@ TASKS LEFT
 	   value which cannot be later changed
 	   	-> default panel will likely crash
 	   	-> other solution is to add setters/getters
+	-- potential error in Asset documentation
+		-> assetClassName is NOT used to reference 
+		the asset in factories???
+	-- HasAsset interface
+		-- wtf does this actually do other than provide
+		   a useless unimplemented getReferencedAsset??
+	-- Handles in model
+		-- figure out who is the Vendor of 
+		   LAYER_VISIBILITY
+		-- who is the Vendor of LAYER_REORDER
+	-- add <br/><br/>
 	   
 	   
 SKETCHES

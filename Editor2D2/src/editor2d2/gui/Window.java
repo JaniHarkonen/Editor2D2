@@ -25,6 +25,7 @@ import editor2d2.subservice.Vendor;
  * and the JFileChooser used to display a file system 
  * dialog window. Window can be accessed by referencing 
  * the Application: Application.window.
+ * <br/><br/>
  * 
  * This class is a singleton and must therefore be 
  * instantiated with the static instantiate-method. Once 
@@ -32,12 +33,14 @@ import editor2d2.subservice.Vendor;
  * calling the setup-method which creates the instances 
  * of all the commonly used GUI-components and creates 
  * the master window.
+ * <br/><br/>
  * 
  * Window also holds a public SubscriptionService that 
  * should mainly be used amongst the GUI-components to 
  * pass around information in cases where components 
  * may not be available for referencing due to their 
  * rendition order.
+ * <br/><br/>
  * 
  * This application uses Swing for its GUI, thus the 
  * master window is a JFrame.
