@@ -7,35 +7,86 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
+/**
+ * <b>Notice: </b>this class does NOT extend GUIComponent, 
+ * instead, it is a pure Swing-component meaning it 
+ * extends a Swing-component rather than implementing 
+ * Swing-components through composition. General 
+ * GUI-component that renders a color preview panel that 
+ * consists of a rectangular JPanel that fills a rectangle 
+ * using the previously selected color. A given value will 
+ * also be drawn onto the rectangle (typically a data cell 
+ * value, see data-module in "modules"-package for more 
+ * information).
+ * 
+ * See GUIComponent for more information on non-Swing-
+ * components. GUIComponents are the most common form of 
+ * GUI-component in this application.
+ * 
+ * @author User
+ *
+ */
 @SuppressWarnings("serial")
 public class ColorPreviewPanel extends JPanel {
 	
-		// Default color panel width
+	/**
+	 * Default color preview panel width (in pixels).
+	 */
 	public static final int DEFAULT_COLOR_PANEL_WIDTH = 64;
 	
-		// Default color panel height
+	/**
+	 * Default color preview panel height (in pixels).
+	 */
 	public static final int DEFAULT_COLOR_PANEL_HEIGHT = 64;
 	
-		// Inverse colors whose brightness is above this threshold default to black
+	/**
+	 * Inverse colors whose brightness value is above 
+	 * this threshold will be rendered as black.
+	 */
 	public static final float DEFAULT_INVERSE_COLOR_DEFAULT_BRIGHTNESS_THRESHOLD_MIN = 0.45f;
 	
-		// Inverse colors whose brightness is below this threshold default to black
+	/**
+	 * Inverse colors whose brightness value is below 
+	 * this threshold will be rendered as black too.
+	 */
 	public static final float DEFAULT_INVERSE_COLOR_DEFAULT_BRIGHTNESS_THRESHOLD_MAX = 0.55f;
 	
-	
-		// Panel color
+	/**
+	 * Color to be displayed in the color preview panel.
+	 * The last color selection.
+	 */
 	private Color color;
 	
-		// Displayed value
+	/**
+	 * The value that is to be overlayed on the color 
+	 * preview panel.
+	 */
 	private String value;
 	
-		// Color panel width
+	/**
+	 * Width of the color preview panel (in pixels).
+	 */
 	private int colorPanelWidth;
 	
-		// Color panel height
+	/**
+	 * Height of the color preview panel (in pixels).
+	 */
 	private int colorPanelHeight;
 	
-	
+	/**
+	 * Constructs a ColorPreviewPanel instance that 
+	 * displays a given color and value and has the 
+	 * given width and height.
+	 * 
+	 * @param color Color to be displayed in the color 
+	 * preview panel.
+	 * @param value Value that is to be overlayed on 
+	 * the color preview panel. 
+	 * @param width Width of the color preview panel (in 
+	 * pixels).
+	 * @param height Height of the color preview panel 
+	 * (in pixels).
+	 */
 	public ColorPreviewPanel(Color color, String value, int width, int height) {
 		this.color = color;
 		this.value = value;
@@ -44,10 +95,26 @@ public class ColorPreviewPanel extends JPanel {
 		this.colorPanelHeight = height;
 	}
 	
+	/**
+	 * Constructs a ColorPreivewPanel instance with the 
+	 * default configuration including the default 
+	 * dimensions. The ColorPreviewPanel will have a 
+	 * given color and value.
+	 * 
+	 * @param color Color to be displayed in the color 
+	 * preview panel.
+	 * @param value Value that is to be overlayed on 
+	 * the color preview panel. 
+	 */
 	public ColorPreviewPanel(Color color, String value) {
 		this(color, value, DEFAULT_COLOR_PANEL_WIDTH, DEFAULT_COLOR_PANEL_HEIGHT);
 	}
 	
+	/**
+	 * Constructs a ColorPreivewPanel instance with the 
+	 * default configuration including NULL color and 
+	 * NULL value.
+	 */
 	public ColorPreviewPanel() {
 		this(null, null);
 	}
@@ -91,18 +158,37 @@ public class ColorPreviewPanel extends JPanel {
 		g.drawString(srcValue, (int) ((pw / 2) - textDimensions.getCenterX()), (int) ((ph / 2) - textDimensions.getCenterY()));
 	}
 	
+	// GETTERS AND SETTERS
 
-		// Returns the width of the color panel
+	/**
+	 * Returns the width of the ColorPreviewPanel
+	 * (in pixels).
+	 * 
+	 * @return ColorPreviewPanel width (in pixels).
+	 */
 	public int getColorPanelWidth() {
 		return this.colorPanelWidth;
 	}
 	
-		// Returns the height of the color panel
+	/**
+	 * Returns the height of the ColorPreivewPanel
+	 * (in pixels).
+	 * 
+	 * @return ColorPreviewPanel height (in pixels).
+	 */
 	public int getColorPanelHeight() {
 		return this.colorPanelHeight;
 	}
 	
-		// Sets the dimensions of the color panel
+	/**
+	 * Sets the ColorPreviewPanel width and height
+	 * (in pixels).
+	 * 
+	 * @param width New width of the ColorPreviewPanel
+	 * (in pixels).
+	 * @param height New height of the ColorPreviewPanel 
+	 * (in pixels).
+	 */
 	public void setColorPanelDimensions(int width, int height) {
 		this.colorPanelWidth = width;
 		this.colorPanelHeight = height;

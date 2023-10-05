@@ -70,7 +70,12 @@ public abstract class Layer implements HasAsset {
 		// Places a given Gridable object into a cell in the object grid
 		// CAN BE OVERRIDDEN FOR MORE COMPLICATED PLACEABLES
 	public Placeable place(int cx, int cy, Placeable p) {
-		Placeable replaced = (Placeable) this.objectGrid.get(cx, cy);
+		Gridable g = this.objectGrid.get(cx, cy);
+		
+		if( g instanceof NullCell )
+		return null;
+		
+		Placeable replaced = (Placeable) g;
 		
 		p.setCellPosition(cx, cy);
 		p.setOffsets(0, 0);

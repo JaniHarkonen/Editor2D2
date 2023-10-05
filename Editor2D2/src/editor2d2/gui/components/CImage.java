@@ -11,23 +11,57 @@ import javax.swing.JPanel;
 import editor2d2.gui.GUIComponent;
 import editor2d2.modules.image.asset.Image;
 
+/**
+ * General GUI-component that contains a JPanel displaying 
+ * a given BUfferedImage. An AffineTransform can be applied 
+ * to the BufferedImage to change its position, scaling or 
+ * dimensions.
+ * 
+ * See AffineTransform for more information on 
+ * BufferedImage transformations.
+ * 
+ * @author User
+ *
+ */
 public class CImage extends GUIComponent {
 	
-		// JPanel containing the elements of the component
-	public JPanel container;
+	/**
+	 * Container JPanel that draws the BufferedImage.
+	 */
+	public JPanel container;	// Not sure why this has to be stored in a field
 	
-		// Reference to the Buffered Image that will be drawn by the component
+	/**
+	 * BufferedImage that is to be displayed.
+	 */
 	public BufferedImage image;
 	
-		// Affine Transform that can be used to apply transforms to the component
+	/**
+	 * AffineTransform that will be applied to the 
+	 * BufferedImage. If NULL, no transformations will be 
+	 * applied.
+	 */
 	public AffineTransform affineTransform;
 	
-	
+	/**
+	 * Constructs a CImage instance with a given 
+	 * AffineTransform that will be applied to the 
+	 * BufferedImage that is drawn during rendering.
+	 * If the AffineTransform is NULL, no transformation 
+	 * will be applied to the BufferedImage.
+	 * 
+	 * @param at AffineTransform to apply to the 
+	 * BufferedImage upon rendering or NULL for no 
+	 * transformation (default).
+	 */
 	public CImage(AffineTransform at) {
 		this.container = null;
 		this.affineTransform = at;
 	}
 	
+	/**
+	 * Constructs a CImage instance with no additional 
+	 * AffineTransformation applied to it.
+	 */
 	public CImage() {
 		this(null);
 	}
@@ -68,10 +102,37 @@ public class CImage extends GUIComponent {
 		return this.container;
 	}
 	
-	/***************************** GETTERS & SETTERS ********************************/
+	// GETTERS AND SETTERS
 	
-		// Sets the image that will be drawn by the component
-		// (BufferedImage)
+	/**
+	 * Returns a reference to the BufferedImage that will 
+	 * be rendered onto the container JPanel.
+	 * 
+	 * @return Reference to the BufferedImage that will 
+	 * be rendered.
+	 */
+	public BufferedImage getImage() {
+		return this.image;
+	}
+	
+	/**
+	 * Returns a reference to the AffineTransform that will 
+	 * be applied to the BufferedImage during rendering.
+	 * 
+	 * @return Reference to the AffineTransform applied 
+	 * during rendering.
+	 */
+	public AffineTransform getAffineTransform() {
+		return this.affineTransform;
+	}
+	
+	/**
+	 * Sets the BufferedImage that will be rendered onto 
+	 * the container JPanel.
+	 * 
+	 * @param image Reference to the BufferedImage that is 
+	 * to be rendered.
+	 */
 	public void setImage(BufferedImage image) {
 		if( image == null )
 		return;
@@ -79,8 +140,13 @@ public class CImage extends GUIComponent {
 		this.image = image;
 	}
 	
-		// Sets the image that will be drawn by the component
-		// (Image - Asset)
+	/**
+	 * Sets the BufferedImage that will be rendered onto 
+	 * the container JPanel based on a given Image-asset.
+	 * 
+	 * @param image Image-asset whose BufferedImage should 
+	 * be used upon rendering.
+	 */
 	public void setImage(Image image) {
 		setImage(image.getImage());
 	}

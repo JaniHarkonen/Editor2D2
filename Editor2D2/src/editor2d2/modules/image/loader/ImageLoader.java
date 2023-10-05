@@ -47,7 +47,13 @@ public class ImageLoader extends AbstractLoader<Image> {
 		int cx = (int) pc.getNumeral(0);
 		int cy = (int) pc.getNumeral(1);
 		
+		int dx = (int) pc.getNumeral(2);
+		int dy = (int) pc.getNumeral(3);
+		int dw = (int) pc.getNumeral(4);
+		int dh = (int) pc.getNumeral(5);
+		
 		Tile target = source.createPlaceable();
+		target.setDrawArea(dx, dy, dw, dh);
 		targetLayer.place(cx, cy, target);
 		
 		return target;

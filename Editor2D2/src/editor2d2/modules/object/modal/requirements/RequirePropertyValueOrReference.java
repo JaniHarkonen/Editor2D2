@@ -19,9 +19,22 @@ public class RequirePropertyValueOrReference extends RequirementFilter<String> {
 		return false;
 		
 		boolean accepted = false;
+		char charAt = this.input.charAt(0); 
 		
-		if( this.input.charAt(0) != '&' )
-		accepted = true;
+		if( charAt != '&' )
+		{
+			if( (charAt == '\'' || charAt == '"' ) )
+			{
+				if( this.input.indexOf(charAt, 1) != this.input.length() - 1 )
+				accepted = false;
+				else
+				accepted = true;
+			}
+			else if( this.input.contains(" ") )
+			accepted = false;
+			else
+			accepted = true;
+		}
 		else
 		{
 			String ref = this.input.substring(1);

@@ -36,11 +36,16 @@ public class EObject extends Asset {
 	
 	@Override
 	public Instance createPlaceable() {
+		return createPlaceable(true);
+	}
+	
+	public Instance createPlaceable(boolean copyProperties) {
 		Instance inst = new Instance();
 		inst.setObject(this);
-		inst.setSprite(this.sprite);
 		inst.setDimensions(this.width, this.height);
 		inst.setRotation(this.rotation);
+		
+		if( copyProperties )
 		this.propertyManager.copyProperties(inst.getPropertyManager());
 		
 		return inst;

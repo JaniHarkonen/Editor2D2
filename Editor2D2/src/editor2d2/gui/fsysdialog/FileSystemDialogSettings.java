@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileFilter;
  * A wrapper class for settings that will be passed onto the Window
  * when accessing the file system dialog window. The same class can be
  * used for both opening and saving files or directories.
+ * 
  * @author User
  *
  */

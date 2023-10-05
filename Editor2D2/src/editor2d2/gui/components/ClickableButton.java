@@ -22,17 +22,37 @@ public class ClickableButton extends JButton {
 	 */
 	private ActionListener clickListener;
 	
-	
+	/**
+	 * Constructs a ClickableButton instance with a given caption 
+	 * that will be drawn onto the button. A given lambda-function 
+	 * will be run when the button detect a mouse click.
+	 * 
+	 * @param title Text that will be displayed on the button.
+	 * @param onClick Lambda-function that is to be run upon 
+	 * clicking the button. If NULL, nothing will happen upon click.
+	 */
 	public ClickableButton(String title, Consumer<ActionEvent> onClick) {
 		super(title);
 		
 		changeClickAction(onClick);
 	}
 	
+	/**
+	 * Constructs a Clickable button instance with a given caption 
+	 * that will be drawn onto the button. By default, no onClick 
+	 * lambda-function is determined, thus, nothign will happen 
+	 * upon mouse click.
+	 * 
+	 * @param title Text that will be displayed on the button.
+	 */
 	public ClickableButton(String title) {
 		this(title, null);
 	}
 
+	/**
+	 * Constructs a Clickable button with default settings 
+	 * including no onClick-event and a blank caption.
+	 */
 	public ClickableButton() {
 		this("", null);
 	}

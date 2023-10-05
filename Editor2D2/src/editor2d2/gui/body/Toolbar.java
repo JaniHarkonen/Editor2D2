@@ -23,12 +23,50 @@ import editor2d2.model.app.tool.Tool;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class renders the toolbar on the left side of 
+ * the SceneView. The Toolbar will list all the Tools 
+ * available in the application as outlined in the 
+ * Tools-class. When a Tool is selected it can be 
+ * used by the SceneView-component.
+ * <br/><br/>
+ * 
+ * This class subscribes to the HotkeyListener as the 
+ * Tools can also be accessed via hotkeys.
+ * <br/><br/>
+ * 
+ * See Tool for more information on the functioning of 
+ * Tools.
+ * <br/><br/>
+ * 
+ * See Tools for the listing of all the Tools available 
+ * in the application.
+ * <br/><br/>
+ * 
+ * See SceneView for more information on using Tools in 
+ * the Scene.
+ * 
+ * @author User
+ *
+ */
 public class Toolbar extends GUIComponent implements Subscriber {
 	
+	/**
+	 * The width of a toolbar item (in pixels).
+	 */
 	public static final int DEFAULT_TOOLBAR_ITEM_WIDTH = 48;
+	
+	/**
+	 * The height of a toolbar item (in pixels).
+	 */
 	public static final int DEFAULT_TOOLBAR_ITEM_HEIGHT = 48;
 	
-	
+	/**
+	 * Constructs a Toolbar instance and subscribes it 
+	 * to the hotkey listener as well as to the Controller.
+	 * The Toolbar receives updates regarding the currently 
+	 * selected Tool via the Controller.
+	 */
 	public Toolbar() {
 		Application.controller.getHotkeyListener().subscribe("Toolbar", this);
 		Application.controller.subscriptionService.subscribe(Handles.SELECTED_TOOL, "Toolbar", this);
@@ -104,8 +142,14 @@ public class Toolbar extends GUIComponent implements Subscriber {
 		return container;
 	}
 	
-	
-		// Selects a given Tool and updates the view
+	/**
+	 * Called upon clicking a tool item in the 
+	 * Toolbar. Selects a given Tool and updates 
+	 * the view.
+	 * 
+	 * @param tool Reference to the Tool that is 
+	 * to be selected.
+	 */
 	private void actionSelectTool(Tool tool) {
 		Application.controller.selectTool(tool);
 		update();

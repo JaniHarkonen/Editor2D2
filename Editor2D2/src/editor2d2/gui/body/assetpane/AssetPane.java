@@ -34,26 +34,93 @@ import editor2d2.modules.FactoryService;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
+/**
+ * AssetPane is a major GUI-component that lists all the 
+ * Assets available in the currently active Project. 
+ * Assets are displayed using AssetItems for Assets and 
+ * FolderItems for Folders. Folders can be navigated by 
+ * double-clicking them whereas double-clicking assets 
+ * will pop them up in a ModalWindow for editing. A 
+ * drop down menu can be brought up by right-clicking an 
+ * AssetItem or the AssetPane itself. The menu contains 
+ * buttons for creating, editing, renaming and deleting 
+ * Assets and/or Folders.
+ * <br/><br/>
+ * 
+ * This class implements both the Vendor- and Subscriber-
+ * interfaces as it sends and receives information on 
+ * updates on actions in the application and the 
+ * AssetPane.
+ * <br/><br/>
+ * 
+ * See AssetItem and FolderItem for more information on 
+ * how Assets and Folders of the active Project are 
+ * handled by the AssetPane.
+ * 
+ * <br/><br/>
+ * See ModalWindow for more information on displaying 
+ * popup windows.
+ * 
+ * @author User
+ *
+ */
 public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 	
-		// Reference to the Folder whose Assets are being displayed
+	/**
+	 * The Folder that is currently open and whose Assets 
+	 * are now being displayed in the AssetPane. 
+	 * <br/><br/>
+	 * 
+	 * By default, this is the root Folder.
+	 */
 	private Folder openFolder;
 	
-		// Reference to the SelectionManager that handles the selection
-		// of Assets
+	/**
+	 * The SelectionManager used to keep track of currently 
+	 * selected Assets and/or Folders.
+	 */
 	private SelectionManager<Asset> assetSelectionManager;
 	
-		// Reference to the JScrollPane that can be used to browse the
-		// AssetPane
+	/**
+	 * JScrollPane that can is used to browse the 
+	 * AssetPane's view.
+	 */
 	private JScrollPane scrollPane;
 	
-		// Current JScrollPane position
+	/**
+	 * Current vertical position of the JScrollPane. 
+	 * This has to be stored in a field so as to keep 
+	 * track of the value even when the AssetPane is 
+	 * re-rendered.
+	 */
 	private int scrollPanePosition;
 	
-		// Reference to the Asset popup menu
+	/**
+	 * The drop down menu that can be brought up by 
+	 * right-clicking the AssetPane.
+	 */
 	private JPopupMenu pmAssets;
 	
-	
+	/**
+	 * Constructs an AssetPane instance by 
+	 * instantiating a SelectionManager to keep track 
+	 * of all the currently selected Assets/Folders.
+	 * <br/><br/>
+	 * The AssetPane is also subscribed to listen for 
+	 * changes in the currently open Folder as well 
+	 * as registered as the Vendor of actions in the 
+	 * AssetPane.
+	 * <br/><br/>
+	 * 
+	 * This class also subscribes to the 
+	 * HotkeyListener as many of the actions available 
+	 * through the drop down menu can also be triggered 
+	 * via hotkeys.
+	 * <br/><br/>
+	 * 
+	 * See HotkeyListener for more information on 
+	 * handling hotkey presses.
+	 */
 	public AssetPane() {
 		this.assetSelectionManager = new SelectionManager<Asset>();
 		this.pmAssets = null;
@@ -75,25 +142,51 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		Application.window.subscriptionService.subscribe(Handles.MODAL, "AssetPane", this);
 	}
 	
-	
-		// Returns whether a given Asset is selected
+	/**
+	 * Returns whether a given Asset is selected in the 
+	 * AssetPane.
+	 * 
+	 * @param a Reference to the Asset that is to be 
+	 * checked.
+	 * 
+	 * @return Whether the Asset is currently selected.
+	 */
 	public boolean checkSelected(Asset a) {
 		return this.assetSelectionManager.checkSelected(a);
 	}
 	
-		// Selects a given Asset
+	/**
+	 * Selects a given Asset in the AssetPane.
+	 * 
+	 * @param a Reference to the Asset that is to be 
+	 * selected.
+	 */
 	public void selectAsset(Asset a) {
 		this.assetSelectionManager.setSelection(a);
 		updateWithState();
 	}
 	
-		// Adds a given Asset to the selection
+	/**
+	 * Performs an additive selection on a given 
+	 * Asset. If the Asset has already been selected, 
+	 * nothing happens.
+	 * 
+	 * @param a Reference to the Asset that is to be 
+	 * additively selected.
+	 */
 	public void addSelection(Asset a) {
 		this.assetSelectionManager.addSelection(a);
 		updateWithState();
 	}
 	
-		// De-selects a given Asset from the selection
+	/**
+	 * De-selects a given asset from the current 
+	 * selection. If the Asset is not selected, 
+	 * nothing happens.
+	 * 
+	 * @param a Reference to the Asset that is to be 
+	 * de-selected.
+	 */
 	public void deselectAsset(Asset a) {
 		this.assetSelectionManager.removeSelection(a);
 		updateWithState();
@@ -128,15 +221,34 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		}
 	}
 	
-		// Saves the position of the scroll bar and updates the
-		// component
+	/**
+	 * Saves the position of the JScrollBar that is 
+	 * used to browse the AssetPane and updates the 
+	 * component by calling the update-method.
+	 * <br/><br/>
+	 * 
+	 * See the update-method of GUIComponent for 
+	 * more information on updating GUI-components.
+	 */
 	public void updateWithState() {
 		this.scrollPanePosition = this.scrollPane.getVerticalScrollBar().getValue() - 4;
 		update();
 	}
 	
-		// Opens the Asset popup menu at a location provided
-		// by a MouseEvent
+	/**
+	 * Opens a drop down menu at the mouse position 
+	 * that allows the user to create, edit, rename 
+	 * and delete Assets and/or Folders. The method 
+	 * takes in a MouseEvent object that contains 
+	 * relevant information on the mouse-click 
+	 * event that triggers this menu, including the 
+	 * mouse position.
+	 * 
+	 * @param e MouseEvent object that contains 
+	 * relevant information for opening the drop 
+	 * down menu, such as the mouse position on 
+	 * screen.
+	 */
 	public void openPopup(MouseEvent e) {
 		this.pmAssets.show(e.getComponent(), e.getX(), e.getY());
 	}
@@ -272,8 +384,21 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		return containerContainer;
 	}
 	
-	
-		// Creates a clickable menu item for the "Asset"-menu
+	/**
+	 * A utility method that creates a menu item for the 
+	 * "Create"-submenu found in the right-click drop down 
+	 * menu and assigns the menu item a given title. The 
+	 * menu item is used to create an Asset by using the 
+	 * given ModalView. When the menu item is clicked the 
+	 * ModalView is popped up in the ModalWindow. 
+	 * 
+	 * @param title Title of the menu item.
+	 * @param mv Reference to the ModalView that will be 
+	 * popped up in the ModalWindow to create the Asset.
+	 * 
+	 * @return Refrence to the created JMenuItem 
+	 * representing the menu item.
+	 */
 	@SuppressWarnings("serial")
 	private JMenuItem createAssetMenuItem(String title, ModalView<? extends Asset> mv) {
 		
@@ -287,7 +412,16 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		});
 	}
 	
-		// Shows an input dialog box for creating a new Folder
+	/**
+	 * Called upon clicking the new folder creation 
+	 * button in the "Create"-submenu found in the 
+	 * right-click drop down menu. This method 
+	 * brings up a JOptionPane-dialog box that 
+	 * allows the user to input a name for the 
+	 * folder that is to be created. If the folder 
+	 * name is valid, it will be created and added 
+	 * to the currently active Project.
+	 */
 	private void actionNewFolder() {
 		String folderName = (String) JOptionPane.showInputDialog("Enter folder name:");
 		
@@ -301,12 +435,19 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		updateWithState();
 	}
 	
-		// Opens a ModalWindow for the selected Asset
+	/**
+	 * Called upon clicking the "Edit"-button found 
+	 * in the right-click drop down menu. The currently 
+	 * selected Asset will be popped up in the 
+	 * ModalWindow for editing. If multiple Assets 
+	 * are currently selected, the first selection will 
+	 * only be opened.
+	 */
 	@SuppressWarnings("unchecked")
 	public void actionEdit() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
 		
-		if( asset == null )
+		if( asset == null || asset instanceof Folder )
 		return;
 		
 		ModalWindow mw = Application.window.getModalWindow();
@@ -317,7 +458,17 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		Application.window.popup(mv);
 	}
 	
-		// Shows an input dialog box for renaming the selected Asset
+	/**
+	 * Called upon clicking the "Rename"-button found 
+	 * in the right-click drop down menu. A 
+	 * JOptionPane-dialog box that allows the user to 
+	 * input a new name for the selected Asset will 
+	 * be displayed. If the entered Asset name is 
+	 * valid, the Asset will be renamed. If the 
+	 * prompt is cancelled, nothing happens. If 
+	 * multiple Assets are currently selected, the 
+	 * first selected Asset will be renamed.
+	 */
 	private void actionRename() {
 		Asset asset = this.assetSelectionManager.getSelectedItem();
 		
@@ -336,13 +487,30 @@ public class AssetPane extends GUIComponent implements Vendor, Subscriber {
 		updateWithState();
 	}
 	
-		// Deletes all Assets in a given list
+	/**
+	 * A utility method for deleting an ArrayList of 
+	 * Assets from the currently active Project.
+	 * 
+	 * @param assetList Reference to the ArrayList 
+	 * of Assets that are to be removed from the 
+	 * Project.
+	 */
 	private void deleteMultipleAssets(ArrayList<Asset> assetList) {
 		for( Asset a : assetList )
 		Application.controller.removeAsset(a);
 	}
 	
-		// Deletes the currently selected Assets from the Project
+	/**
+	 * Called upon clicking the "Delete"-button found 
+	 * in the right-click drop down menu. A 
+	 * JOptionPane-dialog box will be displayed to 
+	 * confirm the deletion of the selected item(s).
+	 * If the user chooses YES, the selected item(s) 
+	 * will be deleted from the currently active 
+	 * Project. If the prompt is cancelled, nothing 
+	 * happens. If multiple items are selected, ALL 
+	 * selected items will be removed.
+	 */
 	private void actionDelete() {
 		if( this.assetSelectionManager.getSelection().size() <= 0 )
 		return;

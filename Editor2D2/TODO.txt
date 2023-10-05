@@ -1,30 +1,19 @@
-TODO - ...
+TODO - Later
 
 OVERVIEW
-
+- Implement all the changes that were supposed to be implemented
+  "later"
 
 SPECIFICS
-
-
-LATER
-- make sure that GUIComponents dont update on HotkeyListner
-  if no expected sequence is held
-- make sure that GUIComponent.update is called only upon
-  onNotification as often as possible to avoid littering
-  the GUI-code with "update()"
-- speedup Tile rendering performance by getting the subimage
-  only when the Image the Tile is based on changes
-	-- check other Placeables for render optimizations
-	-- pay attention to memory usage as well
-	
-	   
-TASKS LEFT
 - create abstractions for compiling
 	-- compiler is to be implemented on project-by-project
 	   basis, and thus, only abstract classes and interfaces
 	   need to be written
-- make sure that all the functionalities work with minor
-  bugs
+
+LATER
+
+
+TASKS LEFT
 - finalize graphics
 - remove DebugUtils and other debug prints and resources
 	-- JohnnyUtils
@@ -33,38 +22,23 @@ TASKS LEFT
 	-- remove ability to place placed Placeables
 	-- refresh SceneView after removing an Asset
 	-- deselect all Placeables after removing an Asset
+	-- selection is not being rendered when selection
+	   starting coordinates are less than ending coords
+	-- selection ignores SPACE being held
 - create a TEMPLATE module
 - remove comments, add Javadoc
-	   
-	   
-SKETCHES
-
----- Editor2D savefile ----
-
-assets
-	data "collision data" DATA00001 "0" 255 0 0
-	image "unknown image" IMG555WETIP "D:\epic\assoomer_logo.png"
-	image "coomer" IMG555WECOOM "D:\epic\coomer_profile.png"
-	object "cj_coomer" OBJ555WECOOM 128 64 0
-/assets
-
-scene "first scene" 640 480
-	layer data "data layer" 32 32 128
-		DATA00001 5 5
-		DATA00001 5 6
-		DATA00001 5 7
-		DATA00001 5 8
-	/layer
-	
-	layer tile "Max Speed" 32 32 255
-		IMG555WETIP 0 0
-		IMG555WETIP 1 0
-		IMG555WETIP 2 0
-		IMG555WETIP 3 0
-		IMG555WETIP 4 0
-	/layer
-	
-	layer object "'bjects" 0 0 255
-		OBJ555WECOOM 36 36
-	/layer
-/scene
+	-- CImage and CIcon need getters/setters???
+		-> public fields
+	-- remove ColorPreviewPanel default constructor
+	   as the default panel has NULL color and NULL
+	   value which cannot be later changed
+	   	-> default panel will likely crash
+	   	-> other solution is to add setters/getters
+	-- potential error in Asset documentation
+		-> assetClassName is NOT used to reference 
+		the asset in factories???
+	-- Handles in model
+		-- figure out who is the Vendor of 
+		   LAYER_VISIBILITY
+		-- who is the Vendor of LAYER_REORDER
+	-- add <br/><br/>

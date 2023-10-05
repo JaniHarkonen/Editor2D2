@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  * This is a wrapper class for all file extensions considered
  * images.
+ * 
  * @author User
  *
  */
@@ -40,7 +41,9 @@ public final class ImageExtensions {
 	/**
 	 * Generates a File Name Extension Filter encompassing all supported image 
 	 * extension filters and assigns it a given title.
+	 * 
 	 * @param title Description of the filter in the file system dialog window.
+	 * 
 	 * @return A File Name Extension Filter that encompasses all the other image
 	 * filters.
 	 */
@@ -63,6 +66,7 @@ public final class ImageExtensions {
 	/**
 	 * Returns an array of all supported image extension filters with the filter
 	 * encompassing all the image extensions added.
+	 * 
 	 * @return An array of all supported image extension filters as well as the
 	 * all-encompassing filter.
 	 */

@@ -2,6 +2,7 @@ package editor2d2.modules.image.placeable;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -26,6 +27,9 @@ public class Tile extends Placeable {
 	
 		// Height of the area in the Image asset that will be drawn
 	private int drawHeight;
+	
+		// Image tile
+	private BufferedImage tileImage;
 
 	
 	public Tile() {
@@ -35,6 +39,7 @@ public class Tile extends Placeable {
 		this.drawY = 0;
 		this.drawWidth = 100;
 		this.drawHeight = 100;
+		this.tileImage = null;
 	}
 	
 	
@@ -61,11 +66,10 @@ public class Tile extends Placeable {
 		BufferedImage img;
 		Image src = getImage();
 		
-		if( src == null )
+		if( src == null || tileImage == null )
 		img = Application.resources.getGraphic("icon-null-texture");
 		else
-		img = src.getImage().getSubimage(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
-		
+		img = tileImage;
 		
 		AffineTransform at = new AffineTransform();
 		at.translate(dx, dy);
@@ -79,6 +83,7 @@ public class Tile extends Placeable {
 		Tile dupl = new Tile();
 		copyAttributes(this, dupl);
 		
+		dupl.tileImage = this.tileImage;
 		dupl.drawX = this.drawX;
 		dupl.drawY = this.drawY;
 		dupl.drawWidth = this.drawWidth;
@@ -101,20 +106,59 @@ public class Tile extends Placeable {
 		// Changes the Image asset of the tile
 	public void setImage(Image image) {
 		this.asset = image;
+		
+		setTileImageFromAsset();
 	}
 	
 		// Sets the X- and Y-coordinates as well as the width and height
 		// of the area on the Image asset that will be drawn
 	public void setDrawArea(int x, int y, int w, int h) {
-		Image img = getImage();
+		Image src = getImage();
+		
+		if( src == null )
+		return;
 		
 			// Overflow
-		if( x < 0 || y < 0 || x + w > img.getWidth() || y + h > img.getHeight() )
+		if( x < 0 || y < 0 || x + w > src.getWidth() || y + h > src.getHeight() )
 		return;
 		
 		this.drawX = x;
 		this.drawY = y;
 		this.drawWidth = w;
 		this.drawHeight = h;
+		
+		setTileImageFromAsset();
+	}
+	
+		// Sets the BufferedImage of the source Image Asset as the tile
+		// image or creates a subimage of a portion of the source if the
+		// the tile image bounds are not the same as the source image's
+	private void setTileImageFromAsset() {
+		Image src = getImage();
+		
+		if( src == null )
+		return;
+		
+		BufferedImage img = src.getImage();
+		
+		if( img == null )
+		return;
+		
+		if(
+			this.drawX == 0 &&
+			this.drawY == 0 &&
+			this.drawWidth == img.getWidth() &&
+			this.drawHeight == img.getHeight()
+		)
+		this.tileImage = img;
+		else
+		this.tileImage = img.getSubimage(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
+	}
+	
+	
+		// Returns a Rectangle representing the dimensions of the area
+		// on the Image asset that will be drawn
+	public Rectangle getDrawArea() {
+		return new Rectangle(this.drawX, this.drawY, this.drawWidth, this.drawHeight);
 	}
 }
