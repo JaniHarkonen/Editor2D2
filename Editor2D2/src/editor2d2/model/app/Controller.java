@@ -3,7 +3,6 @@ package editor2d2.model.app;
 import java.util.ArrayList;
 
 import editor2d2.Application;
-import editor2d2.DebugUtils;
 import editor2d2.model.Handles;
 import editor2d2.model.app.tool.Tool;
 import editor2d2.model.app.tool.ToolContext;
@@ -112,7 +111,9 @@ public class Controller implements Vendor {
 		this.appState = appState;
 		this.subscriptionService = new SubscriptionService();
 		this.placeableSelectionManager = new PlaceableSelectionManager();
-		DebugUtils.controllerDebugSetup(this);	// DEBUG, DELETE
+		this.openProject(new Project());
+		// Comment the line above and uncomment the one below to open a testing project on start
+		//DebugUtils2.controllerDebugSetup(this);
 	}
 	
 	/**

@@ -10,7 +10,7 @@ import johnnyutils.johnparser.parser.ParsedCommand;
  * reading and parsing a project file. Loaders should 
  * contain all the logic used by a module to generate 
  * and place the Asset and the Placeables of the Asset 
- * class. 
+ * class. Each module MUST implement their own loader.
  * <br/><br/>
  * 
  * The template variable A determines the type of the 

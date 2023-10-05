@@ -10,27 +10,58 @@ import editor2d2.model.project.scene.placeable.Drawable;
 import editor2d2.model.project.scene.placeable.RenderContext;
 import editor2d2.modules.object.layer.ObjectArray;
 
+/**
+ * Each Scene will have a Camera through which the Scene is 
+ * viewed through. The Camera functions as the renderer for 
+ * the Scene and everything visible in the Camera's view 
+ * will be rendered in the editor. Each Scene MUST have a 
+ * Camera instance.
+ * 
+ * @author User
+ *
+ */
 public class Camera {
 
-		// X-coordinate of the camera in the scene
+	/**
+	 * World X-coordinate of the Camera in the Scene.
+	 */
 	private double x;
 
-		// Y-coordinate of the camera in the scene
+	/**
+	 * World Y-coordinate of the Camera in the Scene.
+	 */
 	private double y;
 	
-		// Z-coordinate of the camera in the scene
+	/**
+	 * World Z-coordinate (height) of the Camera in the 
+	 * Scene.
+	 */
 	private double z;
-	
-		// Width of the view port in pixels
+	 
+	/**
+	 * Width of the world area that will be rendered by 
+	 * the Camera. 
+	 */
 	private int portWidth;
 	
-		// Height of the view port in pixels
+	/**
+	 * Height of the world area that will be rendered by 
+	 * the Camera.
+	 */
 	private int portHeight;
 	
-		// Reference to the Scene the camera is embedded in
+	/**
+	 * Reference to the Scene that the Camera is embedded 
+	 * in.
+	 */
 	private Scene scene;
 	
-	
+	/**
+	 * Constructs a Camera instance with the default 
+	 * settings, including zeroed out dimensions and 
+	 * coordinates. The Scene of the Camera will also be 
+	 * NULL by default.
+	 */
 	public Camera() {
 		this.x = 0;
 		this.y = 0;
@@ -39,9 +70,19 @@ public class Camera {
 		this.portHeight = 0;
 		this.scene = null;
 	}
-	
-	
-		// Renders the area in the map visible to the camera
+
+	/**
+	 * Renders the view port of the Camera into a given
+	 * Graphics2D context. The Camera will iterate through 
+	 * each visible cell of each Layer in the Scene that 
+	 * the Camera is embedded in. Because each Layer 
+	 * consists of a Grid, determining the cellular bounds 
+	 * of the view port is easy and the rendering is quick 
+	 * as well.
+	 * 
+	 * @param gg Reference to the Graphics2D context object 
+	 * the Scene will be rendered in.
+	 */
 	public void render(Graphics2D gg) {
 		long currentTime = System.nanoTime();
 		RenderContext rctxt = new RenderContext(gg, this);
@@ -139,8 +180,13 @@ public class Camera {
 		return this.y + (y - this.portHeight / 2) / this.z;
 	}
 	
-	
-		// Returns the bounds of the view of the Camera
+	/**
+	 * Returns a Bounds object containing the bounds of the view port 
+	 * of the Camera in the world.
+	 * 
+	 * @return Reference to the Bounds object representing the bounds 
+	 * of the Camera.
+	 */
 	public Bounds getBounds() {
 		double 	wh = this.portWidth / 2 / this.z,
 				hh = this.portHeight / 2 / this.z;
@@ -148,57 +194,119 @@ public class Camera {
 		return new Bounds(this.x - wh, this.y - hh, this.x + wh, this.y + hh);
 	}
 	
-		// Returns the X-coordinate of the camera
+	// GETTERS AND SETTERS
+	
+	/**
+	 * Returns the in world X-coordinate of the Camera.
+	 * 
+	 * @return Returns the Camera X-coordinate.
+	 */
 	public double getX() {
 		return this.x;
 	}
 	
-		// Returns the Y-coordinate of the camera
+	/**
+	 * Returns the in world Y-coordinate of the Camera.
+	 * 
+	 * @return Returns the Camera Y-coordinate.
+	 */
 	public double getY() {
 		return this.y;
 	}
 	
-		// Returns the Z-coordinate (height) of the camera
+	/**
+	 * Returns the in world Z-coordinate of the Camera.
+	 * 
+	 * @return Returns the Camera Z-coordinate.
+	 */
 	public double getZ() {
 		return this.z;
 	}
 	
-		// Returns the view port width of the camera
+	/**
+	 * Returns the width of the area that is visible to 
+	 * the Camera.
+	 * 
+	 * @return Returns the in-world width of the view 
+	 * port of the Camera.
+	 */
 	public int getPortWidth() {
 		return this.portWidth;
 	}
 	
-		// Returns the view port height of the camera
+	/**
+	 * Returns the height of the area that is visible to 
+	 * the Camera.
+	 * 
+	 * @return Returns the in-world height of the view 
+	 * port of the Camera.
+	 */
 	public int getPortHeight() {
 		return this.portHeight;
 	}
 	
-		// Returns a reference to the Scene that the camera is embedded in
+	/**
+	 * Returns a reference to the Scene that the Camera is 
+	 * embedded in.
+	 * 
+	 * @return Reference to the Scene that the Camera is 
+	 * in.
+	 */
 	public Scene getScene() {
 		return this.scene;
 	}
 	
-		// Sets the position of the camera
+	/**
+	 * Sets the position of the Camera inside the Scene.
+	 * 
+	 * @param x The new X-coordinate of the Camera.
+	 * @param y The new Y-coordinate of the Camera.
+	 * @param z The new Z-coordinate of the Camera.
+	 */
 	public void setPosition(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-		// Shifts the position of the camera
+	/**
+	 * Shifts the position of the Camera by incrementing 
+	 * each coordinate by a given amount. This method 
+	 * avoids having to call a getter and a setter in 
+	 * order to shift the Camera.
+	 * 
+	 * @param x Amount by which to shift the Camera on 
+	 * the X-axis.
+	 * @param y Amount by which to shift the Camera on 
+	 * the Y-axis.
+	 * @param z Amount by which to shift the Camera on 
+	 * the Z-axis.
+	 */
 	public void shift(double x, double y, double z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
 	}
 	
-		// Sets the view port dimensions of the camera
+	/**
+	 * Sets the width and the height of the view port 
+	 * that is visible to the Camera.
+	 * 
+	 * @param portWidth The new width of the view port.
+	 * @param portHeight The new height of the view 
+	 * port.
+	 */
 	public void setPortDimensions(int portWidth, int portHeight) {
 		this.portWidth = portWidth;
 		this.portHeight = portHeight;
 	}
 	
-		// Sets the Scene that this camera is embedded in
+	/**
+	 * Sets the Scene that the Camera is embedded in.
+	 * 
+	 * @param scene Reference to the Scene that the 
+	 * Camera is to be embedded in.
+	 */
 	public void setScene(Scene scene) {
 		this.scene = scene;
 	}

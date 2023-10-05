@@ -20,13 +20,46 @@ import editor2d2.model.project.scene.Scene;
 import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class is a major GUI-component that renders the currently 
+ * active Scene using ScenePane-components. The ScenePanes are 
+ * rendered in their respective tabs using the Swing-component 
+ * JTabbedPane.
+ * <br/><br/>
+ * 
+ * This class also implements Subscriber as it is subscribed to 
+ * the hotkey listener as well as the application Controller. The 
+ * Controller is used to listen for active Scene changes.
+ * <br/><br/>
+ * 
+ * See the ScenePane-class for more information on rendering 
+ * Scenes.
+ * <br/><br/>
+ * 
+ * See HotkeyListener for more information on listening to 
+ * hotkey presses.
+ * 
+ * @author User
+ *
+ */
 public class SceneTabsContainer extends GUIComponent implements Subscriber {
 	
+	/**
+	 * The index of the currently open Scene tab.
+	 */
 	private int currentTabIndex;
 	
+	/**
+	 * JTabbedPane used to render the Scene tabs as well as the 
+	 * currently active Scene.
+	 */
 	private JTabbedPane tpScenes;
 	
-	
+	/**
+	 * Constructs a SceneTabsContainer instance with the default 
+	 * settings and subscribes it to the HotkeyListener and the 
+	 * application Controller.
+	 */
 	public SceneTabsContainer() {
 		this.currentTabIndex = -1;
 		this.tpScenes = null;
@@ -35,18 +68,19 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		Application.controller.subscriptionService.subscribe(Handles.ACTIVE_SCENE, "SceneTabsContainer", this);
 	}
 	
-	
 	@Override
 	public void onNotification(String handle, Vendor vendor) {
 		boolean skipUpdate = true;
 		int sceneCount = Application.controller.getActiveProject().getAllScenes().size();
 		
+			// Hotkey press
 		if( HotkeyListener.didKeyUpdate(handle) )
 		{
 			HotkeyListener hl = (HotkeyListener) vendor;
 			
 			for( int i = 1; i < 10; i++ )
 			{
+					// Choose tab based on the numeric key pressed (CTRL + 1)
 				if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL, 49 + i - 1) && i - 1 < sceneCount )
 				{
 					this.currentTabIndex = i;
@@ -56,7 +90,7 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 				}
 			}
 		}
-		else if( handle.equals(Handles.ACTIVE_SCENE) )
+		else if( handle.equals(Handles.ACTIVE_SCENE) )	// Active Scene changed
 		{
 			this.currentTabIndex = Application.controller.getActiveSceneIndex() + 1;
 			
@@ -69,7 +103,6 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		if( !skipUpdate )
 		update();
 	}
-	
 
 	@Override
 	protected JPanel draw() {
@@ -109,7 +142,19 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		return container;
 	}
 	
-		// Handles the Scene tab clicks
+	/**
+	 * Called upon clicking a Scene tab. Changes the currently 
+	 * active Scene to the selected one. If the user clicked 
+	 * on the "plus"-tab (+), a new Scene will be created by 
+	 * calling the actionCreateScene-method.
+	 * <br/><br/>
+	 * 
+	 * See actionCreateScene-method for more information on 
+	 * creating adding Scene tabs in the SceneTabsContainer.
+	 * 
+	 * @param source Reference to the JTabbedPane instance 
+	 * that registered the tab click.
+	 */
 	private void actionSceneTabClick(JTabbedPane source) {
 		
 			// If clicked on the +-tab
@@ -126,7 +171,13 @@ public class SceneTabsContainer extends GUIComponent implements Subscriber {
 		Application.controller.openScene(source.getSelectedIndex() - 1);
 	}
 	
-		// Creates a new scene upon clicking +
+	/**
+	 * Called upon clicking the "plus"-tab (+). Creates a 
+	 * new Scene by popping up an input dialog box where 
+	 * the name of the new Scene can be entered. If name is 
+	 * valid, the Scene is created and added to the 
+	 * currently active Project.
+	 */
 	private void actionCreateScene() {
 		String name = (String) JOptionPane.showInputDialog("Enter scene name:");
 		RequireStringName rfName = new RequireStringName();

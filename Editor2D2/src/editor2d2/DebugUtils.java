@@ -41,7 +41,7 @@ public class DebugUtils {
 		
 			// Project
 		Project dummy = new Project();
-		dummy.setName("testproj :/");
+		dummy.setName("test project");
 		
 				// Scene1
 			Scene scene1 = new Scene("small scene");
@@ -60,14 +60,14 @@ public class DebugUtils {
 				InstanceLayer ol1 = new InstanceLayer(scene1);
 				ol1.setName("objs");
 				DataLayer dl1 = new DataLayer(scene1, 32);
-				dl1.setName("weapon.dat");
+				dl1.setName("data");
 				
 			scene1.addLayer(tl1);
 			scene1.addLayer(ol1);
 			scene1.addLayer(dl1);
 			
 				// Scene2
-			Scene scene2 = new Scene("BIG scene O_O");
+			Scene scene2 = new Scene("BIG scene");
 			scene2.setDimensions(500, 500);
 			
 					// Camera

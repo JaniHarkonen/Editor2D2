@@ -16,22 +16,61 @@ import editor2d2.model.Handles;
 import editor2d2.model.project.scene.Layer;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class represents a clickable Layer pane. When clicked 
+ * the Layer represented by this class will be selected via 
+ * the application Controller. The LayerPane also contains a 
+ * visibility toggle that can be used to display/hide Layers 
+ * of the Scene displayed in the SceneView.
+ * <br/><br/>
+ * 
+ * The Vendor-interface is implemented to notify other 
+ * GUI-components of changes in the visibility of the 
+ * underlying Layer.
+ * 
+ * @author User
+ *
+ */
 public class LayerPane extends GUIComponent implements Vendor {
 	
-		// Manager pane that the LayerPane belongs to
+	/**
+	 * The hosting LayerManagerPane that this Layer pane is 
+	 * rendered in.
+	 */
 	private LayerManagerPane manager;
 	
-		// Reference to the source Layer that the LayerPane
-		// represents
+	/**
+	 * The source Layer that is being represented by this 
+	 * LayerPane.
+	 */
 	private Layer source;
 	
-		// Reference to the Layer visibility icon (visibility ON)
+	/**
+	 * BufferedImage that represents the visibility toggle 
+	 * button in the LayerPane. Setting: ON.
+	 */
 	private BufferedImage imageToggleLayerVisibilityOn;
-	
-		// Reference to the Layer visibility icon (visibility OFF)
+
+	/**
+	 * BufferedImage that represents the visibility toggle 
+	 * button in the LayerPane. Setting: OFF.
+	 */
 	private BufferedImage imageToggleLayerVisibilityOff;
 	
-	
+	/**
+	 * Constructs a LayerPane instance with a reference 
+	 * to a given host LayerManagerPane and a given Layer as 
+	 * the source.
+	 * <br/><br/>
+	 * 
+	 * <b>Notice: </b>each LayerPane MUST have a hosting 
+	 * LayerManagerPane where it is listed.
+	 * 
+	 * @param manager Reference to the host LayerManagerPane 
+	 * that renders this LayerPane.
+	 * @param source Reference to the source Layer that is 
+	 * being represented by this LayerPane.
+	 */
 	public LayerPane(LayerManagerPane manager, Layer source) {
 		this.source = source;
 		this.manager = manager;
@@ -39,6 +78,14 @@ public class LayerPane extends GUIComponent implements Vendor {
 		this.imageToggleLayerVisibilityOff = Application.resources.getGraphic("icon-toggle-layer-visibility-off");
 	}
 	
+	/**
+	 * Constructs a LayerPane instance with the default 
+	 * settings (NULL represented Layer) and a given host 
+	 * LayerManagerPane that the LayerPane is rendered 
+	 * inside of.
+	 * @param manager Reference to the host LayerManagerPane 
+	 * that renders this LayerPane.
+	 */
 	public LayerPane(LayerManagerPane manager) {
 		this(manager, null);
 	}
@@ -77,14 +124,24 @@ public class LayerPane extends GUIComponent implements Vendor {
 		return container;
 	}
 	
-	
-		// Called upon clicking the layer pane
+	/**
+	 * Called upon clicking the Layer. Simply selects the 
+	 * underlying Layer represented by this LayerPane via 
+	 * the applicatino Controller. The host 
+	 * LayerManagerPane will also be notified and 
+	 * re-rendered.
+	 */
 	private void onClick() {
 		Application.controller.selectLayer(this.source);
 		this.manager.onLayerPaneClick();
 	}
 	
-		// Toggles the visibility of the Layer
+	/**
+	 * Called upon toggling the Layer visibility. Simply 
+	 * toggles the visibility and registers the change via 
+	 * the application Controller's SubscriptionService so 
+	 * that the SceneView will be updated.
+	 */
 	private void onToggleLayerVisibility() {
 		this.source.toggleVisibility();
 		Application.controller.subscriptionService.register(Handles.LAYER_VISIBILITY, this);

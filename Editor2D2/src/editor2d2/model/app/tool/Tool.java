@@ -6,9 +6,11 @@ import editor2d2.Application;
 
 public abstract class Tool {
 	
+	public static final int NO_FUNCTION = -1;
 	public static final int PRIMARY_FUNCTION = 1;
 	public static final int SECONDARY_FUNCTION = 2;
 	public static final int TERTIARY_FUNCTION = 3;
+	public static final int QUATERNARY_FUNCTION = 4;
 	
 	public static final int USE_FAILED = 1;
 	public static final int USE_SUCCESSFUL = 2;

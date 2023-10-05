@@ -399,7 +399,6 @@ public class Project {
 		this.rootFolder = folder;
 	}
 	
-		// Sets the filepath of the Project
 	/**
 	 * Sets the file path of the Project.
 	 * 

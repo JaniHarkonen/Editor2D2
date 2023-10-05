@@ -2,7 +2,7 @@ package editor2d2.model.project;
 
 /**
  * PseudoAssets can be used when an object needs to 
- * treated like an Asset, yet do not need the full 
+ * treated like an Asset, yet does not need the full 
  * features of an Asset, such as the ability to 
  * create Placeables.
  * <br/><br/>

@@ -19,7 +19,7 @@ import editor2d2.subservice.Vendor;
 
 /**
  * This class is one of the root components outlined in 
- * Application. Window is contains the root of the GUI as 
+ * Application. Window contains the root of the GUI as 
  * well as references to commonly used global GUI-
  * components such as the ModalWindow used by the modules 
  * and the JFileChooser used to display a file system 

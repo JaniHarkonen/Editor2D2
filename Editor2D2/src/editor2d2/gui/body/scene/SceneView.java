@@ -45,31 +45,116 @@ import editor2d2.subservice.Subscriber;
 import editor2d2.subservice.SubscriptionService;
 import editor2d2.subservice.Vendor;
 
+/**
+ * This class is a major GUI-component that renders the currently 
+ * active Scene. For the most part, this class only renders a 
+ * JPanel that contains the Scene viewed through the Scene's 
+ * Camera. 
+ * <br/><br/>
+ * 
+ * SceneView also handles the usage of Tools each time 
+ * the user clicks the Scene. Each Tool has different orders of 
+ * functionality, some of which are listed in the Tool-class 
+ * (such as Tool.PRIMARY_FUNCTION). This class uses hotkeys to 
+ * determine the order of functionality when a Tool is used. 
+ * Here is a mapping of hotkey combinations to their respective 
+ * orders of functionality: <br/><br/>
+ * <b>LEFT-CLICK</b> - Primary function <br/>
+ * <b>RIGHT-CLICK</b> - Secondary function <br/>
+ * <b>CTRL + LEFT-CLICK</b> - Tertiary function <br/>
+ * <b>SHIFT + LEFT-CLICK</b> - Quaternary function
+ * <br/><br/>
+ * 
+ * The SceneView also handles the following actions: <br/><br/>
+ * <b>SPACE + LEFT-MOUSE DRAG</b> - Pans the Scene's Camera inside 
+ * the view according to the mouse <br/>
+ * <b>DELETE</b> - Deletes the selected Placeables <br/>
+ * <b>CTRL + Z</b> - Undoes the latest Action. <br/>
+ * <b>CTRL + Y</b> - Re-does the previously undone Action. <br/>
+ * <b>CTRL + D</b> - De-selects the selected Placeables. <br/>
+ * <b>CTRL + C</b> - Copies the selected Placeables to the 
+ * clipboard. <br/>
+ * <b>CTRL + X</b> - Copies the selected Placeables to the 
+ * clipboard and deletes the from the Scene. <br/>
+ * <b>CTRL + V</b> - Pastes the Placeables in the clipboard to the 
+ * Scene.
+ * <br/><br/>
+ * 
+ * Unlike other GUI-components, the SceneView will be rendered 
+ * in the constructor using a separate method, createView. This 
+ * method has been implemented only to reduce the amount of code 
+ * in the constructor. The scene must be established in the 
+ * constructor in order to avoid excessive drawing in the draw-
+ * method.
+ * 
+ * <b>NOTES: </b>This class should most likely be split further 
+ * into multiple components as it has quite a few 
+ * responsibilities and is subscribed to many of Controller's 
+ * handles.
+ * 
+ * See Camera for more information on rendering.
+ * <br/><br/>
+ * 
+ * See Tool for more information on using tools in the editor.
+ * 
+ * 
+ * @author User
+ *
+ */
 public class SceneView extends GUIComponent implements Subscriber, Vendor {
 	
-		// Reference to the Scene that this view will render
+	/**
+	 * The Scene that will be rendered by the SceneView.
+	 */
 	private final Scene scene;
 	
-		// The JPanel that the scene will be rendered in
+	/**
+	 * JPanel that the Scene will be renderd onto.
+	 */
 	private JPanel view;
 	
-		// Reference to the DragBox that will be used to drag the Scene view
+	/**
+	 * DragBox instance that will be used to pan the Camera 
+	 * inside the view.
+	 */
 	private DragBox sceneDragger;
 	
-		// Whether space bar is down
+	/**
+	 * Whether the space-key is being held down.
+	 */
 	private boolean isSpaceDown;
 	
-		// Whether the tertiary functionalities of the Tools should be used
+	/**
+	 * The order of functionality that should be used 
+	 * when using the currently selected Tool.
+	 */
 	private int useOrder;
 	
+	/**
+	 * The width of a cursor grid cell (in pixels).
+	 */
 	private int cursorCellWidth;
 	
+	/**
+	 * The height of a cursor grid cell (in pixels).
+	 */
 	private int cursorCellHeight;
 	
+	/**
+	 * Whether the cursor grid should be rendered.
+	 */
 	private boolean drawCursorGrid;
 	
+	/**
+	 * Whether the Layer grid should be rendered.
+	 */
 	private boolean drawLayerGrid;
 	
+	/**
+	 * The BufferedImage that draws the overlay of 
+	 * the Scene. This overlay will contain things 
+	 * such as highlighting selected Placeables.
+	 */
 	private BufferedImage overlay;
 	
 	
@@ -116,7 +201,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		{
 			HotkeyListener hl = (HotkeyListener) vendor;
 			Layer activeLayer = controller.getActiveLayer();
-			int toolUseOrder = -1;
+			int toolUseOrder = Tool.NO_FUNCTION;
 			
 			skipUpdate = true;
 			
@@ -124,7 +209,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_CONTROL) )
 			toolUseOrder = Tool.TERTIARY_FUNCTION;
 			else if( HotkeyListener.isSequenceHeld(hl, KeyEvent.VK_SHIFT) )
-			toolUseOrder = 4;
+			toolUseOrder = Tool.QUATERNARY_FUNCTION;
 			else
 			toolUseOrder = Tool.PRIMARY_FUNCTION;
 			
@@ -261,9 +346,27 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		return container;
 	}
 	
-		// Uses the currently selected Tool specifying whether
-		// the use is continuation of a prior use as well as the
-		// order of function
+	/**
+	 * Uses the currently selected Tool on the active Layer in the 
+	 * Scene. This method can also be used to trigger the stop 
+	 * action of the selected Tool. The Tool will be used at a 
+	 * given world position in the Scene using a given order of 
+	 * functionality. Whether this use is a continuation of a 
+	 * previous use must also be passed. <i>isContinuation</i> is 
+	 * used by Tools that are to be used in succession, such as 
+	 * when placing Placeables via CTRL + SHIFT.
+	 * 
+	 * @param x The world X-coordinate where the Tool is to be 
+	 * used.
+	 * @param y The world Y-coordinate where the Tool is to be 
+	 * used.
+	 * @param isContinuation Whether this is a continuation of a 
+	 * previous useTool-call.
+	 * @param order The order of functionality that is to be 
+	 * used.
+	 * @param stop Whether the Tool use is to be stopped. FALSE 
+	 * is the normal use.
+	 */
 	private void useTool(double x, double y, boolean isContinuation, int order, boolean stop) {
 		ToolContext tc = new ToolContext();
 		tc.isContinuation = isContinuation;
@@ -278,12 +381,62 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		update();
 	}
 	
+	/**
+	 * Uses the currently selected Tool on the active Layer in the 
+	 * Scene. The Tool will be used at a given world position in 
+	 * the Scene using a given order of functionality. Whether 
+	 * this use is a continuation of a previous use must also be 
+	 * passed. <i>isContinuation</i> is used by Tools that are to 
+	 * be used in succession, such as when placing Placeables via 
+	 * CTRL + SHIFT.
+	 * 
+	 * @param x The world X-coordinate where the Tool is to be 
+	 * used.
+	 * @param y The world Y-coordinate where the Tool is to be 
+	 * used.
+	 * @param isContinuation Whether this is a continuation of a 
+	 * previous useTool-call.
+	 * @param order The order of functionality that is to be 
+	 * used.
+	 */
 	private void useTool(double x, double y, boolean isContinuation, int order) {
 		useTool(x, y, isContinuation, order, false);
 	}
 	
-		// Creates the JPanel that will render the Scene by creating an
-		// anonymous class extending JPanel
+	/**
+	 * Creates the JPanel that will contain the Scene rendition 
+	 * and renders the currently active Scene onto it. This 
+	 * method first renders the Scene according to the Scene's 
+	 * Camera by calling its render-method. Next, the bounds 
+	 * of the Scene will be rendered if they are visible to the 
+	 * Camera. Finally, the cursor grid and Layer grid will be 
+	 * rendered in that order. The Scene overlay will also be 
+	 * rendered on top of everything (the overlay will draw the 
+	 * selection rectangle).
+	 * <br/><br/>
+	 * 
+	 * MouseListeners will also be added to the created JPanel 
+	 * that will be used to listen for mouse clicks and 
+	 * releases. Whenever the left or right mouse button is 
+	 * pressed down, the currently selected Tool will be used.
+	 * When the left or right mouse button is released, the 
+	 * use of the currently selected Tool is stopped.
+	 * <br/><br/>
+	 * 
+	 * A MouseMotionListener as well as a 
+	 * MouseWheelWheelListener will be added to listen mouse 
+	 * drags and zooms via the mouse wheel. The 
+	 * MouseMotionListner will be used to listen to mouse 
+	 * drag events to allow for a successive use of Tools as 
+	 * well as panning of the Scene Camera.
+	 * <br/><br/>
+	 * 
+	 * See the render-method of Camera-class for more 
+	 * information on rendering of Scenes.
+	 * 
+	 * @return Reference to the JPanel that contains the 
+	 * rendition of the active Scene.
+	 */
 	private JPanel createView() {
 		Camera cam = this.scene.getCamera();
 		
@@ -417,7 +570,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 				if( isSpaceDown )
 				return;
 				
-				int toolUseOrder = -1;
+				int toolUseOrder = Tool.NO_FUNCTION;
 				
 				if( GUIUtilities.checkLeftClick(e) )
 				toolUseOrder = useOrder;
@@ -430,7 +583,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				int toolUseOrder = -1;
+				int toolUseOrder = Tool.NO_FUNCTION;
 				
 				if( GUIUtilities.checkLeftClick(e) && isSpaceDown )
 				sceneDragger.stopDragging();
@@ -461,7 +614,7 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 			public void mouseDragged(MouseEvent e) {
 				if( !isSpaceDown )
 				{
-					int toolUseOrder = -1;
+					int toolUseOrder = Tool.NO_FUNCTION;
 					
 					if( SwingUtilities.isLeftMouseButton(e) )
 					toolUseOrder = useOrder;
@@ -491,8 +644,25 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		return container;
 	}
 	
-		// Draws a grid in a given context with given bounds and
-		// cell dimensions
+	/**
+	 * A helper method that draws a grid in a given 
+	 * Graphics2D context. The grid will be placed 
+	 * within a specified area and each cell will 
+	 * have the given dimensions (in pixels).
+	 * 
+	 * @param g Graphics2D object that specifies the 
+	 * context in which the grid is to be drawn.
+	 * @param x1 The X-coordinate where the grid is to 
+	 * begin.
+	 * @param y1 The Y-coordinate where the grid is to 
+	 * begin.
+	 * @param x2 The X-coordinate where the grid is to 
+	 * end.
+	 * @param y2 The X-coordinate where the grid is to 
+	 * end.
+	 * @param cw The width of a grid cell (in pixels).
+	 * @param ch The height of a grid cell (in pixels).
+	 */
 	private void drawGrid(Graphics2D g, int x1, int y1, int x2, int y2, int cw, int ch) {
 		if( cw > 1 && ch > 1 )
 		{
@@ -504,7 +674,27 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		}
 	}
 	
-		// Draws a string containing newline characters
+	/**
+	 * A helper method to draw a string in a given Graphics2D
+	 * context. The string will be drawn using the drawString-
+	 * method of the Graphics2D-class and will appear at a 
+	 * given position. The amount of separation between the 
+	 * lines (line spacing) must be specified.
+	 * <br/><br/>
+	 * 
+	 * The lines in the string must be separated using a new 
+	 * line character (\n).
+	 * 
+	 * @param str The string that is to be drawn.
+	 * @param x The X-coordinate where the string is to be 
+	 * drawn.
+	 * @param y The Y-coordinate where the string is to be 
+	 * drawn.
+	 * @param sep Amount of separation (in pixels) between the 
+	 * lines.
+	 * @param g Reference to the Graphics2D object that the 
+	 * string is to be drawn in.
+	 */
 	private void drawStringNewline(String str, int x, int y, int sep, Graphics2D g) {
 		String[] split = str.split("\n");
 		int s = split.length;
@@ -513,18 +703,33 @@ public class SceneView extends GUIComponent implements Subscriber, Vendor {
 		g.drawString(split[i], x, y + i * sep);
 	}
 	
+	// GETTERS AND SETTERS
 	
-		// Returns the width of a cursor cell
+	/**
+	 * Returns the width of a cursor cell (in pixels).
+	 * 
+	 * @return Width of a cursor cell.
+	 */
 	public int getCursorCellWidth() {
 		return this.cursorCellWidth;
 	}
 	
-		// Returns the height of a cursor cell
+	/**
+	 * Returns the height of a cursor cell (in pixels).
+	 * 
+	 * @return Height of a cursor cell.
+	 */
 	public int getCursorCellHeight() {
 		return this.cursorCellHeight;
 	}
 	
-		// Sets the drawable overlay
+	/**
+	 * Sets the overlay BufferedImage that will be 
+	 * rendered over all of the components of the Scene.
+	 * 
+	 * @param overlay Reference to the BufferedImage 
+	 * containing the overlay that is to be rendered.
+	 */
 	public void setOverlay(BufferedImage overlay) {
 		this.overlay = overlay;
 		update();
