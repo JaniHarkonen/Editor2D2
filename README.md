@@ -46,7 +46,7 @@ extended due to their highly modular nature.
 ## Modularity
 Each mentioned asset type is placed (in the Java project) inside its own package under the package "modules".
 Each module is named after the asset type that it represents. All modules must have the same structure as the 
-modules of the three basic asset types. All modules must also be declared inside the ModuleDeclarations so that 
+modules of the three basic asset types. All modules must also be declared inside the ``ModuleDeclarations`` so that 
 Editor2D can initialize and load them into the framework as the program is ran. This structure is used so that 
 new modules can be added either by extending the three basic ones or by writing completely new modules altogether.
 Assets may also be removed by removing their declarations, however, this is not recommended.
